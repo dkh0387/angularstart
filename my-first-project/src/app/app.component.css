@@ -1,5 +1,7 @@
 .container {
   margin-right: 48px;
+  display: inline-block;
+  vertical-align: top;
 }
 
 .flexrow {

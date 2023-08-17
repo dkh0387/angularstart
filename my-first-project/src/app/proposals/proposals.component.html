@@ -1,16 +1,18 @@
 <div class="proposals">
-  <app-profile-row class="profile-row" imgPath="{{this.imgPath}}" imgAlt="{{this.imgAlt}}" name="{{this.name}}"
-                   description="{{this.description}}"></app-profile-row>
+    <app-profile-row class="profile-row" imgPath="{{this.imgPath}}" imgAlt="{{this.imgAlt}}" name="{{this.name}}"
+                     description="{{this.description}}"></app-profile-row>
 
-  <div class="proposals-title">
-    <b>Freundesvorschläge</b>
-  </div>
+    <div class="proposals-title">
+        <b>Freundesvorschläge</b>
+    </div>
 
-  <div *ngFor="let i of [0, 1, 2]">
-    <app-profile-row *ngIf="name != names[i]" [name]="names[i]"
-                     [imgPath]="images[i]"
-                     [imgAlt]="imageAlts[i]"
-                     [description]="descriptions[i]"></app-profile-row>
-  </div>
+    <div *ngFor="let i of [0, 1, 2]">
+        <app-profile-row *ngIf="name != names[i]" [name]="names[i]"
+                         [imgPath]="images[i]"
+                         [imgAlt]="imageAlts[i]"
+                         [description]="descriptions[i]"
+                         [followLink]="'Folgen'">
+        </app-profile-row>
+    </div>
 </div>
 

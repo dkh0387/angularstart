@@ -1,4 +1,5 @@
 .profile-row {
+  margin-right: 12px;
   margin-bottom: 20px;
   vertical-align: top;
   display: inline-block;
@@ -21,6 +22,13 @@
   display: block;
   color: rgba(0, 0, 0, 0.5);
   font-size: 12px;
+}
+.profile-row .profile-info {
+  width: 100px;
+}
+.profile-row a {
+  font-size: 12px;
+  color: #1976d2;
 }
 
 /*# sourceMappingURL=profile-row.component.css.map */
