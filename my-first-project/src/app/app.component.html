@@ -1,28 +1,30 @@
 <app-header></app-header>
 
-<!-- In order to show the hamster conainer on the left and proposals on the right we need a flex -->
+<!-- In order to show the hamster container on the left and proposals on the right we need a flex -->
 <div class="flexrow">
-  <div class="container">
-    <!-- all friends of a hamster as a row of bobbles -->
-    <app-friend-box [name]="'Frederik'"></app-friend-box>
+    <div class="container">
+        <!-- Example of For loop in Angular: multiple hamster profiles as image cards with friends banner -->
+        <div *ngFor="let i of [0, 1, 2]">
+            <!-- all friends of a hamster as a row of bobbles -->
+            <app-friend-box [name]="names[i]"></app-friend-box>
 
-    <!-- NOTE: the advantage of Angular is the re usage of components -->
-    <!-- Example of For loop in Angular: multiple hamster profiles as image cards -->
-    <app-hamster-card *ngFor="let i of [0, 1, 2]"
-                      [text]="postTexts[i]"
-                      [imgPath]="images[i]"
-                      [imgAlt]="imageAlts[i]">
-    </app-hamster-card>
-  </div>
+            <!-- NOTE: the advantage of Angular is the re usage of components -->
+            <app-hamster-card
+                    [text]="postTexts[i]"
+                    [imgPath]="images[i]"
+                    [imgAlt]="imageAlts[i]">
+            </app-hamster-card>
+        </div>
+    </div>
 
-  <div class="container">
-    <!-- Multiple friend proposals for each hamster -->
-    <app-proposals *ngFor="let i of [0, 1, 2]"
-                   [name]="names[i]"
-                   [description]="descriptions[i]"
-                   [imgPath]="images[i]"
-                   [imgAlt]="imageAlts[i]"></app-proposals>
-  </div>
+    <div class="container">
+        <!-- Multiple friend proposals for each hamster -->
+        <app-proposals *ngFor="let i of [0, 1, 2]"
+                       [name]="names[i]"
+                       [description]="descriptions[i]"
+                       [imgPath]="images[i]"
+                       [imgAlt]="imageAlts[i]"></app-proposals>
+    </div>
 
 </div>
 
