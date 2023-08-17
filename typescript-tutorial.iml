@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<module type="WEB_MODULE" version="4">
+  <component name="NewModuleRootManager" inherit-compiler-output="true">
+    <exclude-output />
+    <content url="file://$MODULE_DIR$/typescript-tutorial">
+      <excludeFolder url="file://$MODULE_DIR$/typescript-tutorial/dist" />
+      <excludeFolder url="file://$MODULE_DIR$/typescript-tutorial/tmp" />
+    </content>
+    <orderEntry type="sourceFolder" forTests="false" />
+  </component>
+  <component name="SonarLintModuleSettings">
+    <option name="uniqueId" value="274a1e05-a245-4fcf-8e13-eba252567e3e" />
+  </component>
+</module>

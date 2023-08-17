@@ -1,0 +1,41 @@
+.card {
+  min-height: 550px;
+  background-color: white;
+  width: 400px;
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  border-radius: 4px;
+  overflow: hidden;
+  /*position: relative; /*makes sure, that all absolute positioned elements are on the bottom*/
+  margin-bottom: 50px;
+}
+.card img {
+  width: 100%;
+}
+.card p {
+  padding-left: 16px;
+  padding-right: 16px;
+  color: rgba(0, 0, 0, 0.8);
+  font-size: 20px;
+}
+.card button {
+  width: 50%;
+  bottom: 0; /*distance to the bottom*/
+  /*position: absolute; /*buttons are on the bottom*/
+  height: 32px;
+  background-color: white;
+  border-top: 1px solid rgba(0, 0, 0, 0.1);
+  cursor: pointer;
+  margin-top: 35%;
+}
+.card button :first-child {
+  left: 0; /*first button has a distance to the left of zero*/
+}
+.card button :last-child {
+  right: 0; /*last button has a distance to the left of zero*/
+  border-left: 1px solid rgba(0, 0, 0, 0.1);
+}
+.card button:hover {
+  background-color: rgba(0, 0, 0, 0.05);
+}
+
+/*# sourceMappingURL=hamster-card.component.css.map */

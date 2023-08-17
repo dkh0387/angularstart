@@ -1,0 +1,23 @@
+/* You can add global styles to this file, and also import other style files */
+body {
+  margin: 0;
+  background-color: rgba(0, 0, 0, 0.05);
+  font-family: "Lato", sans-serif;
+}
+
+.padding-16 {
+  padding: 16px;
+}
+
+.standard-card {
+  justify-content: center;
+  background-color: white;
+  width: 400px;
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  border-radius: 4px;
+  overflow: hidden;
+  margin-bottom: 16px;
+  box-sizing: border-box; /*since we use this class and .padding-16 together we need to exclude 16px padding from the div size to secure this one has the same width as the hamster card*/
+}
+
+/*# sourceMappingURL=styles.css.map */

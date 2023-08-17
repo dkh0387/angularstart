@@ -1,0 +1,9 @@
+.friend-row {
+  display: flex; /*all friend images are in one row*/
+}
+
+.friend {
+  text-align: center;
+}
+
+/*# sourceMappingURL=friend-box.component.css.map */
