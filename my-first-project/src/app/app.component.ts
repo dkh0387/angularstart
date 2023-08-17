@@ -1,4 +1,5 @@
-import {Component} from '@angular/core';
+import {Component, OnInit} from '@angular/core';
+import {FriendsAddingServiceService} from "./service/friends-adding-service.service";
 
 /*
 Web component:
@@ -7,26 +8,23 @@ consists of a .html template, .css style and this .ts file (JS)
 const imageAlts = ['hamster1', 'hamster2', 'hamster3'];
 
 @Component({
-  selector: 'app-root',
-  templateUrl: './app.component.html',
-  styleUrls: ['./app.component.scss']
+    selector: 'app-root',
+    templateUrl: './app.component.html',
+    styleUrls: ['./app.component.scss']
 })
-export class AppComponent {
+export class AppComponent implements OnInit {
 
-  private readonly imgHamsterPath = 'assets/img/hamster/';
-  private readonly ingFileType = '.jpg';
-  title = 'my-first-project';
+    title = 'my-first-project';
 
-  names = ['Frederik', 'Mark', 'Denis']
+    friendsAddingService: FriendsAddingServiceService
 
-  descriptions = ['3 Jahre alt', 'esse gerne Käse', 'bin sportlich']
+    /*
+    Example of dependency injection (DI).
+     */
+    constructor(public newFriendsAddingService: FriendsAddingServiceService) {
+        this.friendsAddingService = newFriendsAddingService;
+    }
 
-  postTexts = ['Hallo! Mein Name ist Frederik, ich bin hier, um neue Freunde zu treffen!',
-    'Hallo! Mein Name ist Marc, ich bin hier, um neue Freunde zu treffen!',
-    'Hallo! Mein Name ist Denis, ich bin hier, um neue Freunde zu treffen!'
-  ]
-
-  images = imageAlts.map(value => this.imgHamsterPath + value + this.ingFileType)
-
-  protected readonly imageAlts = imageAlts;
+    ngOnInit(): void {
+    }
 }

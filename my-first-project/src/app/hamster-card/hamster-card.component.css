@@ -32,10 +32,13 @@
 }
 .card button :last-child {
   right: 0; /*last button has a distance to the left of zero*/
-  border-left: 1px solid rgba(0, 0, 0, 0.1);
+  /*border-left: 1px solid rgba(0, 0, 0, 0.1);*/
 }
 .card button:hover {
   background-color: rgba(0, 0, 0, 0.05);
+}
+.card button mat-icon {
+  font-size: 16px;
 }
 
 /*# sourceMappingURL=hamster-card.component.css.map */

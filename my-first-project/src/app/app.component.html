@@ -4,26 +4,26 @@
 <div class="flexrow">
     <div class="container">
         <!-- Example of For loop in Angular: multiple hamster profiles as image cards with friends banner -->
-        <div *ngFor="let i of [0, 1, 2]">
+        <div *ngFor="let n of friendsAddingService.names; let i = index">
             <!-- all friends of a hamster as a row of bobbles -->
-            <app-friend-box [name]="names[i]"></app-friend-box>
+            <app-friend-box [name]="n"></app-friend-box>
 
             <!-- NOTE: the advantage of Angular is the re usage of components -->
             <app-hamster-card
-                    [text]="postTexts[i]"
-                    [imgPath]="images[i]"
-                    [imgAlt]="imageAlts[i]">
+                    [text]="friendsAddingService.postTexts[i]"
+                    [imgPath]="friendsAddingService.images[i]"
+                    [imgAlt]="friendsAddingService.imageAlts[i]">
             </app-hamster-card>
         </div>
     </div>
 
     <div class="container">
         <!-- Multiple friend proposals for each hamster -->
-        <app-proposals *ngFor="let i of [0, 1, 2]"
-                       [name]="names[i]"
-                       [description]="descriptions[i]"
-                       [imgPath]="images[i]"
-                       [imgAlt]="imageAlts[i]"></app-proposals>
+        <app-proposals *ngFor="let n of friendsAddingService.names; let i = index"
+                       [name]="n"
+                       [description]="friendsAddingService.descriptions[i]"
+                       [imgPath]="friendsAddingService.images[i]"
+                       [imgAlt]="friendsAddingService.imageAlts[i]"></app-proposals>
     </div>
 
 </div>

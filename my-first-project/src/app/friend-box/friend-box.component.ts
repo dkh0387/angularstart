@@ -1,22 +1,24 @@
-import {Component, Input} from '@angular/core';
-
-const imageAlts = ['hamster1', 'hamster2', 'hamster3'];
+import {Component, Input, OnInit} from '@angular/core';
+import {FriendsAddingServiceService} from "../service/friends-adding-service.service";
 
 @Component({
-  selector: 'app-friend-box',
-  templateUrl: './friend-box.component.html',
-  styleUrls: ['./friend-box.component.scss']
+    selector: 'app-friend-box',
+    templateUrl: './friend-box.component.html',
+    styleUrls: ['./friend-box.component.scss']
 })
-export class FriendBoxComponent {
+export class FriendBoxComponent implements OnInit {
 
-  private readonly imgHamsterPath = 'assets/img/hamster/';
-  private readonly ingFileType = '.jpg';
+    @Input() name: string = '';
+    friendsAddingService: FriendsAddingServiceService
 
-  @Input() name: string = '';
+    /*
+    Example of dependency injection (DI).
+     */
+    constructor(public newFriendsAddingService: FriendsAddingServiceService) {
+        this.friendsAddingService = newFriendsAddingService;
+    }
 
-  names = ['Frederik', 'Mark', 'Denis']
-  images = imageAlts.map(value => this.imgHamsterPath + value + this.ingFileType)
-
-  protected readonly imageAlts = imageAlts;
+    ngOnInit(): void {
+    }
 
 }

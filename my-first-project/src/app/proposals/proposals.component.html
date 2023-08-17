@@ -3,14 +3,14 @@
                      description="{{this.description}}"></app-profile-row>
 
     <div class="proposals-title">
-        <b>Freundesvorschläge</b>
+        <b>Kennst du auch?</b>
     </div>
 
-    <div *ngFor="let i of [0, 1, 2]">
-        <app-profile-row *ngIf="name != names[i]" [name]="names[i]"
-                         [imgPath]="images[i]"
-                         [imgAlt]="imageAlts[i]"
-                         [description]="descriptions[i]"
+    <div *ngFor="let n of friendsAddingService.names; let i = index">
+        <app-profile-row *ngIf="name != n" [name]="n"
+                         [imgPath]="friendsAddingService.images[i]"
+                         [imgAlt]="friendsAddingService.imageAlts[i]"
+                         [description]="friendsAddingService.descriptions[i]"
                          [followLink]="'Folgen'">
         </app-profile-row>
     </div>

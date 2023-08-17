@@ -10,6 +10,10 @@ Run `ng serve --open` in terminal in order to start the app.
 
 Run `ng g component header` in terminal in order to create a new angular component.
 
+3. Generating a new service:
+
+Run `ng g service friendsAddingService` in terminal in order to create a new angular component.
+
 ## Development server
 
 Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The application will automatically reload if you change any of the source files.

@@ -35,11 +35,15 @@
 
     & :last-child {
       right: 0; /*last button has a distance to the left of zero*/
-      border-left: 1px solid rgba(0, 0, 0, 0.1);
+      /*border-left: 1px solid rgba(0, 0, 0, 0.1);*/
     }
 
     &:hover {
       background-color: rgba(0, 0, 0, 0.05);
+    }
+
+    mat-icon {
+      font-size: 16px;
     }
   }
 }

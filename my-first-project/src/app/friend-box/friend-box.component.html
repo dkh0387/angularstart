@@ -1,9 +1,9 @@
 <div class="standard-card padding-16 friend-row">
-  <div class="friend" *ngFor="let i of [0, 1, 2]">
-    <app-profile-row *ngIf="name != names[i]" [name]="names[i]"
-                     [imgPath]="images[i]"
-                     [imgAlt]="imageAlts[i]">
-    </app-profile-row>
-  </div>
+    <div class="friend" *ngFor="let n of friendsAddingService.names; let i = index">
+        <app-profile-row *ngIf="name != n" [name]="n"
+                         [imgPath]="friendsAddingService.images[i]"
+                         [imgAlt]="friendsAddingService.imageAlts[i]">
+        </app-profile-row>
+    </div>
 </div>
 

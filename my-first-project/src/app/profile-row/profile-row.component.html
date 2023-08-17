@@ -3,6 +3,6 @@
     <div class="profile-info">
         <b class="name">{{name}}</b>
         <span class="description">{{description}}</span>
-        <a>{{followLink}}</a>
+        <a (click)="friendsAddingService.addFriend(name, description, imgPath)">{{followLink}}</a>
     </div>
 </div>
