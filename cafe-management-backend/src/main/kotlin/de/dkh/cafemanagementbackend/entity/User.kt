@@ -1,5 +1,6 @@
 package de.dkh.cafemanagementbackend.entity
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties
 import jakarta.persistence.Column
 import jakarta.persistence.Entity
 import jakarta.persistence.Table
@@ -12,6 +13,7 @@ import org.hibernate.annotations.DynamicUpdate
 @Table(name = "user")
 @DynamicInsert
 @DynamicUpdate
+@JsonIgnoreProperties(ignoreUnknown = true)
 class User(
     @Column(name = "name") private val name: String,
     @Column(name = "contact_number") private val contactNumber: String,
