@@ -1,0 +1,37 @@
+version: "3.9" #version of docker-compose
+services:
+  mysql-service:
+    container_name: mysql
+    image: mysql:latest
+    restart: always
+    command:
+      --default-authentication-plugin=mysql_native_password
+#    `ports` is responsible for exposing container ports to the host machine.
+#    Simply put, when running docker-compose on our computer with a 123:456 setting,
+#    we will be able to access a container’s 456 port through localhost:123
+    ports:
+      - "3307:3306"
+    environment:
+      - MYSQL_ROOT_PASSWORD=admin1                    #default password of the MySQL container
+      - MYSQL_DATABASE=cafe_db
+      - MYSQL_USER=springstudent
+      - MYSQL_PASSWORD=springstudent
+    volumes:
+      #- ./data:/var/lib/mysql                         #database data volume
+      - ./src/main/db:/docker-entrypoint-initdb.d/:ro #database files called when the container is built and started for the first time
+  backend-service:
+    container_name: backend
+    depends_on:
+      - mysql-service
+    build:
+      dockerfile: backend.Dockerfile
+    command:
+      --publish 8081:8080
+    ports:
+      - "8081:8080"
+  adminer-service:
+    container_name: adminer
+    image: adminer
+    restart: always
+    ports:
+      - "9001:8080"
