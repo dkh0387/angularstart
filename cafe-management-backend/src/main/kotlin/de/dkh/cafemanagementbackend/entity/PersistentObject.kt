@@ -18,7 +18,7 @@ open class PersistentObject {
     @Column(name = "id", nullable = false)
     @Getter
     @Setter
-    protected var id: Long? = null
+    protected var id: Long = 0
 
 
 }
