@@ -4,5 +4,6 @@ class CafeConstants {
 
     companion object {
         val SOMETHING_WENT_WRONG = "Something went wrong!"
+        val INVALID_DATA = "Invalid data!"
     }
 }

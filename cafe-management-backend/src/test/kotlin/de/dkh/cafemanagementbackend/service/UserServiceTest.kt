@@ -2,17 +2,21 @@ package de.dkh.cafemanagementbackend.service
 
 import de.dkh.cafemanagementbackend.entity.User
 import de.dkh.cafemanagementbackend.exception.SignUpValidationException
+import de.dkh.cafemanagementbackend.repository.UserRepository
 import org.assertj.core.api.Assertions.assertThat
 import org.assertj.core.api.Assertions.assertThatThrownBy
-import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.TestInstance
+import org.junit.jupiter.api.extension.ExtendWith
+import org.mockito.Mock
+import org.mockito.junit.jupiter.MockitoExtension
 
-class UserServiceTest {
+@ExtendWith(MockitoExtension::class)
+class UserServiceTest(@Mock val userRepository: UserRepository) {
 
-    private val objectUnderTest: UserServiceImpl = UserServiceImpl()
+    private val objectUnderTest: UserServiceImpl = UserServiceImpl(userRepository)
 
     @Nested
     @DisplayName("Testing SignUp Map Validator")
@@ -36,10 +40,10 @@ class UserServiceTest {
             // then
             assertThat(result.toString()).isEqualTo(
                 User(
-                    name = requestMap.get("name")!!,
-                    contactNumber = requestMap.get("contactNumber")!!,
-                    email = requestMap.get("email")!!,
-                    password = requestMap.get("password")!!,
+                    name = requestMap["name"]!!,
+                    contactNumber = requestMap["contactNumber"]!!,
+                    email = requestMap["email"]!!,
+                    password = requestMap["password"]!!,
                     status = "null",
                     role = "null"
                 ).toString()

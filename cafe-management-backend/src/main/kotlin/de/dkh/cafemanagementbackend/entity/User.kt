@@ -1,12 +1,17 @@
 package de.dkh.cafemanagementbackend.entity
 
 import com.fasterxml.jackson.annotation.JsonAutoDetect
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties
 import jakarta.persistence.Column
 import jakarta.persistence.Entity
+import jakarta.persistence.NamedQuery
 import jakarta.persistence.Table
 import org.hibernate.annotations.DynamicInsert
 import org.hibernate.annotations.DynamicUpdate
+
+/**
+ * Example of usage named queries as implementation of a repository interface {@see UserRepository}.
+ */
+@NamedQuery(name = "User.findByEmail", query = "SELECT u FROM User u WHERE u.email =: emailInput")
 
 @Entity
 @Table(name = "user")
