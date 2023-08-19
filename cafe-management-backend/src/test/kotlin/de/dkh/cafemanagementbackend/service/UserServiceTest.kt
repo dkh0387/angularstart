@@ -143,10 +143,10 @@ class UserServiceTest {
             // when
             every { userRepository.findByEmail(any()) } returns null
             every { userRepository.save(any()) } returns TestData.getInactiveUser()
-            val responseEntity = objectUnderTest.signUp(requestMap)
+            objectUnderTest.signUp(requestMap)
 
             // then
-            verify(exactly = 1) { userRepository.findByEmail(any()) }
+            verify(exactly = 1) { userRepository.save(any()) }
         }
 
     }
