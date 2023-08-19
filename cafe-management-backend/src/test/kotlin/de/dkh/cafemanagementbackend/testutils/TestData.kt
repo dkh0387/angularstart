@@ -7,7 +7,7 @@ class TestData {
     companion object {
 
         fun getInactiveUser(): User = User(
-            name = "Denis ",
+            name = "Denis Khaskin",
             contactNumber = "+4915126227287",
             email = "deniskh87@gmail.com",
             password = "11235813",

@@ -3,6 +3,7 @@ package de.dkh.cafemanagementbackend.service
 import com.fasterxml.jackson.databind.ObjectMapper
 import de.dkh.cafemanagementbackend.constants.CafeConstants
 import de.dkh.cafemanagementbackend.entity.User
+import de.dkh.cafemanagementbackend.exception.InvalidEmailException
 import de.dkh.cafemanagementbackend.exception.SignUpErrorResponce
 import de.dkh.cafemanagementbackend.exception.SignUpException
 import de.dkh.cafemanagementbackend.exception.SignUpValidationException
@@ -11,6 +12,7 @@ import lombok.extern.slf4j.Slf4j
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.stereotype.Service
+import java.security.InvalidParameterException
 import java.util.*
 
 @Service
@@ -31,7 +33,7 @@ class UserServiceImpl(private val userRepository: UserRepository) : UserService 
                     val registeredUser = register(userFromMap)
                     ResponseEntity<String>(
                         CafeConstants.USER_SUCCESSFULLY_REGISTERED + ": $registeredUser",
-                        HttpStatus.OK
+                        HttpStatus.CREATED
                     )
                 } else {
                     ResponseEntity<String>(CafeConstants.EMAIL_ALREADY_EXISTS, HttpStatus.BAD_REQUEST)
@@ -66,7 +68,14 @@ class UserServiceImpl(private val userRepository: UserRepository) : UserService 
     private fun register(user: User): User {
         user.status = "false"
         user.role = "user"
-        return userRepository.save(user)
+        return if (isValidEmail(user.email)) userRepository.save(user) else throw InvalidEmailException(
+            CafeConstants.INVALID_EMAIL
+        )
+    }
+
+    private fun isValidEmail(email: String): Boolean {
+        val emailRegex = "^[A-Za-z0-9+_.-]+@[A-Za-z0-9.-]+\$"
+        return email.matches(emailRegex.toRegex())
     }
 
 }

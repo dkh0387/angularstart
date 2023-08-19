@@ -25,7 +25,7 @@ CREATE TABLE `user`
     `name`           varchar(45) DEFAULT NULL,
     `contact_number` varchar(45) DEFAULT NULL,
     `email`          varchar(45) DEFAULT NULL,
-    `passwort`       varchar(45) DEFAULT NULL,
+    `password`       varchar(45) DEFAULT NULL,
     `status`         varchar(20) DEFAULT NULL,
     `role`           varchar(20) DEFAULT NULL,
     PRIMARY KEY (`id`)
