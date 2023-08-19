@@ -14,18 +14,12 @@ class UserServiceImpl : UserService {
         TODO("Not yet implemented")
     }
 
-    fun validateSignUpMap(requestMap: Map<String, String>): Boolean {
+    fun validateSignUpMap(requestMap: Map<String, String>): User {
         val objectMapper = ObjectMapper()
         try {
-            val jsonInString = "{\"name\":\"mkyong\",\"age\":37,\"skills\":[\"java\",\"python\"]}"
-            val user2 = objectMapper.readValue(jsonInString, User::class.java)
-
-
-
-
-            val json = objectMapper.writeValueAsString(requestMap)
-            val user = objectMapper.readValue(json, User::class.java)
-            return user is User
+            val json =
+                objectMapper.writer().withoutAttribute("status").withoutAttribute("role").writeValueAsString(requestMap)
+            return objectMapper.readValue(json, User::class.java)
         } catch (e: Exception) {
             throw SignUpValidationException("Map $requestMap could not be parsed as User object!")
         }
