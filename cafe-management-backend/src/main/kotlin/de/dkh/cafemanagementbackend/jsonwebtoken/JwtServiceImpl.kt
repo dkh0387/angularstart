@@ -29,6 +29,10 @@ import java.util.function.Function
  *
  * See: https://auth0.com/learn/json-web-tokens
  */
+
+/**
+ * @TODO: how do i test this one??
+ */
 @Service
 class JwtServiceImpl : JwtService {
 
@@ -58,11 +62,11 @@ class JwtServiceImpl : JwtService {
         return createToken(claims, username)
     }
 
-    fun extractUserName(token: String): String {
+    override fun extractUserName(token: String): String? {
         return extractClaims(token, Claims::getSubject) as String
     }
 
-    fun extractExpiration(token: String): Date {
+    override fun extractExpiration(token: String): Date? {
         return extractClaims(token, Claims::getExpiration) as Date
     }
 
@@ -79,11 +83,13 @@ class JwtServiceImpl : JwtService {
             .compact()
     }
 
-    private fun isTokenExpired(token: String): Boolean = extractExpiration(token).before(
-        Date.from(
-            LocalDate.now().atStartOfDay(
-                ZoneId.systemDefault()
-            ).toInstant()
+    private fun isTokenExpired(token: String): Boolean {
+        return if (extractExpiration(token) == null) false else extractExpiration(token)!!.before(
+            Date.from(
+                LocalDate.now().atStartOfDay(
+                    ZoneId.systemDefault()
+                ).toInstant()
+            )
         )
-    )
+    }
 }

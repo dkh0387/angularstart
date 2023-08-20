@@ -2,6 +2,7 @@ package de.dkh.cafemanagementbackend.jsonwebtoken
 
 import io.jsonwebtoken.Claims
 import org.springframework.security.core.userdetails.UserDetails
+import java.util.*
 import java.util.function.Function
 
 interface JwtService {
@@ -11,6 +12,10 @@ interface JwtService {
     fun validateToken(token: String, userDetails: UserDetails): Boolean
 
     fun generateToken(username: String, role: String): String
+
+    fun extractUserName(token: String): String?
+
+    fun extractExpiration(token: String): Date?
 
 
 }

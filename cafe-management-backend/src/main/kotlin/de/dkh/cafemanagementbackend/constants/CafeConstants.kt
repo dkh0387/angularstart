@@ -8,5 +8,6 @@ class CafeConstants {
         val EMAIL_ALREADY_EXISTS = "Email already exists!"
         val USER_SUCCESSFULLY_REGISTERED = "User successfully registered!"
         val INVALID_EMAIL = "Invalid email!"
+        val USER_COULD_NOT_FOUND_BY_EMAIL = "User could not be found for provided email!"
     }
 }
