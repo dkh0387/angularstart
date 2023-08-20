@@ -1,32 +1,27 @@
 package de.dkh.cafemanagementbackend.controller
 
 import com.fasterxml.jackson.databind.ObjectMapper
-import de.dkh.cafemanagementbackend.constants.CafeConstants
-import de.dkh.cafemanagementbackend.exception.InvalidEmailException
-import de.dkh.cafemanagementbackend.exception.SignUpException
-import de.dkh.cafemanagementbackend.exception.SignUpValidationException
 import de.dkh.cafemanagementbackend.repository.UserRepository
-import de.dkh.cafemanagementbackend.service.UserService
 import de.dkh.cafemanagementbackend.testutils.TestData
-import io.mockk.every
-import io.mockk.mockk
 import jakarta.servlet.ServletException
-import org.assertj.core.api.Assertions
 import org.assertj.core.api.Assertions.assertThatThrownBy
-import org.junit.jupiter.api.*
-import org.junit.jupiter.api.Assertions.assertTrue
+import org.junit.jupiter.api.DisplayName
+import org.junit.jupiter.api.Nested
+import org.junit.jupiter.api.Test
+import org.junit.jupiter.api.TestInstance
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc
 import org.springframework.boot.test.context.SpringBootTest
-import org.springframework.http.HttpStatus
 import org.springframework.http.MediaType
 import org.springframework.test.annotation.DirtiesContext
+import org.springframework.test.context.ActiveProfiles
 import org.springframework.test.web.servlet.MockMvc
 import org.springframework.test.web.servlet.post
 import java.nio.charset.StandardCharsets
 
 @SpringBootTest
-@AutoConfigureMockMvc
+@AutoConfigureMockMvc(addFilters = false)
+//@ActiveProfiles(value = ["test"])
 class UserRESTImplTest {
 
     private val BASE_URL = "http://localhost:8081/user"
