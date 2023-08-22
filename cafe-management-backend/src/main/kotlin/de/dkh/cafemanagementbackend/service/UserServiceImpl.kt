@@ -52,8 +52,13 @@ class UserServiceImpl(private val userRepository: UserRepository) : UserService 
         }
     }
 
+    override fun logIn(requestMap: Map<String, String>): ResponseEntity<String> {
+        TODO("Not yet implemented")
+    }
+
     fun validateSignUpMap(requestMap: Map<String, String>): User? {
         val objectMapper = ObjectMapper()
+
         try {
             val json =
                 objectMapper.writer().withoutAttribute("status").withoutAttribute("role").writeValueAsString(requestMap)

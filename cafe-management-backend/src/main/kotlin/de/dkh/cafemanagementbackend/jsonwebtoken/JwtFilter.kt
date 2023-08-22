@@ -5,6 +5,7 @@ import io.jsonwebtoken.Claims
 import jakarta.servlet.FilterChain
 import jakarta.servlet.http.HttpServletRequest
 import jakarta.servlet.http.HttpServletResponse
+import lombok.Getter
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken
 import org.springframework.security.core.context.SecurityContextHolder
 import org.springframework.security.web.authentication.WebAuthenticationDetailsSource
@@ -19,6 +20,8 @@ import org.springframework.web.filter.OncePerRequestFilter
 
 /**
  * @TODO: how do i test this one??
+ * Idea: we can remove the permitted url `user/signup` from the matches and we expect 403
+ * (remove from [de.dkh.cafemanagementbackend.config.SecurityConfig] as well).
  */
 @Component
 class JwtFilter(
@@ -27,6 +30,8 @@ class JwtFilter(
 ) : OncePerRequestFilter() {
 
     private lateinit var claims: Claims
+
+    @Getter
     private var userName: String? = null
     override fun doFilterInternal(
         request: HttpServletRequest,
@@ -53,6 +58,12 @@ class JwtFilter(
             filterChain.doFilter(request, response)
         }
     }
+
+    fun isAdmin(): Boolean = hasRole("admin")
+
+    fun isUser(): Boolean = hasRole("user")
+
+    private fun hasRole(role: String): Boolean = role.equals(claims["role"] as String?, true)
 
     private fun extractToken(header: String): String {
         val token = header.substring(7)

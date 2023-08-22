@@ -10,4 +10,7 @@ interface UserREST {
 
     @PostMapping(path = ["/signup"])
     fun signUp(@RequestBody(required = true) requestMap: Map<String, String>): ResponseEntity<String>
+
+    @PostMapping("/login")
+    fun logIn(@RequestBody(required = true) requestMap: Map<String, String>): ResponseEntity<String>
 }
