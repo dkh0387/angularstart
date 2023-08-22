@@ -5,7 +5,6 @@ import jakarta.persistence.Column
 import jakarta.persistence.Entity
 import jakarta.persistence.NamedQuery
 import jakarta.persistence.Table
-import lombok.Getter
 import org.hibernate.annotations.DynamicInsert
 import org.hibernate.annotations.DynamicUpdate
 
@@ -29,7 +28,7 @@ data class User(
     @Column(name = "name") val name: String,
     @Column(name = "contact_number") val contactNumber: String,
     @Column(name = "email") val email: String,
-    @Column(name = "password") val password: String,
+    @Column(name = "password") val password: String?,
     @Column(name = "status") var status: String,
     @Column(name = "role") var role: String
 ) : PersistentObject()

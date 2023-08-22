@@ -23,7 +23,6 @@ import java.util.Objects
 @Slf4j
 class CustomerUserDetailsService(private val userRepository: UserRepository) : UserDetailsService {
 
-    @Getter
     private lateinit var userDetail: de.dkh.cafemanagementbackend.entity.User
 
     @Throws(UsernameNotFoundException::class)
@@ -38,4 +37,9 @@ class CustomerUserDetailsService(private val userRepository: UserRepository) : U
         userDetail = userDetailFromDB!!
         return User(userDetail.email, userDetail.password, ArrayList())
     }
+
+    fun getUserDetailWithoutPassword(): de.dkh.cafemanagementbackend.entity.User = userDetail.copy(password = null)
+
+    fun checkUserApproved(): Boolean = getUserDetailWithoutPassword().status.equals("true", true)
+
 }

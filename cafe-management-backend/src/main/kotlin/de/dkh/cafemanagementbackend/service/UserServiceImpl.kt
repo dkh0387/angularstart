@@ -7,16 +7,26 @@ import de.dkh.cafemanagementbackend.exception.InvalidEmailException
 import de.dkh.cafemanagementbackend.exception.SignUpErrorResponce
 import de.dkh.cafemanagementbackend.exception.SignUpException
 import de.dkh.cafemanagementbackend.exception.SignUpValidationException
+import de.dkh.cafemanagementbackend.jsonwebtoken.JwtService
 import de.dkh.cafemanagementbackend.repository.UserRepository
+import de.dkh.cafemanagementbackend.utils.CafeUtils
 import lombok.extern.slf4j.Slf4j
 import org.springframework.http.HttpStatus
+import org.springframework.http.HttpStatusCode
 import org.springframework.http.ResponseEntity
+import org.springframework.security.authentication.AuthenticationManager
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken
 import org.springframework.stereotype.Service
 import java.util.*
 
 @Service
 @Slf4j
-class UserServiceImpl(private val userRepository: UserRepository) : UserService {
+class UserServiceImpl(
+    private val userRepository: UserRepository,
+    private val authenticationManager: AuthenticationManager,
+    private val customerUserDetailsService: CustomerUserDetailsService,
+    private val jwtService: JwtService
+) : UserService {
     override fun signUp(requestMap: Map<String, String>): ResponseEntity<String> {
         println("Inside signUp $requestMap")
 
@@ -30,20 +40,17 @@ class UserServiceImpl(private val userRepository: UserRepository) : UserService 
 
                 return if (Objects.isNull(existingUser)) {
                     val registeredUser = register(userFromMap)
-                    ResponseEntity<String>(
-                        CafeConstants.USER_SUCCESSFULLY_REGISTERED + ": $registeredUser",
-                        HttpStatus.CREATED
+                    CafeUtils.getResponseFor(
+                        CafeConstants.USER_SUCCESSFULLY_REGISTERED + ": $registeredUser", HttpStatus.CREATED
                     )
                 } else {
-                    ResponseEntity<String>(CafeConstants.EMAIL_ALREADY_EXISTS, HttpStatus.BAD_REQUEST)
+                    CafeUtils.getResponseFor(CafeConstants.EMAIL_ALREADY_EXISTS, HttpStatus.BAD_REQUEST)
                 }
                 // If the incoming request is not valid, return a SignUpErrorResponce
             } else {
-                return ResponseEntity<String>(
+                return CafeUtils.getResponseFor(
                     SignUpErrorResponce(
-                        HttpStatus.BAD_REQUEST.name,
-                        CafeConstants.INVALID_DATA,
-                        System.currentTimeMillis()
+                        HttpStatus.BAD_REQUEST.name, CafeConstants.INVALID_DATA, System.currentTimeMillis()
                     ).toString(), HttpStatus.BAD_REQUEST
                 )
             }
@@ -52,8 +59,47 @@ class UserServiceImpl(private val userRepository: UserRepository) : UserService 
         }
     }
 
+    /**
+     * Login implementation.
+     * We use [AuthenticationManager] to authenticate a user by the given email.
+     */
+    /**
+     * @TODO: testing!
+     */
     override fun logIn(requestMap: Map<String, String>): ResponseEntity<String> {
-        TODO("Not yet implemented")
+        println("Inside logIn $requestMap")
+
+        try {
+            // simple presentation of a username and password
+            val authentication = authenticationManager.authenticate(
+                UsernamePasswordAuthenticationToken(
+                    requestMap["email"], requestMap["password"]
+                )
+            )
+
+            if (authentication.isAuthenticated) {
+                // Check if the user is activated and return the token: <token> response
+                return if (customerUserDetailsService.checkUserApproved()) {
+                    val tokenKeyWord = "token"
+                    val token = jwtService.generateToken(
+                        customerUserDetailsService.getUserDetailWithoutPassword().email,
+                        customerUserDetailsService.getUserDetailWithoutPassword().role
+                    )
+                    CafeUtils.getResponseFor("{\"$tokenKeyWord\":\"$token\"}", HttpStatus.OK)
+                } else {
+                    val messageKeyWord = "message"
+                    CafeUtils.getResponseFor(
+                        "{\"$messageKeyWord\":\"${CafeConstants.WAIT_FOR_ADMIN_APPROVAL}\"}",
+                        HttpStatus.BAD_REQUEST
+                    )
+                }
+            } else {
+                return CafeUtils.getResponseFor(CafeConstants.BAD_CREDENTIALS, HttpStatus.INTERNAL_SERVER_ERROR)
+            }
+
+        } catch (e: Exception) {
+            throw SignUpException(CafeConstants.SOMETHING_WENT_WRONG, HttpStatus.INTERNAL_SERVER_ERROR)
+        }
     }
 
     fun validateSignUpMap(requestMap: Map<String, String>): User? {
