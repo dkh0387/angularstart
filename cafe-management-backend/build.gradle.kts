@@ -50,7 +50,12 @@ dependencies {
     /* Converting JSON-POJO */
     //implementation("com.google.code.gson:gson:2.10.1")
     implementation("com.vaadin.external.google:android-json:0.0.20131108.vaadin1")
-
+    // Needed for XML Serialization of JSON web tokens from credentials
+    implementation("javax.xml.bind:jaxb-api:2.3.1")
+    implementation("com.sun.xml.bind:jaxb-core:4.0.3")
+    implementation("org.glassfish.jaxb:jaxb-runtime:4.0.3")
+    implementation("jakarta.xml.bind:jakarta.xml.bind-api:4.0.0")
+    implementation("com.sun.xml.bind:jaxb-impl:4.0.3")
 
 }
 

@@ -44,12 +44,12 @@ LOCK
     DISABLE KEYS */;
 
 INSERT INTO `user`
-VALUES (1, 'David Adams', '+4915126227287', 'david@luv2code.com', '126d', 'active', 'user'),
-       (2, 'John Doe', '+4915126227287', 'john@luv2code.com', '126d', 'active', 'user'),
-       (3, 'Ajay Rao', '+4915126227287', 'ajay@luv2code.com', '126d', 'active', 'user'),
-       (4, 'Mary Public', '+4915126227287', 'mary@luv2code.com', '126d', 'active', 'user'),
-       (5, 'Maxwell Dixon', '+4915126227287', 'max@luv2code.com', '126d', 'active', 'user'),
-       (6, 'Denis Khaskin', '+4915126227287', 'deniskh87@gmail.com', '11235813', 'active', 'admin');
+VALUES (1, 'David Adams', '+4915126227287', 'david@luv2code.com', '126d', 'false', 'user'),
+       (2, 'John Doe', '+4915126227287', 'john@luv2code.com', '126d', 'false', 'user'),
+       (3, 'Ajay Rao', '+4915126227287', 'ajay@luv2code.com', '126d', 'false', 'user'),
+       (4, 'Mary Public', '+4915126227287', 'mary@luv2code.com', '126d', 'false', 'user'),
+       (5, 'Maxwell Dixon', '+4915126227287', 'max@luv2code.com', '126d', 'false', 'user'),
+       (6, 'Denis Khaskin', '+4915126227287', 'deniskh87@gmail.com', '11235813', 'true', 'admin');
 
 /*!40000 ALTER TABLE `user`
     ENABLE KEYS */;
