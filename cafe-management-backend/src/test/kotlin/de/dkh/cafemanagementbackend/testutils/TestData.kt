@@ -14,5 +14,8 @@ class TestData {
             status = "false",
             role = "user"
         )
+
+        fun getUserDetailWithoutPassword(): User =
+            getInactiveUser().copy(password = null, status = "true")
     }
 }

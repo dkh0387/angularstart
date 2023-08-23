@@ -4,12 +4,14 @@ import de.dkh.cafemanagementbackend.constants.CafeConstants
 import de.dkh.cafemanagementbackend.entity.User
 import de.dkh.cafemanagementbackend.exception.SignUpException
 import de.dkh.cafemanagementbackend.exception.SignUpValidationException
+import de.dkh.cafemanagementbackend.jsonwebtoken.JwtService
 import de.dkh.cafemanagementbackend.repository.UserRepository
 import de.dkh.cafemanagementbackend.testutils.TestData
+import de.dkh.cafemanagementbackend.utils.CafeUtils
 import io.mockk.*
 import io.mockk.junit5.MockKExtension
-import org.assertj.core.api.Assertions.assertThat
-import org.assertj.core.api.Assertions.assertThatThrownBy
+import org.assertj.core.api.Assertions.*
+import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
@@ -17,13 +19,20 @@ import org.junit.jupiter.api.TestInstance
 import org.junit.jupiter.api.extension.ExtendWith
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
+import org.springframework.security.authentication.AuthenticationManager
+import org.springframework.security.core.AuthenticationException
+import java.lang.RuntimeException
 
 
 @ExtendWith(MockKExtension::class)
 class UserServiceTest {
 
     private val userRepository = mockk<UserRepository>()
-    private val objectUnderTest: UserServiceImpl = UserServiceImpl(userRepository)
+    private val authenticationManager = mockk<AuthenticationManager>()
+    private val customerUserDetailsService = mockk<CustomerUserDetailsService>()
+    private val jwtService = mockk<JwtService>()
+    private val objectUnderTest: UserServiceImpl =
+        UserServiceImpl(userRepository, authenticationManager, customerUserDetailsService, jwtService)
 
     @Nested
     @DisplayName("Testing SignUp Map Validator")
@@ -147,6 +156,103 @@ class UserServiceTest {
 
             // then
             verify(exactly = 1) { userRepository.save(any()) }
+        }
+
+    }
+
+    @Nested
+    @DisplayName("Testing Log in")
+    @TestInstance(TestInstance.Lifecycle.PER_CLASS)
+    inner class LogInTesting {
+
+        @BeforeEach
+        fun setUp() {
+
+        }
+
+        @Test
+        fun `should throw a SignUpException when the authentication fails`() {
+            // given
+            val requestMap: Map<String, String> = mapOf(
+                "email" to "deniskh87@gmail.com",
+                "password" to "11235813"
+            )
+
+            every { authenticationManager.authenticate(any()) } throws RuntimeException("Authentication failed!")
+
+            // when / then
+            assertThatThrownBy { objectUnderTest.logIn(requestMap) }.isInstanceOf(SignUpException::class.java)
+
+        }
+
+        @Test
+        fun `should return a BAD_REQUEST response when user is not authenticated`() {
+            // given
+            val requestMap: Map<String, String> = mapOf(
+                "email" to "deniskh87@gmail.com",
+                "password" to "11235813"
+            )
+
+            every { authenticationManager.authenticate(any()).isAuthenticated } returns false
+
+            // when
+            val response = objectUnderTest.logIn(requestMap)
+
+            // then
+            assertThat(response).isEqualTo(
+                CafeUtils.getResponseFor(
+                    CafeConstants.BAD_CREDENTIALS,
+                    HttpStatus.INTERNAL_SERVER_ERROR
+                )
+            )
+        }
+
+        @Test
+        fun `should return a BAD_REQUEST response when user is not approved (status = false)`() {
+            // given
+            val requestMap: Map<String, String> = mapOf(
+                "email" to "deniskh87@gmail.com",
+                "password" to "11235813"
+            )
+
+            every { authenticationManager.authenticate(any()).isAuthenticated } returns true
+            every { customerUserDetailsService.checkUserApproved() } returns false
+
+            // when
+            val messageKeyWord = "message"
+            val response = objectUnderTest.logIn(requestMap)
+
+            // then
+            assertThat(response).isEqualTo(
+                CafeUtils.getResponseFor(
+                    "{\"$messageKeyWord\":\"${CafeConstants.WAIT_FOR_ADMIN_APPROVAL}\"}",
+                    HttpStatus.BAD_REQUEST
+                )
+            )
+        }
+
+        @Test
+        fun `should return a OK response with generated JWT when user is approved (status = true)`() {
+            // given
+            val requestMap: Map<String, String> = mapOf(
+                "email" to "deniskh87@gmail.com",
+                "password" to "11235813"
+            )
+
+            val tokenKeyWord = "token"
+
+            every { authenticationManager.authenticate(any()).isAuthenticated } returns true
+            every { customerUserDetailsService.checkUserApproved() } returns true
+            every { customerUserDetailsService.getUserDetailWithoutPassword() } returns TestData.getUserDetailWithoutPassword()
+            every { jwtService.generateToken(any(), any()) } returns tokenKeyWord
+
+            // when
+            val response = objectUnderTest.logIn(requestMap)
+
+            // then
+            assertThat(response).isEqualTo(
+                CafeUtils.getResponseFor("{\"$tokenKeyWord\":\"$tokenKeyWord\"}", HttpStatus.OK)
+            )
         }
 
     }

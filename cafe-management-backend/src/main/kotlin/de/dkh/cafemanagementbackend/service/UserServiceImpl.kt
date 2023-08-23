@@ -63,9 +63,6 @@ class UserServiceImpl(
      * Login implementation.
      * We use [AuthenticationManager] to authenticate a user by the given email.
      */
-    /**
-     * @TODO: testing!
-     */
     override fun logIn(requestMap: Map<String, String>): ResponseEntity<String> {
         println("Inside logIn $requestMap")
 
