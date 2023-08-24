@@ -13,9 +13,6 @@ class UserRESTImpl(private val userService: UserService) : UserREST {
         return userService.signUp(requestMap)
     }
 
-    /**
-     * @TODO: testing!
-     */
     @Throws(LogInException::class)
     override fun logIn(requestMap: Map<String, String>): ResponseEntity<String> {
         return userService.logIn(requestMap)

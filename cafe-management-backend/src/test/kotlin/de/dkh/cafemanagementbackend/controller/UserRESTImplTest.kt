@@ -14,7 +14,6 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.http.MediaType
 import org.springframework.test.annotation.DirtiesContext
-import org.springframework.test.context.ActiveProfiles
 import org.springframework.test.web.servlet.MockMvc
 import org.springframework.test.web.servlet.post
 import java.nio.charset.StandardCharsets
@@ -106,5 +105,53 @@ class UserRESTImplTest {
             }.isInstanceOf(ServletException::class.java)
         }
 
+    }
+
+    @Nested
+    @DisplayName("Testing web layer for user log in")
+    @TestInstance(TestInstance.Lifecycle.PER_CLASS)
+    @DirtiesContext
+    inner class LogInTesting {
+
+        @Test
+        fun `should return 'INTERNAL_SERVER_ERROR' response if an exception occurs`() {
+
+            // given
+            val user = TestData.getInactiveUser().copy(email = "dfhlfwhewio")
+
+            // when / then
+            val resultActionsDsl = (mockMvc.post("$BASE_URL/login") {
+                contentType = MediaType.APPLICATION_JSON
+                content = objectMapper.writeValueAsString(user)
+            })
+
+            resultActionsDsl
+                .andDo { print() }
+                .andExpect {
+                    status { isInternalServerError() }
+                    content { contentType(MediaType.APPLICATION_JSON) }
+                }
+
+        }
+
+        @Test
+        fun `should return 'OK' response if no exceptions occur`() {
+
+            // given
+            val user = TestData.getInactiveUser().copy(email = "deniskh87@gmail.com")
+
+            // when / then
+            val resultActionsDsl = (mockMvc.post("$BASE_URL/login") {
+                contentType = MediaType.APPLICATION_JSON
+                content = objectMapper.writeValueAsString(user)
+            })
+
+            resultActionsDsl
+                .andDo { print() }
+                .andExpect {
+                    status { isOk() }
+                    content { contentType(MediaType("text", "plain", StandardCharsets.UTF_8)) }
+                }
+        }
     }
 }
