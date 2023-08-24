@@ -2,22 +2,17 @@ package de.dkh.cafemanagementbackend.service
 
 import de.dkh.cafemanagementbackend.constants.CafeConstants
 import de.dkh.cafemanagementbackend.repository.UserRepository
-import lombok.Getter
 import lombok.extern.slf4j.Slf4j
 import org.springframework.security.core.userdetails.User
 import org.springframework.security.core.userdetails.UserDetails
 import org.springframework.security.core.userdetails.UserDetailsService
 import org.springframework.security.core.userdetails.UsernameNotFoundException
 import org.springframework.stereotype.Service
-import java.util.Objects
+import java.util.*
 
 /**
  * Implementation of the UserDetailsService, using by Spring security as default.
  * This one will be provided to the AuthenticationManager within [de.dkh.cafemanagementbackend.config.SecurityConfig].
- */
-
-/**
- * @TODO: testing!
  */
 @Service
 @Slf4j
