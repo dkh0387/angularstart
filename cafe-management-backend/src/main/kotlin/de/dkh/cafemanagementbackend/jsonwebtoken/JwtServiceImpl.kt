@@ -57,9 +57,9 @@ class JwtServiceImpl : JwtService {
         return extractUserName(token) == userDetails.username && !isTokenExpired(token)
     }
 
-    override fun generateToken(username: String, role: String): String {
+    override fun generateToken(email: String, role: String): String {
         val claims = hashMapOf("role" to role)
-        return createToken(claims, username)
+        return createToken(claims, email)
     }
 
     override fun extractUserName(token: String): String? {

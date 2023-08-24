@@ -11,7 +11,7 @@ interface JwtService {
     fun extractClaims(token: String, claimsResolver: Function<Claims, Any>): Any
     fun validateToken(token: String, userDetails: UserDetails): Boolean
 
-    fun generateToken(username: String, role: String): String
+    fun generateToken(email: String, role: String): String
 
     fun extractUserName(token: String): String?
 

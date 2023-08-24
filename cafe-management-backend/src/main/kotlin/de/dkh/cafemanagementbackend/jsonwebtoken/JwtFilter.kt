@@ -17,23 +17,17 @@ import org.springframework.web.filter.OncePerRequestFilter
  * If a user is signing up or goes for forget password, we do not apply a filter,
  * otherwise we do the validation of the provided token and then pass the user through the filter.
  */
-
-/**
- * @TODO: how do i test this one??
- * Idea: we can remove the permitted url `user/signup` from the matches and we expect 403
- * (remove from [de.dkh.cafemanagementbackend.config.SecurityConfig] as well).
- */
 @Component
 class JwtFilter(
     private val jwtService: JwtService,
     private val customerUserDetailsService: CustomerUserDetailsService
 ) : OncePerRequestFilter() {
 
+    var securityContext = SecurityContextHolder.getContext()
     private lateinit var claims: Claims
-
     @Getter
     private var userName: String? = null
-    override fun doFilterInternal(
+    public override fun doFilterInternal(
         request: HttpServletRequest,
         response: HttpServletResponse,
         filterChain: FilterChain
@@ -45,14 +39,14 @@ class JwtFilter(
             // Extracting token claims using the service
             val token: String = extractToken(header)
             // Check the user credentials and validate the token
-            if (userName != null && SecurityContextHolder.getContext().authentication == null) {
+            if (userName != null && securityContext.authentication == null) {
                 val userDetails = customerUserDetailsService.loadUserByUsername(userName)
 
                 if (jwtService.validateToken(token, userDetails)) {
                     val usernamePasswordAuthenticationToken =
                         UsernamePasswordAuthenticationToken(userDetails, null, userDetails.authorities)
                     usernamePasswordAuthenticationToken.details = WebAuthenticationDetailsSource().buildDetails(request)
-                    SecurityContextHolder.getContext().authentication = usernamePasswordAuthenticationToken
+                    securityContext.authentication = usernamePasswordAuthenticationToken
                 }
             }
             filterChain.doFilter(request, response)
@@ -68,7 +62,7 @@ class JwtFilter(
     private fun extractToken(header: String): String {
         val token = header.substring(7)
 
-        if (header != null && header.startsWith("Bearer ")) {
+        if (header.startsWith("Bearer ")) {
             userName = jwtService.extractUserName(token)
             claims = jwtService.extractAllClaims(token)
         }

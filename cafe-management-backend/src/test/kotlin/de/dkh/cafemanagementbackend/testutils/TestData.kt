@@ -17,5 +17,12 @@ class TestData {
 
         fun getUserDetailWithoutPassword(): User =
             getInactiveUser().copy(password = null, status = "true")
+
+        fun getSpringUserDetails(): org.springframework.security.core.userdetails.User =
+            org.springframework.security.core.userdetails.User(
+                getInactiveUser().email,
+                getInactiveUser().password,
+                ArrayList()
+            )
     }
 }
