@@ -8,6 +8,7 @@ import jakarta.servlet.FilterChain
 import jakarta.servlet.http.HttpServletRequest
 import jakarta.servlet.http.HttpServletResponse
 import org.assertj.core.api.Assertions.assertThat
+import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
@@ -29,6 +30,11 @@ class JwtFilterTest {
     @TestInstance(TestInstance.Lifecycle.PER_CLASS)
     inner class TestingJwtFilter {
 
+        @BeforeEach
+        fun setUp(){
+            clearAllMocks()
+        }
+
         @Test
         fun `should call doFilter() if the request servletPath matches`() {
             // given
@@ -41,6 +47,7 @@ class JwtFilterTest {
             // then
             verify(exactly = 1)
             { filterChain.doFilter(request, response) }
+
         }
 
         @Test
