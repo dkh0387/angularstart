@@ -14,5 +14,10 @@ class CafeConstants {
         val BAD_CREDENTIALS = "Bad credentials!"
         val LOGIN_WENT_WRONG = "Log in went wrong!"
         val LOAD_USERS_WENT_WRONG = "Could not load users from the database!"
+        val UNAUTHORIZED_ACCESS = "Unauthorized access!"
+        val UPDATE_USER_STATUS_WENT_WRONG = "Could not update user(s)!"
+        val NO_USER_FOR_ID = "There is no user for the given id in the database!"
+        val USER_STATUS_UPDATED = "User status successfully updated!"
+        val NO_STATUS_REQUESTED_FOR_UPDATE = "There is no status key provided in the request map!"
     }
 }

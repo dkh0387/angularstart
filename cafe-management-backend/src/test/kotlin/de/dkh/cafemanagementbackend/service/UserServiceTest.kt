@@ -4,6 +4,7 @@ import de.dkh.cafemanagementbackend.constants.CafeConstants
 import de.dkh.cafemanagementbackend.entity.User
 import de.dkh.cafemanagementbackend.exception.SignUpException
 import de.dkh.cafemanagementbackend.exception.SignUpValidationException
+import de.dkh.cafemanagementbackend.exception.UserUpdateStatusException
 import de.dkh.cafemanagementbackend.exception.UsersLoadException
 import de.dkh.cafemanagementbackend.jsonwebtoken.JwtFilter
 import de.dkh.cafemanagementbackend.jsonwebtoken.JwtService
@@ -25,6 +26,7 @@ import org.springframework.http.ResponseEntity
 import org.springframework.security.authentication.AuthenticationManager
 import java.lang.Exception
 import java.lang.RuntimeException
+import java.util.*
 
 
 @ExtendWith(MockKExtension::class)
@@ -262,9 +264,9 @@ class UserServiceTest {
     }
 
     @Nested
-    @DisplayName("Testing get all users as wrappers")
+    @DisplayName("Testing update user status")
     @TestInstance(TestInstance.Lifecycle.PER_CLASS)
-    inner class GetAllUsersTesting {
+    inner class UpdateUserStatusTesting {
 
         @Test
         fun `should throw a UsersLoadException if the repository throws an exception`() {
@@ -310,5 +312,126 @@ class UserServiceTest {
             )
         }
 
+    }
+
+    @Nested
+    @DisplayName("Testing get all users as wrappers")
+    @TestInstance(TestInstance.Lifecycle.PER_CLASS)
+    inner class GetAllUsersTesting {
+
+        @Test
+        fun `should throw a UserUpdateStatusException if the repository throws an exception`() {
+            // given
+            val requestMap: Map<String, String> = mapOf(
+                "name" to "Denis Khaskin",
+                "contactNumber" to "+4915126227287",
+                "email" to "deniskh87@gmail.com",
+                "password" to "11235813",
+                "status" to "user"
+            )
+
+            every { jwtFilter.isAdmin() } returns true
+            every { userRepository.findById(any()) } throws Exception()
+
+            // when / then
+            assertThatThrownBy { objectUnderTest.update(requestMap) }.isInstanceOf(UserUpdateStatusException::class.java)
+        }
+
+        @Test
+        fun `should return a UNAUTHORIZED_ACCESS response if the user is not an admin`() {
+            // given
+            val requestMap: Map<String, String> = mapOf(
+                "name" to "Denis Khaskin",
+                "contactNumber" to "+4915126227287",
+                "email" to "deniskh87@gmail.com",
+                "password" to "11235813",
+                "status" to "user"
+            )
+
+            every { jwtFilter.isAdmin() } returns false
+
+            // when / then
+            val responseEntity = objectUnderTest.update(requestMap)
+
+            // then
+            assertThat(responseEntity).isEqualTo(
+                ResponseEntity<String>(
+                    CafeConstants.UNAUTHORIZED_ACCESS, HttpStatus.UNAUTHORIZED
+                )
+            )
+        }
+
+        @Test
+        fun `should return a NO_USER_FOR_ID response if there is no user for the given id in the database`() {
+            // given
+            val requestMap: Map<String, String> = mapOf(
+                "id" to "10",
+                "name" to "Denis Khaskin",
+                "contactNumber" to "+4915126227287",
+                "email" to "deniskh87@gmail.com",
+                "password" to "11235813",
+                "status" to "user"
+            )
+
+            every { jwtFilter.isAdmin() } returns true
+            every { userRepository.findById(any()) } returns Optional.empty()
+
+            // when / then
+            val responseEntity = objectUnderTest.update(requestMap)
+
+            // then
+            assertThat(responseEntity).isEqualTo(
+                ResponseEntity<String>(
+                    CafeConstants.NO_USER_FOR_ID, HttpStatus.OK
+                )
+            )
+        }
+
+        @Test
+        fun `should update the user status and return a valid response if there is a user for the given id in the database`() {
+            // given
+            val requestMap: Map<String, String> = mapOf(
+                "id" to "1",
+                "status" to "admin"
+            )
+
+            every { jwtFilter.isAdmin() } returns true
+            every { userRepository.findById(any()) } returns Optional.of(TestData.getInactiveUser())
+            every { userRepository.updateStatus(any(), any()) } returns TestData.getInactiveUser()
+
+            // when
+            val responseEntity = objectUnderTest.update(requestMap)
+
+            // then
+            verify(exactly = 1) { userRepository.updateStatus(any(), any()) }
+            assertThat(responseEntity).isEqualTo(
+                ResponseEntity<String>(
+                    CafeConstants.USER_STATUS_UPDATED, HttpStatus.OK
+                )
+            )
+        }
+
+        @Test
+        fun `should not update the user status and return a NO_STATUS_REQUESTED_FOR_UPDATE response if there is no status in the request map`() {
+            // given
+            val requestMap: Map<String, String> = mapOf(
+                "id" to "1"
+            )
+
+            every { jwtFilter.isAdmin() } returns true
+            every { userRepository.findById(any()) } returns Optional.of(TestData.getInactiveUser())
+            every { userRepository.updateStatus(any(), any()) } returns TestData.getInactiveUser()
+
+            // when
+            val responseEntity = objectUnderTest.update(requestMap)
+
+            // then
+            verify(exactly = 0) { userRepository.updateStatus(any(), any()) }
+            assertThat(responseEntity).isEqualTo(
+                ResponseEntity<String>(
+                    CafeConstants.NO_STATUS_REQUESTED_FOR_UPDATE, HttpStatus.OK
+                )
+            )
+        }
     }
 }

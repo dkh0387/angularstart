@@ -18,4 +18,7 @@ interface UserREST {
 
     @GetMapping("/get")
     fun getAllUsers(): ResponseEntity<List<UserWrapper>>
+
+    @PostMapping("/update")
+    fun update(@RequestBody(required = true) requestMap: Map<String, String>): ResponseEntity<String>
 }

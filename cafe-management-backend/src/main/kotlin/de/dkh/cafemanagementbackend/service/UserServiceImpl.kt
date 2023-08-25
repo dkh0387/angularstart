@@ -98,7 +98,8 @@ class UserServiceImpl(
         }
     }
 
-    override fun getAllUsers(): ResponseEntity<List<UserWrapper>> {
+    override fun
+            getAllUsers(): ResponseEntity<List<UserWrapper>> {
         println("Inside getAllUsers")
 
         try {
@@ -112,6 +113,36 @@ class UserServiceImpl(
             }
         } catch (e: Exception) {
             throw UsersLoadException(CafeConstants.LOAD_USERS_WENT_WRONG, HttpStatus.BAD_REQUEST)
+        }
+    }
+
+    /**
+     * Implementation of updating a user status by admin.
+     * User for update is within the request map.
+     *
+     */
+    override fun update(requestMap: Map<String, String>): ResponseEntity<String> {
+        println("Inside update $requestMap")
+
+        try {
+            return if (jwtFilter.isAdmin()) {
+                val userOptional = userRepository.findById(Integer.parseInt(requestMap["id"]).toLong())
+                // if the user exists update the status
+                if (userOptional.isEmpty) {
+                    return CafeUtils.getStringResponseFor(CafeConstants.NO_USER_FOR_ID, HttpStatus.OK)
+                } else {
+                    requestMap["status"]?.let { userRepository.updateStatus(userOptional.get().id, it) }
+                    return CafeUtils.getStringResponseFor(
+                        if (requestMap["status"] != null) CafeConstants.USER_STATUS_UPDATED else CafeConstants.NO_STATUS_REQUESTED_FOR_UPDATE,
+                        HttpStatus.OK
+                    )
+                }
+            } else {
+                CafeUtils.getStringResponseFor(CafeConstants.UNAUTHORIZED_ACCESS, HttpStatus.UNAUTHORIZED)
+            }
+
+        } catch (e: Exception) {
+            throw UserUpdateStatusException("", HttpStatus.INTERNAL_SERVER_ERROR)
         }
     }
 

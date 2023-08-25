@@ -8,5 +8,6 @@ interface UserService {
 
     fun logIn(requestMap: Map<String, String>): ResponseEntity<String>
     fun getAllUsers(): ResponseEntity<List<UserWrapper>>
+    fun update(requestMap: Map<String, String>): ResponseEntity<String>
 
 }

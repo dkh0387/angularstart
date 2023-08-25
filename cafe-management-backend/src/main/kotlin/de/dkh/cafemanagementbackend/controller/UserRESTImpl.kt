@@ -2,6 +2,7 @@ package de.dkh.cafemanagementbackend.controller
 
 import de.dkh.cafemanagementbackend.exception.LogInException
 import de.dkh.cafemanagementbackend.exception.SignUpException
+import de.dkh.cafemanagementbackend.exception.UserUpdateStatusException
 import de.dkh.cafemanagementbackend.exception.UsersLoadException
 import de.dkh.cafemanagementbackend.service.UserService
 import de.dkh.cafemanagementbackend.wrapper.UserWrapper
@@ -23,6 +24,11 @@ class UserRESTImpl(private val userService: UserService) : UserREST {
     @Throws(UsersLoadException::class)
     override fun getAllUsers(): ResponseEntity<List<UserWrapper>> {
         return userService.getAllUsers()
+    }
+
+    @Throws(UserUpdateStatusException::class)
+    override fun update(requestMap: Map<String, String>): ResponseEntity<String> {
+        return userService.update(requestMap)
     }
 
 
