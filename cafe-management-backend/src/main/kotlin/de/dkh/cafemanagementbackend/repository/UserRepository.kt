@@ -1,6 +1,7 @@
 package de.dkh.cafemanagementbackend.repository
 
 import de.dkh.cafemanagementbackend.entity.User
+import de.dkh.cafemanagementbackend.wrapper.UserWrapper
 import org.springframework.data.jpa.repository.JpaRepository
 import org.springframework.data.jpa.repository.Modifying
 import org.springframework.data.jpa.repository.Query
@@ -14,8 +15,15 @@ interface UserRepository : JpaRepository<User, Long> {
      */
     @Transactional
     @Modifying
-    @Query("UPDATE User u SET u.status = ?2 where u.id = ?1")
+    @Query("UPDATE User u SET u.status = ?2 WHERE u.id = ?1")
     fun updateStatus(id: Long, status: String): Int
+
+    /**
+     * Example of a JAVA constructor call inside a named query using JPA.
+     */
+    @Query("SELECT new de.dkh.cafemanagementbackend.wrapper.UserWrapper(u.id, u.name, u.email, u.contactNumber, u.status) FROM User u WHERE upper(u.role) = upper(?1)")
+    fun getAllAdmins(role: String): List<UserWrapper>
+
 
     /**
      * NOTE: imlementation directly in [de.dkh.cafemanagementbackend.entity.User]!

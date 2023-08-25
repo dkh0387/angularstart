@@ -10,4 +10,6 @@ interface UserService {
     fun getAllUsers(): ResponseEntity<List<UserWrapper>>
     fun update(requestMap: Map<String, String>): ResponseEntity<String>
 
+    fun sendEmailToAllAdmin(status: String?, email: String, allAdmins: List<UserWrapper>)
+
 }

@@ -4,6 +4,8 @@ class CafeConstants {
 
     companion object {
 
+        val BASE_URL = "https://localhost:8081"
+
         val SOMETHING_WENT_WRONG = "Something went wrong!"
         val INVALID_DATA = "Invalid data!"
         val EMAIL_ALREADY_EXISTS = "Email already exists!"
@@ -20,5 +22,9 @@ class CafeConstants {
         val USER_STATUS_UPDATED = "User status successfully updated!"
         val NO_STATUS_REQUESTED_FOR_UPDATE = "There is no status key provided in the request map!"
         val USER_STATUS_UPDATE_WENT_WRONG = "User status update went wrong!"
+        val SUBJECT_USER_SET_APPROVED = "User approved"
+        val TEXT_USER_SET_APPROVED = "User is approved by admin"
+        val SUBJECT_USER_SET_DISABLED = "User disabled"
+        val TEXT_USER_SET_DISABLED = "User is disabled by admin"
     }
 }

@@ -1,6 +1,7 @@
 package de.dkh.cafemanagementbackend.wrapper
 
 import com.fasterxml.jackson.annotation.JsonAutoDetect
+import lombok.Getter
 import lombok.NoArgsConstructor
 import lombok.ToString
 
@@ -10,7 +11,7 @@ import lombok.ToString
 data class UserWrapper(
     private val id: Long,
     private val name: String,
-    private val email: String,
+    val email: String,
     private val contactNumber: String,
     private val status: String
 ) {

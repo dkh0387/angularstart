@@ -3,12 +3,16 @@ package de.dkh.cafemanagementbackend.service
 import de.dkh.cafemanagementbackend.constants.CafeConstants
 import de.dkh.cafemanagementbackend.repository.UserRepository
 import lombok.extern.slf4j.Slf4j
+import org.springframework.security.core.GrantedAuthority
+import org.springframework.security.core.authority.SimpleGrantedAuthority
 import org.springframework.security.core.userdetails.User
 import org.springframework.security.core.userdetails.UserDetails
 import org.springframework.security.core.userdetails.UserDetailsService
 import org.springframework.security.core.userdetails.UsernameNotFoundException
 import org.springframework.stereotype.Service
 import java.util.*
+import kotlin.collections.ArrayList
+
 
 /**
  * Implementation of the UserDetailsService, using by Spring security as default.
@@ -30,7 +34,15 @@ class CustomerUserDetailsService(private val userRepository: UserRepository) : U
             throw UsernameNotFoundException(CafeConstants.USER_COULD_NOT_FOUND_BY_EMAIL)
         }
         userDetail = userDetailFromDB!!
-        return User(userDetail.email, userDetail.password, ArrayList())
+        val authorities = ArrayList<GrantedAuthority?>()
+
+        authorities.add(SimpleGrantedAuthority(userDetail.role))
+
+        return User(
+            userDetail.email,
+            userDetail.password,
+            authorities
+        )
     }
 
     fun getUserDetailWithoutPassword(): de.dkh.cafemanagementbackend.entity.User = userDetail.copy(password = null)

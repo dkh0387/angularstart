@@ -1,5 +1,6 @@
 package de.dkh.cafemanagementbackend.jsonwebtoken
 
+import de.dkh.cafemanagementbackend.constants.CafeConstants
 import io.jsonwebtoken.Claims
 import io.jsonwebtoken.Jwts
 import io.jsonwebtoken.SignatureAlgorithm
@@ -75,8 +76,9 @@ class JwtServiceImpl : JwtService {
      */
     private fun createToken(claims: Map<String, Any>, subject: String): String {
         return Jwts.builder()
-            .setSubject(subject)
             .setClaims(claims)
+            .setSubject(subject)
+            .setIssuer(CafeConstants.BASE_URL)
             .setIssuedAt(Date(System.currentTimeMillis()))
             .setExpiration(Date(System.currentTimeMillis() + 1000 * 60 * 60 * 10))
             .signWith(SignatureAlgorithm.HS256, secret)

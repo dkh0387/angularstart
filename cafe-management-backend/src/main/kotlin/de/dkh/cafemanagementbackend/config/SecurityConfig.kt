@@ -9,6 +9,7 @@ import org.springframework.security.config.BeanIds
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration
 import org.springframework.security.config.annotation.web.builders.HttpSecurity
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity
+import org.springframework.security.config.annotation.web.configurers.LogoutConfigurer
 import org.springframework.security.config.http.SessionCreationPolicy
 import org.springframework.security.crypto.password.NoOpPasswordEncoder
 import org.springframework.security.crypto.password.PasswordEncoder
@@ -54,6 +55,7 @@ class SecurityConfig(
                 authorizeHttpRequests
                     //.requestMatchers("/**").hasRole("USER")
                     .requestMatchers("user/login", "user/signup", "user/forgotPassword").permitAll()
+                    .requestMatchers("user/get", "user/update").hasAuthority("ADMIN")
                     .anyRequest()
                     .authenticated()
             }
@@ -63,6 +65,7 @@ class SecurityConfig(
                     .accessDeniedPage("/errors/access-denied")
             }
             .sessionManagement { sessionManagement -> sessionManagement.sessionCreationPolicy(SessionCreationPolicy.STATELESS) }
+            .logout { lo -> lo.permitAll() }
         //.formLogin(withDefaults())
 
         http.addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter::class.java)

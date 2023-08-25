@@ -11,6 +11,7 @@ import de.dkh.cafemanagementbackend.jsonwebtoken.JwtService
 import de.dkh.cafemanagementbackend.repository.UserRepository
 import de.dkh.cafemanagementbackend.testutils.TestData
 import de.dkh.cafemanagementbackend.utils.CafeUtils
+import de.dkh.cafemanagementbackend.utils.EmailUtils
 import de.dkh.cafemanagementbackend.wrapper.UserWrapper
 import io.mockk.*
 import io.mockk.junit5.MockKExtension
@@ -37,8 +38,16 @@ class UserServiceTest {
     private val customerUserDetailsService = mockk<CustomerUserDetailsService>()
     private val jwtService = mockk<JwtService>()
     private val jwtFilter = mockk<JwtFilter>()
+    private val emailUtils = mockk<EmailUtils>()
     private val objectUnderTest: UserServiceImpl =
-        UserServiceImpl(userRepository, authenticationManager, customerUserDetailsService, jwtService, jwtFilter)
+        UserServiceImpl(
+            userRepository,
+            authenticationManager,
+            customerUserDetailsService,
+            jwtService,
+            jwtFilter,
+            emailUtils
+        )
 
     @BeforeEach
     fun setUp() {
@@ -200,6 +209,8 @@ class UserServiceTest {
             )
 
             every { authenticationManager.authenticate(any()).isAuthenticated } returns false
+            every { customerUserDetailsService.loadUserByUsername(any()) } returns TestData.getInactiveUser().toUserDetails()
+
 
             // when
             val response = objectUnderTest.logIn(requestMap)
@@ -223,6 +234,7 @@ class UserServiceTest {
 
             every { authenticationManager.authenticate(any()).isAuthenticated } returns true
             every { customerUserDetailsService.checkUserApproved() } returns false
+            every { customerUserDetailsService.loadUserByUsername(any()) } returns TestData.getInactiveUser().toUserDetails()
 
             // when
             val messageKeyWord = "message"
@@ -251,6 +263,8 @@ class UserServiceTest {
             every { customerUserDetailsService.checkUserApproved() } returns true
             every { customerUserDetailsService.getUserDetailWithoutPassword() } returns TestData.getUserDetailWithoutPassword()
             every { jwtService.generateToken(any(), any()) } returns tokenKeyWord
+            every { customerUserDetailsService.loadUserByUsername(any()) } returns TestData.getInactiveUser().toUserDetails()
+
 
             // when
             val response = objectUnderTest.logIn(requestMap)
@@ -396,8 +410,10 @@ class UserServiceTest {
             )
 
             every { jwtFilter.isAdmin() } returns true
+            every { jwtFilter.getCurrentUser() } returns null
             every { userRepository.findById(any()) } returns Optional.of(TestData.getInactiveUser())
             every { userRepository.updateStatus(any(), any()) } returns 1
+            every { userRepository.getAllAdmins("admin") } returns emptyList()
 
             // when
             val responseEntity = objectUnderTest.update(requestMap)

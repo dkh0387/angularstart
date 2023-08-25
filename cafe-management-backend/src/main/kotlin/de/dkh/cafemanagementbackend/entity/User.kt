@@ -8,6 +8,8 @@ import jakarta.persistence.NamedQuery
 import jakarta.persistence.Table
 import org.hibernate.annotations.DynamicInsert
 import org.hibernate.annotations.DynamicUpdate
+import org.springframework.security.core.userdetails.User
+import org.springframework.security.core.userdetails.UserDetails
 
 /**
  * Example of usage named queries as implementation of a repository interface {@see UserRepository}.
@@ -34,4 +36,9 @@ data class User(
     @Column(name = "role") var role: String
 ) : PersistentObject() {
     fun toWrapper(): UserWrapper = UserWrapper(this.id, this.name, this.email, this.contactNumber, this.status)
+    fun toUserDetails(): UserDetails = User(
+        this.email,
+        this.password,
+        ArrayList()
+    )
 }

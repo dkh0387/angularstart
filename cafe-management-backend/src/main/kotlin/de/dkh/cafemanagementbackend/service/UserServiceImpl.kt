@@ -8,6 +8,7 @@ import de.dkh.cafemanagementbackend.jsonwebtoken.JwtFilter
 import de.dkh.cafemanagementbackend.jsonwebtoken.JwtService
 import de.dkh.cafemanagementbackend.repository.UserRepository
 import de.dkh.cafemanagementbackend.utils.CafeUtils
+import de.dkh.cafemanagementbackend.utils.EmailUtils
 import de.dkh.cafemanagementbackend.wrapper.UserWrapper
 import lombok.extern.slf4j.Slf4j
 import org.springframework.http.HttpStatus
@@ -24,7 +25,8 @@ class UserServiceImpl(
     private val authenticationManager: AuthenticationManager,
     private val customerUserDetailsService: CustomerUserDetailsService,
     private val jwtService: JwtService,
-    private val jwtFilter: JwtFilter
+    private val jwtFilter: JwtFilter,
+    private val emailUtils: EmailUtils
 ) : UserService {
     override fun signUp(requestMap: Map<String, String>): ResponseEntity<String> {
         println("Inside signUp $requestMap")
@@ -66,6 +68,8 @@ class UserServiceImpl(
         println("Inside logIn $requestMap")
 
         try {
+            // in order to set the userDetails for customerUserDetailsService
+            customerUserDetailsService.loadUserByUsername(requestMap["email"])
             // simple presentation of a username and password
             val authentication = authenticationManager.authenticate(
                 UsernamePasswordAuthenticationToken(
@@ -131,11 +135,24 @@ class UserServiceImpl(
                 if (userOptional.isEmpty) {
                     return CafeUtils.getStringResponseFor(CafeConstants.NO_USER_FOR_ID, HttpStatus.OK)
                 } else {
-                    requestMap["status"]?.let { userRepository.updateStatus(userOptional.get().id, it) }
-                    return CafeUtils.getStringResponseFor(
-                        if (requestMap["status"] != null) CafeConstants.USER_STATUS_UPDATED else CafeConstants.NO_STATUS_REQUESTED_FOR_UPDATE,
-                        HttpStatus.OK
-                    )
+                    if (requestMap["status"] != null) {
+                        requestMap["status"]?.let { userRepository.updateStatus(userOptional.get().id, it) }
+                        sendEmailToAllAdmin(
+                            requestMap["status"],
+                            userOptional.get().email,
+                            userRepository.getAllAdmins("admin")
+                        )
+                        return CafeUtils.getStringResponseFor(
+                            CafeConstants.USER_STATUS_UPDATED,
+                            HttpStatus.OK
+                        )
+                    } else {
+                        return CafeUtils.getStringResponseFor(
+                            CafeConstants.NO_STATUS_REQUESTED_FOR_UPDATE,
+                            HttpStatus.OK
+                        )
+                    }
+
                 }
             } else {
                 CafeUtils.getStringResponseFor(CafeConstants.UNAUTHORIZED_ACCESS, HttpStatus.UNAUTHORIZED)
@@ -146,6 +163,32 @@ class UserServiceImpl(
                 CafeConstants.USER_STATUS_UPDATE_WENT_WRONG,
                 HttpStatus.INTERNAL_SERVER_ERROR
             )
+        }
+    }
+
+    /**
+     * @TODO: testing!
+     * Send an email to all admins about status update for the requested user.
+     * NOTE: the username of UserDetails is being used as email in this project, see: [de.dkh.cafemanagementbackend.service.CustomerUserDetailsService].
+     */
+    override fun sendEmailToAllAdmin(status: String?, email: String, allAdmins: List<UserWrapper>) {
+
+        if (jwtFilter.getCurrentUser() != null && status != null) {
+            if (status.equals("true", true)) {
+                emailUtils.sendSimpleMessage(
+                    to = jwtFilter.getCurrentUser()!!.username,
+                    subject = CafeConstants.SUBJECT_USER_SET_APPROVED,
+                    text = CafeConstants.TEXT_USER_SET_APPROVED + " USER: $email" + " ADMIN: ${jwtFilter.getCurrentUser()}",
+                    allAdmins.map { it.email }
+                )
+            } else if (status.equals("false", true)) {
+                emailUtils.sendSimpleMessage(
+                    to = jwtFilter.getCurrentUser()!!.username,
+                    subject = CafeConstants.SUBJECT_USER_SET_DISABLED,
+                    text = CafeConstants.TEXT_USER_SET_DISABLED + " USER: $email" + " ADMIN: ${jwtFilter.getCurrentUser()}",
+                    allAdmins.map { it.email }
+                )
+            }
         }
     }
 
