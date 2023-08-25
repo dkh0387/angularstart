@@ -1,9 +1,6 @@
 package de.dkh.cafemanagementbackend.entity
 
 import jakarta.persistence.*
-import lombok.Getter
-import lombok.NoArgsConstructor
-import lombok.Setter
 
 
 /**
@@ -16,9 +13,7 @@ open class PersistentObject {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false)
-    @Getter
-    @Setter
-    protected var id: Long = 0
+    var id: Long = 0
 
 
 }

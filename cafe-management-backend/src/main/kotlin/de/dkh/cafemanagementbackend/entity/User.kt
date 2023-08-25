@@ -1,6 +1,7 @@
 package de.dkh.cafemanagementbackend.entity
 
 import com.fasterxml.jackson.annotation.JsonAutoDetect
+import de.dkh.cafemanagementbackend.wrapper.UserWrapper
 import jakarta.persistence.Column
 import jakarta.persistence.Entity
 import jakarta.persistence.NamedQuery
@@ -31,4 +32,6 @@ data class User(
     @Column(name = "password") val password: String?,
     @Column(name = "status") var status: String,
     @Column(name = "role") var role: String
-) : PersistentObject()
+) : PersistentObject() {
+    fun toWrapper(): UserWrapper = UserWrapper(this.id, this.name, this.email, this.contactNumber, this.status)
+}

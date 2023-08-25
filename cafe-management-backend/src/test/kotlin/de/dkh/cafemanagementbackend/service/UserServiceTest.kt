@@ -4,10 +4,12 @@ import de.dkh.cafemanagementbackend.constants.CafeConstants
 import de.dkh.cafemanagementbackend.entity.User
 import de.dkh.cafemanagementbackend.exception.SignUpException
 import de.dkh.cafemanagementbackend.exception.SignUpValidationException
+import de.dkh.cafemanagementbackend.exception.UsersLoadException
 import de.dkh.cafemanagementbackend.jsonwebtoken.JwtService
 import de.dkh.cafemanagementbackend.repository.UserRepository
 import de.dkh.cafemanagementbackend.testutils.TestData
 import de.dkh.cafemanagementbackend.utils.CafeUtils
+import de.dkh.cafemanagementbackend.wrapper.UserWrapper
 import io.mockk.*
 import io.mockk.junit5.MockKExtension
 import org.assertj.core.api.Assertions.*
@@ -20,7 +22,7 @@ import org.junit.jupiter.api.extension.ExtendWith
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.security.authentication.AuthenticationManager
-import org.springframework.security.core.AuthenticationException
+import java.lang.Exception
 import java.lang.RuntimeException
 
 
@@ -200,7 +202,7 @@ class UserServiceTest {
 
             // then
             assertThat(response).isEqualTo(
-                CafeUtils.getResponseFor(
+                CafeUtils.getStringResponseFor(
                     CafeConstants.BAD_CREDENTIALS,
                     HttpStatus.INTERNAL_SERVER_ERROR
                 )
@@ -224,7 +226,7 @@ class UserServiceTest {
 
             // then
             assertThat(response).isEqualTo(
-                CafeUtils.getResponseFor(
+                CafeUtils.getStringResponseFor(
                     "{\"$messageKeyWord\":\"${CafeConstants.WAIT_FOR_ADMIN_APPROVAL}\"}",
                     HttpStatus.BAD_REQUEST
                 )
@@ -251,7 +253,41 @@ class UserServiceTest {
 
             // then
             assertThat(response).isEqualTo(
-                CafeUtils.getResponseFor("{\"$tokenKeyWord\":\"$tokenKeyWord\"}", HttpStatus.OK)
+                CafeUtils.getStringResponseFor("{\"$tokenKeyWord\":\"$tokenKeyWord\"}", HttpStatus.OK)
+            )
+        }
+
+    }
+
+    @Nested
+    @DisplayName("Testing get all users as wrappers")
+    @TestInstance(TestInstance.Lifecycle.PER_CLASS)
+    inner class GetAllUsersTesting {
+
+        @Test
+        fun `should throw a UsersLoadException if the repository throws an exception`() {
+            // given
+            every { userRepository.findAll() } throws Exception()
+
+            // when / then
+            assertThatThrownBy { objectUnderTest.getAllUsers() }.isInstanceOf(UsersLoadException::class.java)
+        }
+
+        @Test
+        fun `should return a valid UserWrapper response if the repository loads all users`() {
+            // given
+            every { userRepository.findAll() } returns listOf(TestData.getInactiveUser())
+
+            // when / then
+            val responseEntity = objectUnderTest.getAllUsers()
+
+            // then
+            assertThat(responseEntity).isEqualTo(
+                ResponseEntity<List<UserWrapper>>(
+                    listOf(
+                        TestData.getInactiveUser().toWrapper()
+                    ), HttpStatus.OK
+                )
             )
         }
 

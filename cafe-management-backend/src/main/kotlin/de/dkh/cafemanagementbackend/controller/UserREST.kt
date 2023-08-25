@@ -1,6 +1,8 @@
 package de.dkh.cafemanagementbackend.controller
 
+import de.dkh.cafemanagementbackend.wrapper.UserWrapper
 import org.springframework.http.ResponseEntity
+import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RequestMapping
@@ -13,4 +15,7 @@ interface UserREST {
 
     @PostMapping("/login")
     fun logIn(@RequestBody(required = true) requestMap: Map<String, String>): ResponseEntity<String>
+
+    @GetMapping("/get")
+    fun getAllUsers(): ResponseEntity<List<UserWrapper>>
 }

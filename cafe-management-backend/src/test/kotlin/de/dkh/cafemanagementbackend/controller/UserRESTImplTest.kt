@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper
 import de.dkh.cafemanagementbackend.repository.UserRepository
 import de.dkh.cafemanagementbackend.testutils.TestData
 import jakarta.servlet.ServletException
+import org.assertj.core.api.Assertions.assertThat
 import org.assertj.core.api.Assertions.assertThatThrownBy
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Nested
@@ -15,8 +16,10 @@ import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.http.MediaType
 import org.springframework.test.annotation.DirtiesContext
 import org.springframework.test.web.servlet.MockMvc
+import org.springframework.test.web.servlet.get
 import org.springframework.test.web.servlet.post
 import java.nio.charset.StandardCharsets
+
 
 @SpringBootTest
 @AutoConfigureMockMvc(addFilters = false)
@@ -153,5 +156,32 @@ class UserRESTImplTest {
                     content { contentType(MediaType("text", "plain", StandardCharsets.UTF_8)) }
                 }
         }
+    }
+
+    @Nested
+    @DisplayName("Testing web layer for loading all users as wrappers")
+    @TestInstance(TestInstance.Lifecycle.PER_CLASS)
+    @DirtiesContext
+    inner class LoadAllUsersTesting {
+
+        @Test
+        fun `should return a response with all users as wrappers`() {
+
+            // given
+
+            // when
+            val resultActionsDsl = mockMvc.get("$BASE_URL/get")
+
+            // then
+            val mvcResult = resultActionsDsl
+                .andDo { print() }
+                .andExpect {
+                    status { isOk() }
+                    content { contentType(MediaType.APPLICATION_JSON) }
+                    jsonPath("$[0].name") { value("David Adams") }
+                }
+                .andReturn()
+        }
+
     }
 }

@@ -3,13 +3,11 @@ package de.dkh.cafemanagementbackend.service
 import com.fasterxml.jackson.databind.ObjectMapper
 import de.dkh.cafemanagementbackend.constants.CafeConstants
 import de.dkh.cafemanagementbackend.entity.User
-import de.dkh.cafemanagementbackend.exception.InvalidEmailException
-import de.dkh.cafemanagementbackend.exception.SignUpErrorResponce
-import de.dkh.cafemanagementbackend.exception.SignUpException
-import de.dkh.cafemanagementbackend.exception.SignUpValidationException
+import de.dkh.cafemanagementbackend.exception.*
 import de.dkh.cafemanagementbackend.jsonwebtoken.JwtService
 import de.dkh.cafemanagementbackend.repository.UserRepository
 import de.dkh.cafemanagementbackend.utils.CafeUtils
+import de.dkh.cafemanagementbackend.wrapper.UserWrapper
 import lombok.extern.slf4j.Slf4j
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
@@ -39,15 +37,15 @@ class UserServiceImpl(
 
                 return if (Objects.isNull(existingUser)) {
                     val registeredUser = register(userFromMap)
-                    CafeUtils.getResponseFor(
+                    CafeUtils.getStringResponseFor(
                         CafeConstants.USER_SUCCESSFULLY_REGISTERED + ": $registeredUser", HttpStatus.CREATED
                     )
                 } else {
-                    CafeUtils.getResponseFor(CafeConstants.EMAIL_ALREADY_EXISTS, HttpStatus.BAD_REQUEST)
+                    CafeUtils.getStringResponseFor(CafeConstants.EMAIL_ALREADY_EXISTS, HttpStatus.BAD_REQUEST)
                 }
                 // If the incoming request is not valid, return a SignUpErrorResponce
             } else {
-                return CafeUtils.getResponseFor(
+                return CafeUtils.getStringResponseFor(
                     SignUpErrorResponce(
                         HttpStatus.BAD_REQUEST.name, CafeConstants.INVALID_DATA, System.currentTimeMillis()
                     ).toString(), HttpStatus.BAD_REQUEST
@@ -81,20 +79,33 @@ class UserServiceImpl(
                         customerUserDetailsService.getUserDetailWithoutPassword().email,
                         customerUserDetailsService.getUserDetailWithoutPassword().role
                     )
-                    CafeUtils.getResponseFor("{\"$tokenKeyWord\":\"$token\"}", HttpStatus.OK)
+                    CafeUtils.getStringResponseFor("{\"$tokenKeyWord\":\"$token\"}", HttpStatus.OK)
                 } else {
                     val messageKeyWord = "message"
-                    CafeUtils.getResponseFor(
+                    CafeUtils.getStringResponseFor(
                         "{\"$messageKeyWord\":\"${CafeConstants.WAIT_FOR_ADMIN_APPROVAL}\"}",
                         HttpStatus.BAD_REQUEST
                     )
                 }
             } else {
-                return CafeUtils.getResponseFor(CafeConstants.BAD_CREDENTIALS, HttpStatus.INTERNAL_SERVER_ERROR)
+                return CafeUtils.getStringResponseFor(CafeConstants.BAD_CREDENTIALS, HttpStatus.INTERNAL_SERVER_ERROR)
             }
 
         } catch (e: Exception) {
-            throw SignUpException(CafeConstants.SOMETHING_WENT_WRONG, HttpStatus.INTERNAL_SERVER_ERROR)
+            throw SignUpException(CafeConstants.LOGIN_WENT_WRONG, HttpStatus.INTERNAL_SERVER_ERROR)
+        }
+    }
+
+    override fun getAllUsers(): ResponseEntity<List<UserWrapper>> {
+        println("Inside getAllUsers")
+
+        try {
+            return ResponseEntity<List<UserWrapper>>(
+                userRepository.findAll().map { it.toWrapper() },
+                HttpStatus.OK
+            )
+        } catch (e: Exception) {
+            throw UsersLoadException(CafeConstants.LOAD_USERS_WENT_WRONG, HttpStatus.BAD_REQUEST)
         }
     }
 
