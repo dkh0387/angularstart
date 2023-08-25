@@ -32,7 +32,7 @@ class JwtFilter(
         response: HttpServletResponse,
         filterChain: FilterChain
     ) {
-        if (request.servletPath.matches(Regex("/user/login|/user/signup|/user/forgotPassword|/user/get"))) {
+        if (request.servletPath.matches(Regex("/user/login|/user/signup|/user/forgotPassword"))) {
             filterChain.doFilter(request, response)
         } else {
             val header = request.getHeader("Authorization")

@@ -53,7 +53,7 @@ class SecurityConfig(
             .authorizeHttpRequests { authorizeHttpRequests ->
                 authorizeHttpRequests
                     //.requestMatchers("/**").hasRole("USER")
-                    .requestMatchers("user/login", "user/signup", "user/forgotPassword", "user/get").permitAll()
+                    .requestMatchers("user/login", "user/signup", "user/forgotPassword").permitAll()
                     .anyRequest()
                     .authenticated()
             }
