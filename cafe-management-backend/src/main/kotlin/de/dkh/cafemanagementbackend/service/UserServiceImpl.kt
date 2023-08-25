@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper
 import de.dkh.cafemanagementbackend.constants.CafeConstants
 import de.dkh.cafemanagementbackend.entity.User
 import de.dkh.cafemanagementbackend.exception.*
+import de.dkh.cafemanagementbackend.jsonwebtoken.JwtFilter
 import de.dkh.cafemanagementbackend.jsonwebtoken.JwtService
 import de.dkh.cafemanagementbackend.repository.UserRepository
 import de.dkh.cafemanagementbackend.utils.CafeUtils
@@ -22,7 +23,8 @@ class UserServiceImpl(
     private val userRepository: UserRepository,
     private val authenticationManager: AuthenticationManager,
     private val customerUserDetailsService: CustomerUserDetailsService,
-    private val jwtService: JwtService
+    private val jwtService: JwtService,
+    private val jwtFilter: JwtFilter
 ) : UserService {
     override fun signUp(requestMap: Map<String, String>): ResponseEntity<String> {
         println("Inside signUp $requestMap")
@@ -100,10 +102,14 @@ class UserServiceImpl(
         println("Inside getAllUsers")
 
         try {
-            return ResponseEntity<List<UserWrapper>>(
-                userRepository.findAll().map { it.toWrapper() },
-                HttpStatus.OK
-            )
+            return if (jwtFilter.isAdmin()) {
+                ResponseEntity<List<UserWrapper>>(
+                    userRepository.findAll().filter { it.role.equals("user", true) }.map { it.toWrapper() },
+                    HttpStatus.OK
+                )
+            } else {
+                CafeUtils.getUsersResponseFor(emptyList(), HttpStatus.UNAUTHORIZED)
+            }
         } catch (e: Exception) {
             throw UsersLoadException(CafeConstants.LOAD_USERS_WENT_WRONG, HttpStatus.BAD_REQUEST)
         }

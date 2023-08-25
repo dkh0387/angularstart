@@ -5,6 +5,7 @@ import de.dkh.cafemanagementbackend.entity.User
 import de.dkh.cafemanagementbackend.exception.SignUpException
 import de.dkh.cafemanagementbackend.exception.SignUpValidationException
 import de.dkh.cafemanagementbackend.exception.UsersLoadException
+import de.dkh.cafemanagementbackend.jsonwebtoken.JwtFilter
 import de.dkh.cafemanagementbackend.jsonwebtoken.JwtService
 import de.dkh.cafemanagementbackend.repository.UserRepository
 import de.dkh.cafemanagementbackend.testutils.TestData
@@ -33,8 +34,14 @@ class UserServiceTest {
     private val authenticationManager = mockk<AuthenticationManager>()
     private val customerUserDetailsService = mockk<CustomerUserDetailsService>()
     private val jwtService = mockk<JwtService>()
+    private val jwtFilter = mockk<JwtFilter>()
     private val objectUnderTest: UserServiceImpl =
-        UserServiceImpl(userRepository, authenticationManager, customerUserDetailsService, jwtService)
+        UserServiceImpl(userRepository, authenticationManager, customerUserDetailsService, jwtService, jwtFilter)
+
+    @BeforeEach
+    fun setUp() {
+        clearAllMocks()
+    }
 
     @Nested
     @DisplayName("Testing SignUp Map Validator")
@@ -119,7 +126,7 @@ class UserServiceTest {
         }
 
         @Test
-        fun `should return the 'EMAIL_ALREADY_EXISTS' response if the requested user is already registered`() {
+        fun `should return the EMAIL_ALREADY_EXISTS response if the requested user is already registered`() {
             // given
             val requestMap: Map<String, String> = mapOf(
                 "name" to "Denis Khaskin",
@@ -166,11 +173,6 @@ class UserServiceTest {
     @DisplayName("Testing Log in")
     @TestInstance(TestInstance.Lifecycle.PER_CLASS)
     inner class LogInTesting {
-
-        @BeforeEach
-        fun setUp() {
-
-        }
 
         @Test
         fun `should throw a SignUpException when the authentication fails`() {
@@ -274,8 +276,25 @@ class UserServiceTest {
         }
 
         @Test
+        fun `should return a BAD_REQUEST response if the user is not an admin`() {
+            // given
+            every { jwtFilter.isAdmin() } returns false
+
+            // when / then
+            val responseEntity = objectUnderTest.getAllUsers()
+
+            // then
+            assertThat(responseEntity).isEqualTo(
+                ResponseEntity<List<UserWrapper>>(
+                    emptyList(), HttpStatus.UNAUTHORIZED
+                )
+            )
+        }
+
+        @Test
         fun `should return a valid UserWrapper response if the repository loads all users`() {
             // given
+            every { jwtFilter.isAdmin() } returns true
             every { userRepository.findAll() } returns listOf(TestData.getInactiveUser())
 
             // when / then

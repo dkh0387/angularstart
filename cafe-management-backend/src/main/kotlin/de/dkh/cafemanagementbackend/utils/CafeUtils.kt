@@ -10,5 +10,8 @@ class CafeUtils {
         fun getStringResponseFor(body: String, httpStatus: HttpStatus): ResponseEntity<String> =
             ResponseEntity(body, httpStatus)
 
+        fun getUsersResponseFor(body: List<UserWrapper>, httpStatus: HttpStatus): ResponseEntity<List<UserWrapper>> =
+            ResponseEntity(body, httpStatus)
+
     }
 }
