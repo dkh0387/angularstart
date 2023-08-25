@@ -327,7 +327,7 @@ class UserServiceTest {
                 "contactNumber" to "+4915126227287",
                 "email" to "deniskh87@gmail.com",
                 "password" to "11235813",
-                "status" to "user"
+                "status" to "false"
             )
 
             every { jwtFilter.isAdmin() } returns true
@@ -345,7 +345,7 @@ class UserServiceTest {
                 "contactNumber" to "+4915126227287",
                 "email" to "deniskh87@gmail.com",
                 "password" to "11235813",
-                "status" to "user"
+                "status" to "false"
             )
 
             every { jwtFilter.isAdmin() } returns false
@@ -370,7 +370,7 @@ class UserServiceTest {
                 "contactNumber" to "+4915126227287",
                 "email" to "deniskh87@gmail.com",
                 "password" to "11235813",
-                "status" to "user"
+                "status" to "false"
             )
 
             every { jwtFilter.isAdmin() } returns true
@@ -392,12 +392,12 @@ class UserServiceTest {
             // given
             val requestMap: Map<String, String> = mapOf(
                 "id" to "1",
-                "status" to "admin"
+                "status" to "true"
             )
 
             every { jwtFilter.isAdmin() } returns true
             every { userRepository.findById(any()) } returns Optional.of(TestData.getInactiveUser())
-            every { userRepository.updateStatus(any(), any()) } returns TestData.getInactiveUser()
+            every { userRepository.updateStatus(any(), any()) } returns 1
 
             // when
             val responseEntity = objectUnderTest.update(requestMap)
@@ -420,7 +420,7 @@ class UserServiceTest {
 
             every { jwtFilter.isAdmin() } returns true
             every { userRepository.findById(any()) } returns Optional.of(TestData.getInactiveUser())
-            every { userRepository.updateStatus(any(), any()) } returns TestData.getInactiveUser()
+            every { userRepository.updateStatus(any(), any()) } returns 1
 
             // when
             val responseEntity = objectUnderTest.update(requestMap)

@@ -2,6 +2,7 @@ package de.dkh.cafemanagementbackend.jsonwebtoken
 
 import de.dkh.cafemanagementbackend.service.CustomerUserDetailsService
 import io.jsonwebtoken.Claims
+import io.jsonwebtoken.impl.DefaultClaims
 import jakarta.servlet.FilterChain
 import jakarta.servlet.http.HttpServletRequest
 import jakarta.servlet.http.HttpServletResponse
@@ -24,9 +25,11 @@ class JwtFilter(
 ) : OncePerRequestFilter() {
 
     var securityContext = SecurityContextHolder.getContext()
-    private lateinit var claims: Claims
+    var claims: Claims = DefaultClaims()
+
     @Getter
     private var userName: String? = null
+
     public override fun doFilterInternal(
         request: HttpServletRequest,
         response: HttpServletResponse,

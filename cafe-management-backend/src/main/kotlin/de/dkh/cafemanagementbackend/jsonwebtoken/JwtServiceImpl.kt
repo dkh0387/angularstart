@@ -50,7 +50,7 @@ class JwtServiceImpl : JwtService {
      *
      */
     override fun extractAllClaims(token: String): Claims {
-        return Jwts.parser().setSigningKey(secret).parseClaimsJwt(token).body
+        return Jwts.parser().setSigningKey(secret).parseClaimsJws(token).body
     }
 
     override fun validateToken(token: String, userDetails: UserDetails): Boolean {

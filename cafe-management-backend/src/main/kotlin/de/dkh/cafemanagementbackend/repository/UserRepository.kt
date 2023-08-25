@@ -15,7 +15,7 @@ interface UserRepository : JpaRepository<User, Long> {
     @Transactional
     @Modifying
     @Query("UPDATE User u SET u.status = ?2 where u.id = ?1")
-    fun updateStatus(id: Long, status: String): User
+    fun updateStatus(id: Long, status: String): Int
 
     /**
      * NOTE: imlementation directly in [de.dkh.cafemanagementbackend.entity.User]!

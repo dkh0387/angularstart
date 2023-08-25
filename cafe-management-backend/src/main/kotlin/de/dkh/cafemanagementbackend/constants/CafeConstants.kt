@@ -19,5 +19,6 @@ class CafeConstants {
         val NO_USER_FOR_ID = "There is no user for the given id in the database!"
         val USER_STATUS_UPDATED = "User status successfully updated!"
         val NO_STATUS_REQUESTED_FOR_UPDATE = "There is no status key provided in the request map!"
+        val USER_STATUS_UPDATE_WENT_WRONG = "User status update went wrong!"
     }
 }

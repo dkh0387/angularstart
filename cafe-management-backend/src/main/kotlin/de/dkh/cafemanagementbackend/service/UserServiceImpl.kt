@@ -142,7 +142,10 @@ class UserServiceImpl(
             }
 
         } catch (e: Exception) {
-            throw UserUpdateStatusException("", HttpStatus.INTERNAL_SERVER_ERROR)
+            throw UserUpdateStatusException(
+                CafeConstants.USER_STATUS_UPDATE_WENT_WRONG,
+                HttpStatus.INTERNAL_SERVER_ERROR
+            )
         }
     }
 
