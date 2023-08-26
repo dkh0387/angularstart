@@ -2,10 +2,9 @@ package de.dkh.cafemanagementbackend.entity
 
 import com.fasterxml.jackson.annotation.JsonAutoDetect
 import de.dkh.cafemanagementbackend.wrapper.UserWrapper
-import jakarta.persistence.Column
-import jakarta.persistence.Entity
-import jakarta.persistence.NamedQuery
-import jakarta.persistence.Table
+import jakarta.persistence.*
+import lombok.Getter
+import lombok.Setter
 import org.hibernate.annotations.DynamicInsert
 import org.hibernate.annotations.DynamicUpdate
 import org.springframework.security.core.userdetails.User
@@ -33,12 +32,24 @@ data class User(
     @Column(name = "email") val email: String,
     @Column(name = "password") val password: String?,
     @Column(name = "status") var status: String,
-    @Column(name = "role") var role: String
+    @Column(name = "role") var role: String,
+    @OneToOne(cascade = [CascadeType.ALL], mappedBy = "user", fetch = FetchType.EAGER)
+    @Getter
+    @Setter
+    val authority: Authority? = null
 ) : PersistentObject() {
+
     fun toWrapper(): UserWrapper = UserWrapper(this.id, this.name, this.email, this.contactNumber, this.status)
     fun toUserDetails(): UserDetails = User(
         this.email,
         this.password,
         ArrayList()
     )
+
+
+    internal enum class UserRoles {
+        USER,
+        ADMIN;
+    }
+
 }

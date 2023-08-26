@@ -1,6 +1,7 @@
 package de.dkh.cafemanagementbackend.controller
 
 import de.dkh.cafemanagementbackend.wrapper.UserWrapper
+import jakarta.annotation.security.RolesAllowed
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PostMapping
@@ -17,6 +18,7 @@ interface UserREST {
     fun logIn(@RequestBody(required = true) requestMap: Map<String, String>): ResponseEntity<String>
 
     @GetMapping("/get")
+    //@RolesAllowed("ADMIN")
     fun getAllUsers(): ResponseEntity<List<UserWrapper>>
 
     @PostMapping("/update")

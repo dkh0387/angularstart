@@ -30,7 +30,7 @@ dependencies {
     implementation("org.springframework.boot:spring-boot-starter-jdbc")
     implementation("org.springframework.boot:spring-boot-starter-web")
     implementation("org.jetbrains.kotlin:kotlin-reflect")
-    //implementation("com.fasterxml.jackson.core:jackson-databind:2.15.2")
+
     implementation("com.fasterxml.jackson.module:jackson-module-kotlin:2.15.2")
 
     compileOnly("org.projectlombok:lombok")
@@ -38,20 +38,32 @@ dependencies {
     annotationProcessor("org.projectlombok:lombok")
     testImplementation("org.springframework.boot:spring-boot-starter-test")
     testImplementation("io.mockk:mockk:1.13.7")
+
     /*Security stuff: JSON web token, Soring security */
     implementation("io.jsonwebtoken:jjwt:0.9.1")
+
+    /*Needed to handle RSA keys*/
+    implementation("org.bitbucket.b_c:jose4j:0.9.3")
+    implementation("org.bouncycastle:bcprov-jdk15on:1.70")
+    implementation("org.bouncycastle:bcpkix-jdk15on:1.70")
+
     implementation("org.springframework.boot:spring-boot-starter-security:3.1.2")
     testImplementation("org.springframework.security:spring-security-test:6.1.2")
+
     /* Sending mails over the network */
     implementation("org.springframework.boot:spring-boot-starter-mail:3.1.2")
+
     /* Generating/downloading PDFs */
     implementation("com.itextpdf:itextpdf:5.5.13.3")
     implementation("org.apache.pdfbox:pdfbox:3.0.0")
+
     /* String validation etc. */
     implementation("com.google.guava:guava:32.1.2-jre")
+
     /* Converting JSON-POJO */
     //implementation("com.google.code.gson:gson:2.10.1")
     implementation("com.vaadin.external.google:android-json:0.0.20131108.vaadin1")
+
     // Needed for XML Serialization of JSON web tokens from credentials
     implementation("javax.xml.bind:jaxb-api:2.3.1")
     implementation("com.sun.xml.bind:jaxb-core:4.0.3")

@@ -6,10 +6,12 @@ import io.jsonwebtoken.Jwts
 import io.jsonwebtoken.SignatureAlgorithm
 import org.springframework.security.core.userdetails.UserDetails
 import org.springframework.stereotype.Service
+import java.security.*
 import java.time.LocalDate
 import java.time.ZoneId
-import java.util.Date
+import java.util.*
 import java.util.function.Function
+
 
 /**
  * Service for JSON web tokens.
@@ -35,10 +37,7 @@ import java.util.function.Function
  * @TODO: how do i test this one??
  */
 @Service
-class JwtServiceImpl : JwtService {
-
-    private val secret = "secret"
-
+class JwtServiceImpl(private val publicKey: PublicKey, private val privateKey: PrivateKey) : JwtService {
     /**
      * Extract a specific claim using Getter of Claims interface.
      */
@@ -51,7 +50,7 @@ class JwtServiceImpl : JwtService {
      *
      */
     override fun extractAllClaims(token: String): Claims {
-        return Jwts.parser().setSigningKey(secret).parseClaimsJws(token).body
+        return Jwts.parser().setSigningKey(publicKey).parseClaimsJws(token).body
     }
 
     override fun validateToken(token: String, userDetails: UserDetails): Boolean {
@@ -81,7 +80,7 @@ class JwtServiceImpl : JwtService {
             .setIssuer(CafeConstants.BASE_URL)
             .setIssuedAt(Date(System.currentTimeMillis()))
             .setExpiration(Date(System.currentTimeMillis() + 1000 * 60 * 60 * 10))
-            .signWith(SignatureAlgorithm.HS256, secret)
+            .signWith(SignatureAlgorithm.ES256, privateKey)
             .compact()
     }
 
@@ -93,5 +92,11 @@ class JwtServiceImpl : JwtService {
                 ).toInstant()
             )
         )
+    }
+
+    fun generateKeyPair(): KeyPair {
+        val generator = KeyPairGenerator.getInstance("RSA")
+        generator.initialize(2048, SecureRandom())
+        return generator.genKeyPair()
     }
 }

@@ -19,16 +19,16 @@ services:
     volumes:
       #- ./data:/var/lib/mysql                         #database data volume
       - ./src/main/db:/docker-entrypoint-initdb.d/:ro #database files called when the container is built and started for the first time
-  backend-service:
-    container_name: backend
-    depends_on:
-      - mysql-service
-    build:
-      dockerfile: backend.Dockerfile
-    command:
-      --publish 8081:8080
-    ports:
-      - "8081:8080"
+#  backend-service:
+#    container_name: backend
+#    depends_on:
+#      - mysql-service
+#    build:
+#      dockerfile: backend.Dockerfile
+#    command:
+#      --publish 8081:8080
+#    ports:
+#      - "8081:8080"
   adminer-service:
     container_name: adminer
     image: adminer

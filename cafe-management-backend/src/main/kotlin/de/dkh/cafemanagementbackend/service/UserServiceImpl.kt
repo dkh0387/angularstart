@@ -83,7 +83,7 @@ class UserServiceImpl(
                     val tokenKeyWord = "token"
                     val token = jwtService.generateToken(
                         customerUserDetailsService.getUserDetailWithoutPassword().email,
-                        customerUserDetailsService.getUserDetailWithoutPassword().role
+                        customerUserDetailsService.getUserDetailWithoutPassword().authority!!.authority
                     )
                     CafeUtils.getStringResponseFor("{\"$tokenKeyWord\":\"$token\"}", HttpStatus.OK)
                 } else {

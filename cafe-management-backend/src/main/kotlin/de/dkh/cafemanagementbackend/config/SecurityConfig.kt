@@ -5,25 +5,37 @@ import de.dkh.cafemanagementbackend.service.CustomerUserDetailsService
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 import org.springframework.security.authentication.AuthenticationManager
+import org.springframework.security.authentication.AuthenticationProvider
+import org.springframework.security.authentication.dao.DaoAuthenticationProvider
 import org.springframework.security.config.BeanIds
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration
+import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity
 import org.springframework.security.config.annotation.web.builders.HttpSecurity
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity
-import org.springframework.security.config.annotation.web.configurers.LogoutConfigurer
+import org.springframework.security.config.core.GrantedAuthorityDefaults
 import org.springframework.security.config.http.SessionCreationPolicy
 import org.springframework.security.crypto.password.NoOpPasswordEncoder
 import org.springframework.security.crypto.password.PasswordEncoder
 import org.springframework.security.web.SecurityFilterChain
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter
+import org.springframework.web.cors.CorsConfiguration
+import org.springframework.web.cors.UrlBasedCorsConfigurationSource
+import org.springframework.web.filter.CorsFilter
 
 
 /**
  * Spring security configuration.
  * NOTE: we are on Spring boot 3 here, so we can not use the deprecated [WebSecurityConfigurerAdapter]!
- * For details see: https://spring.io/blog/2022/02/21/spring-security-without-the-websecurityconfigureradapter
+ * For details see: https://spring.io/blog/2022/02/21/spring-security-without-the-websecurityconfigureradapter.
+ * @EnableMethodSecurity allowes to use annotion based configuration of role each endpoint, see [de.dkh.cafemanagementbackend.controller.UserREST].
  */
 @Configuration
 @EnableWebSecurity
+/*@EnableMethodSecurity(
+    securedEnabled = true,
+    jsr250Enabled = true,
+    prePostEnabled = true
+)*/
 class SecurityConfig(
     private val customerUserDetailsService: CustomerUserDetailsService,
     private val jwtFilter: JwtFilter
@@ -36,6 +48,19 @@ class SecurityConfig(
     @Throws(Exception::class)
     fun authenticationManager(authenticationConfiguration: AuthenticationConfiguration): AuthenticationManager {
         return authenticationConfiguration.getAuthenticationManager()
+    }
+
+    @Bean
+    fun authenticationProvider(): AuthenticationProvider {
+        val authProvider = DaoAuthenticationProvider()
+        authProvider.setUserDetailsService(customerUserDetailsService)
+        authProvider.setPasswordEncoder(passwordEncoder())
+        return authProvider
+    }
+
+    @Bean
+    fun passwordEncoder(): PasswordEncoder {
+        return NoOpPasswordEncoder.getInstance()
     }
 
     /**
@@ -55,7 +80,7 @@ class SecurityConfig(
                 authorizeHttpRequests
                     //.requestMatchers("/**").hasRole("USER")
                     .requestMatchers("user/login", "user/signup", "user/forgotPassword").permitAll()
-                    .requestMatchers("user/get", "user/update").hasAuthority("ADMIN")
+                    .requestMatchers("user/get", "user/update").hasRole("ADMIN")
                     .anyRequest()
                     .authenticated()
             }
@@ -72,10 +97,22 @@ class SecurityConfig(
         return http.build()
     }
 
+    // Used by Spring Security if CORS is enabled.
     @Bean
-    fun passwordEncoder(): PasswordEncoder {
-        return NoOpPasswordEncoder.getInstance()
+    fun corsFilter(): CorsFilter {
+        val source = UrlBasedCorsConfigurationSource()
+        val config = CorsConfiguration()
+        config.allowCredentials = true
+        config.addAllowedOrigin("*")
+        config.addAllowedHeader("*")
+        config.addAllowedMethod("*")
+        source.registerCorsConfiguration("/**", config)
+        return CorsFilter(source)
     }
 
+    @Bean
+    fun grantedAuthorityDefaults(): GrantedAuthorityDefaults {
+        return GrantedAuthorityDefaults("") // Remove the ROLE_ prefix
+    }
 
 }

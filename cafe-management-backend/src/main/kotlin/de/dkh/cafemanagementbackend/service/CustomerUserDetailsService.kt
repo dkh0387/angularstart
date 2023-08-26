@@ -34,14 +34,11 @@ class CustomerUserDetailsService(private val userRepository: UserRepository) : U
             throw UsernameNotFoundException(CafeConstants.USER_COULD_NOT_FOUND_BY_EMAIL)
         }
         userDetail = userDetailFromDB!!
-        val authorities = ArrayList<GrantedAuthority?>()
-
-        authorities.add(SimpleGrantedAuthority(userDetail.role))
 
         return User(
             userDetail.email,
             userDetail.password,
-            authorities
+            listOf(SimpleGrantedAuthority(userDetail.authority!!.authority))
         )
     }
 
