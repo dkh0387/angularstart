@@ -1,5 +1,6 @@
 package de.dkh.cafemanagementbackend.jsonwebtoken
 
+import de.dkh.cafemanagementbackend.entity.User
 import de.dkh.cafemanagementbackend.service.CustomerUserDetailsService
 import io.jsonwebtoken.Claims
 import io.jsonwebtoken.impl.DefaultClaims
@@ -44,8 +45,8 @@ class JwtFilter(
             filterChain.doFilter(request, response)
             return
         }
-
-        val token: String = request.getHeader("Authorization").substring(7)
+        val header = request.getHeader("Authorization")
+        val token: String = extractToken(header)
         val username: String? = jwtService.extractUserName(token)
 
         if (username != null && SecurityContextHolder.getContext().authentication == null) {
@@ -53,21 +54,20 @@ class JwtFilter(
             val isValidToken: Boolean = jwtService.validateToken(token, userDetails)
 
             if (isValidToken) {
-                val context = SecurityContextHolder.createEmptyContext()
                 val usernamePasswordAuthenticationToken =
                     UsernamePasswordAuthenticationToken(userDetails, null, userDetails.authorities)
                 usernamePasswordAuthenticationToken.details = WebAuthenticationDetailsSource().buildDetails(request)
-                context.authentication = usernamePasswordAuthenticationToken
-                SecurityContextHolder.setContext(context)
+                securityContext.authentication = usernamePasswordAuthenticationToken
+                SecurityContextHolder.setContext(securityContext)
             }
         }
         filterChain.doFilter(request, response)
     }
 
     fun getCurrentUser(): UserDetails? = currentUser
-    fun isAdmin(): Boolean = hasRole("admin")
+    fun isAdmin(): Boolean = hasRole(User.UserRoles.ROLE_ADMIN.name)
 
-    fun isUser(): Boolean = hasRole("user")
+    fun isUser(): Boolean = hasRole(User.UserRoles.ROLE_USER.name)
 
     private fun hasRole(role: String): Boolean = role.equals(claims["role"] as String?, true)
 

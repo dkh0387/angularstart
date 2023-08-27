@@ -31,7 +31,7 @@ class CustomerUserDetailsServiceTest {
         @Test
         fun `should return valid user if there is a user for the given email in the database`() {
             // given
-            every { userRepository.findByEmail(any()) } returns TestData.getInactiveUser()
+            every { userRepository.findByEmail(any()) } returns TestData.getInactiveUserWithAuthorities()
 
             // when
             val user = objectUnderTest.loadUserByUsername("deniskh87@gmail.com")
@@ -39,8 +39,8 @@ class CustomerUserDetailsServiceTest {
             // then
             assertThat(user).isNotNull
             assertThat(user.username).isEqualTo("deniskh87@gmail.com")
-
         }
 
     }
+
 }

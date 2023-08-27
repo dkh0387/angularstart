@@ -33,10 +33,10 @@ data class User(
     @Column(name = "password") val password: String?,
     @Column(name = "status") var status: String,
     @Column(name = "role") var role: String,
-    @OneToOne(cascade = [CascadeType.ALL], mappedBy = "user", fetch = FetchType.EAGER)
+    @OneToMany(cascade = [CascadeType.ALL], mappedBy = "user", fetch = FetchType.EAGER)
     @Getter
     @Setter
-    val authority: Authority? = null
+    val authorities: List<Authority>? = null
 ) : PersistentObject() {
 
     fun toWrapper(): UserWrapper = UserWrapper(this.id, this.name, this.email, this.contactNumber, this.status)
@@ -47,9 +47,11 @@ data class User(
     )
 
 
-    internal enum class UserRoles {
-        USER,
-        ADMIN;
+    enum class UserRoles {
+        ROLE_ADMIN,
+        ROLE_USER;
+
+        fun nameWithoutPrefix(): String = this.name.substring(5)
     }
 
 }

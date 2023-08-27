@@ -1,5 +1,6 @@
 package de.dkh.cafemanagementbackend.jsonwebtoken
 
+import de.dkh.cafemanagementbackend.entity.User
 import de.dkh.cafemanagementbackend.service.CustomerUserDetailsService
 import de.dkh.cafemanagementbackend.testutils.TestData
 import io.jsonwebtoken.impl.DefaultClaims
@@ -31,7 +32,7 @@ class JwtFilterTest {
     inner class TestingJwtFilter {
 
         @BeforeEach
-        fun setUp(){
+        fun setUp() {
             clearAllMocks()
         }
 
@@ -76,7 +77,7 @@ class JwtFilterTest {
             every { request.getHeader("Authorization") } returns "Bearer S0VLU0UhIExFQ0tFUiEK"
             every { jwtService.validateToken(any(), any()) } returns true
             every { jwtService.extractUserName(any()) } returns "deniskh87@gmail.com"
-            every { jwtService.extractAllClaims(any()) } returns DefaultClaims(mapOf("role" to "user"))
+            every { jwtService.extractAllClaims(any()) } returns DefaultClaims(mapOf("role" to User.UserRoles.ROLE_USER.name))
             every { customerUserDetailsService.loadUserByUsername(any()) } returns TestData.getSpringUserDetails()
             every { filterChain.doFilter(request, response) } just runs
 

@@ -2,6 +2,7 @@ package de.dkh.cafemanagementbackend.controller
 
 import com.fasterxml.jackson.databind.ObjectMapper
 import de.dkh.cafemanagementbackend.constants.CafeConstants
+import de.dkh.cafemanagementbackend.entity.User
 import de.dkh.cafemanagementbackend.jsonwebtoken.JwtFilter
 import de.dkh.cafemanagementbackend.jsonwebtoken.JwtService
 import de.dkh.cafemanagementbackend.repository.UserRepository
@@ -174,7 +175,7 @@ class UserRESTImplTest {
         @Test
         fun `should return a response with all users as wrappers`() {
             // given
-            val token = jwtService.generateToken("deniskh87@gmail.com", "admin")
+            val token = jwtService.generateToken("deniskh87@gmail.com", User.UserRoles.ROLE_ADMIN.name)
             jwtFilter.claims = jwtService.extractAllClaims(token)
 
             // when
@@ -206,7 +207,7 @@ class UserRESTImplTest {
             val user = TestData.getInactiveUser().copy(status = "false")
 
             // when
-            val token = jwtService.generateToken("deniskh87@gmail.com", "admin")
+            val token = jwtService.generateToken("deniskh87@gmail.com", User.UserRoles.ROLE_ADMIN.name)
             jwtFilter.claims = jwtService.extractAllClaims(token)
 
             val resultActionsDsl = mockMvc.post("$BASE_URL/update") {
@@ -236,7 +237,7 @@ class UserRESTImplTest {
                     "}"
 
             // when
-            val token = jwtService.generateToken("deniskh87@gmail.com", "admin")
+            val token = jwtService.generateToken("deniskh87@gmail.com", User.UserRoles.ROLE_ADMIN.name)
             jwtFilter.claims = jwtService.extractAllClaims(token)
 
             val resultActionsDsl = (mockMvc.post("$BASE_URL/update") {

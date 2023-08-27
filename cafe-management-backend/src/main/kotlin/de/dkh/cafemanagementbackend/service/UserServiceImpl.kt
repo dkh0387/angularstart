@@ -2,6 +2,7 @@ package de.dkh.cafemanagementbackend.service
 
 import com.fasterxml.jackson.databind.ObjectMapper
 import de.dkh.cafemanagementbackend.constants.CafeConstants
+import de.dkh.cafemanagementbackend.entity.Authority
 import de.dkh.cafemanagementbackend.entity.User
 import de.dkh.cafemanagementbackend.exception.*
 import de.dkh.cafemanagementbackend.jsonwebtoken.JwtFilter
@@ -83,7 +84,8 @@ class UserServiceImpl(
                     val tokenKeyWord = "token"
                     val token = jwtService.generateToken(
                         customerUserDetailsService.getUserDetailWithoutPassword().email,
-                        customerUserDetailsService.getUserDetailWithoutPassword().authority!!.authority
+                        customerUserDetailsService.getUserDetailWithoutPassword().authorities!!
+                            .sortedWith(authorityComparator).first().authority
                     )
                     CafeUtils.getStringResponseFor("{\"$tokenKeyWord\":\"$token\"}", HttpStatus.OK)
                 } else {
@@ -216,6 +218,14 @@ class UserServiceImpl(
     private fun isValidEmail(email: String): Boolean {
         val emailRegex = "^[A-Za-z0-9+_.-]+@[A-Za-z0-9.-]+\$"
         return email.matches(emailRegex.toRegex())
+    }
+
+    private val authorityComparator = Comparator<Authority> { a1, a2 ->
+        when {
+            (a1 == null && a2 == null) -> 0
+            (a1 == null) -> -1
+            else -> User.UserRoles.valueOf(a1.authority).compareTo(User.UserRoles.valueOf(a2.authority))
+        }
     }
 
 }

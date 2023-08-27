@@ -3,7 +3,6 @@ package de.dkh.cafemanagementbackend.service
 import de.dkh.cafemanagementbackend.constants.CafeConstants
 import de.dkh.cafemanagementbackend.repository.UserRepository
 import lombok.extern.slf4j.Slf4j
-import org.springframework.security.core.GrantedAuthority
 import org.springframework.security.core.authority.SimpleGrantedAuthority
 import org.springframework.security.core.userdetails.User
 import org.springframework.security.core.userdetails.UserDetails
@@ -11,7 +10,6 @@ import org.springframework.security.core.userdetails.UserDetailsService
 import org.springframework.security.core.userdetails.UsernameNotFoundException
 import org.springframework.stereotype.Service
 import java.util.*
-import kotlin.collections.ArrayList
 
 
 /**
@@ -38,7 +36,7 @@ class CustomerUserDetailsService(private val userRepository: UserRepository) : U
         return User(
             userDetail.email,
             userDetail.password,
-            listOf(SimpleGrantedAuthority(userDetail.authority!!.authority))
+            userDetail.authorities!!.map { SimpleGrantedAuthority(it.authority) }
         )
     }
 

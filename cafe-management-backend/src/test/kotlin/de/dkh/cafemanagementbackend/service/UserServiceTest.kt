@@ -311,7 +311,7 @@ class UserServiceTest {
         fun `should return a valid UserWrapper response if the repository loads all users`() {
             // given
             every { jwtFilter.isAdmin() } returns true
-            every { userRepository.findAll() } returns listOf(TestData.getInactiveUser())
+            every { userRepository.findAll() } returns listOf(TestData.getInactiveUserWithAuthorities())
 
             // when / then
             val responseEntity = objectUnderTest.getAllUsers()

@@ -1,5 +1,6 @@
 package de.dkh.cafemanagementbackend.testutils
 
+import de.dkh.cafemanagementbackend.entity.Authority
 import de.dkh.cafemanagementbackend.entity.User
 
 class TestData {
@@ -12,11 +13,13 @@ class TestData {
             email = "deniskh87@gmail.com",
             password = "11235813",
             status = "false",
-            role = "user"
+            role = User.UserRoles.ROLE_USER.nameWithoutPrefix()
         )
 
+        fun getAuthority(): Authority = Authority(User.UserRoles.ROLE_USER.name)
+
         fun getUserDetailWithoutPassword(): User =
-            getInactiveUser().copy(password = null, status = "true")
+            getInactiveUserWithAuthorities().copy(password = null, status = "true")
 
         fun getSpringUserDetails(): org.springframework.security.core.userdetails.User =
             org.springframework.security.core.userdetails.User(
@@ -24,5 +27,7 @@ class TestData {
                 getInactiveUser().password,
                 ArrayList()
             )
+
+        fun getInactiveUserWithAuthorities(): User = getInactiveUser().copy(authorities = listOf(getAuthority()))
     }
 }

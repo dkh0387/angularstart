@@ -15,7 +15,7 @@ import org.hibernate.annotations.DynamicUpdate
 //@IdClass(AuthorityId::class)
 data class Authority(val authority: String) : PersistentObject() {
 
-    @OneToOne
+    @ManyToOne
     @JoinColumn(name = "user_id")
     @Getter
     @Setter
