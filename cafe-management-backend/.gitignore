@@ -35,3 +35,6 @@ out/
 
 ### VS Code ###
 .vscode/
+
+### EC keys ###
+/src/main/resources/*.pem
