@@ -42,7 +42,7 @@ class JwtServiceImpl(private val publicKey: PublicKey, private val privateKey: P
      * Extract a specific claim using Getter of Claims interface.
      */
     override fun extractClaims(token: String, claimsResolver: Function<Claims, Any>): Any {
-        return claimsResolver.apply(extractAllClaims(token));
+        return claimsResolver.apply(extractAllClaims(token))
     }
 
     /**
@@ -94,9 +94,4 @@ class JwtServiceImpl(private val publicKey: PublicKey, private val privateKey: P
         )
     }
 
-    fun generateKeyPair(): KeyPair {
-        val generator = KeyPairGenerator.getInstance("RSA")
-        generator.initialize(2048, SecureRandom())
-        return generator.genKeyPair()
-    }
 }
