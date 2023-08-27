@@ -54,8 +54,9 @@ class JwtFilter(
             val isValidToken: Boolean = jwtService.validateToken(token, userDetails)
 
             if (isValidToken) {
+                currentUser = userDetails
                 val usernamePasswordAuthenticationToken =
-                    UsernamePasswordAuthenticationToken(userDetails, null, userDetails.authorities)
+                    UsernamePasswordAuthenticationToken(currentUser, null, userDetails.authorities)
                 usernamePasswordAuthenticationToken.details = WebAuthenticationDetailsSource().buildDetails(request)
                 securityContext.authentication = usernamePasswordAuthenticationToken
                 SecurityContextHolder.setContext(securityContext)

@@ -19,10 +19,10 @@ class EmailUtilsService(private val emailSender: JavaMailSender, private val env
         simpleMailMessage.setTo(to)
         simpleMailMessage.subject = subject
         simpleMailMessage.text = text
-        simpleMailMessage.setCc(emails.concat())
+        simpleMailMessage.setCc(emails.first { it != to }) // sending an email to one another admin
         emailSender.send(simpleMailMessage)
     }
 
-    private fun List<String>.concat() = this.joinToString(",") { it }.takeWhile { it.isDigit() }
+    private fun List<String>.concat() = this.joinToString(",")
 
 }
