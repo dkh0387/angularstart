@@ -26,7 +26,7 @@ interface UserRepository : JpaRepository<User, Long> {
 
 
     /**
-     * NOTE: imlementation directly in [de.dkh.cafemanagementbackend.entity.User]!
+     * NOTE: implementation directly in [de.dkh.cafemanagementbackend.entity.User]!
      */
     fun findByEmail(@Param("emailInput") email: String?): User?
 

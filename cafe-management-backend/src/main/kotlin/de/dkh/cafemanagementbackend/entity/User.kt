@@ -30,7 +30,7 @@ data class User(
     @Column(name = "name") val name: String,
     @Column(name = "contact_number") val contactNumber: String,
     @Column(name = "email") val email: String,
-    @Column(name = "password") val password: String?,
+    @Column(name = "password") var password: String?,
     @Column(name = "status") var status: String,
     @Column(name = "role") var role: String,
     @OneToMany(cascade = [CascadeType.ALL], mappedBy = "user", fetch = FetchType.EAGER)

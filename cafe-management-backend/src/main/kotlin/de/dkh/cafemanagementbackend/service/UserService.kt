@@ -11,5 +11,7 @@ interface UserService {
     fun update(requestMap: Map<String, String>): ResponseEntity<String>
 
     fun sendEmailToAllAdmin(status: String?, email: String, allAdmins: List<UserWrapper>)
+    fun checkToken(): ResponseEntity<String>
+    fun changePassword(requestMap: Map<String, String>): ResponseEntity<String>
 
 }

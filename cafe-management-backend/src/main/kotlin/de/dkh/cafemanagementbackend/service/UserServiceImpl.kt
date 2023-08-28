@@ -14,6 +14,10 @@ import de.dkh.cafemanagementbackend.wrapper.UserWrapper
 import lombok.extern.slf4j.Slf4j
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
+import org.springframework.mail.MailAuthenticationException
+import org.springframework.mail.MailException
+import org.springframework.mail.MailParseException
+import org.springframework.mail.MailSendException
 import org.springframework.security.authentication.AuthenticationManager
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken
 import org.springframework.stereotype.Service
@@ -57,7 +61,10 @@ class UserServiceImpl(
                 )
             }
         } catch (e: Exception) {
-            throw SignUpException(CafeConstants.SOMETHING_WENT_WRONG, HttpStatus.INTERNAL_SERVER_ERROR)
+            throw SignUpException(
+                CafeConstants.SOMETHING_WENT_WRONG + " MESSAGE: " + e.localizedMessage,
+                HttpStatus.INTERNAL_SERVER_ERROR
+            )
         }
     }
 
@@ -100,7 +107,10 @@ class UserServiceImpl(
             }
 
         } catch (e: Exception) {
-            throw SignUpException(CafeConstants.LOGIN_WENT_WRONG, HttpStatus.INTERNAL_SERVER_ERROR)
+            throw SignUpException(
+                CafeConstants.LOGIN_WENT_WRONG + " MESSAGE: " + e.localizedMessage,
+                HttpStatus.INTERNAL_SERVER_ERROR
+            )
         }
     }
 
@@ -118,7 +128,10 @@ class UserServiceImpl(
                 CafeUtils.getUsersResponseFor(emptyList(), HttpStatus.UNAUTHORIZED)
             }
         } catch (e: Exception) {
-            throw UsersLoadException(CafeConstants.LOAD_USERS_WENT_WRONG, HttpStatus.BAD_REQUEST)
+            throw UsersLoadException(
+                CafeConstants.LOAD_USERS_WENT_WRONG + " MESSAGE: " + e.localizedMessage,
+                HttpStatus.BAD_REQUEST
+            )
         }
     }
 
@@ -162,7 +175,7 @@ class UserServiceImpl(
 
         } catch (e: Exception) {
             throw UserUpdateStatusException(
-                CafeConstants.USER_STATUS_UPDATE_WENT_WRONG,
+                CafeConstants.USER_STATUS_UPDATE_WENT_WRONG + " MESSAGE: " + e.localizedMessage,
                 HttpStatus.INTERNAL_SERVER_ERROR
             )
         }
@@ -173,6 +186,12 @@ class UserServiceImpl(
      * Send an email to all admins about status update for the requested user.
      * NOTE: the username of UserDetails is being used as email in this project, see: [de.dkh.cafemanagementbackend.service.CustomerUserDetailsService].
      */
+    @Throws(
+        MailException::class,
+        MailAuthenticationException::class,
+        MailParseException::class,
+        MailSendException::class
+    )
     override fun sendEmailToAllAdmin(status: String?, email: String, allAdmins: List<UserWrapper>) {
 
         if (jwtFilter.getCurrentUser() != null && status != null) {
@@ -194,6 +213,49 @@ class UserServiceImpl(
         }
     }
 
+    /**
+     * We are using this method as a flag to check, whether the provided JWT corresponds to the admin role.
+     * When a user goes through the app and access admin resources, the method returns 403, otherwise OK.
+     */
+    override fun checkToken(): ResponseEntity<String> {
+        return CafeUtils.getStringResponseFor("true", HttpStatus.OK)
+    }
+
+    /**
+     * @TODO: testing!
+     * Changing password for a user.
+     * NOTE: [de.dkh.cafemanagementbackend.jsonwebtoken.JwtFilter.currentUser] must be set here!
+     */
+    override fun changePassword(requestMap: Map<String, String>): ResponseEntity<String> {
+        try {
+            val user = userRepository.findByEmail(jwtFilter.getCurrentUser()!!.username)
+                ?: return CafeUtils.getStringResponseFor(
+                    CafeConstants.NO_USER_FOR_EMAIL,
+                    HttpStatus.INTERNAL_SERVER_ERROR
+                )
+            // Check if the old password in the request map and the existing one match...
+            val oldVSExistingPassword = checkOldVSExistingPassword(requestMap["oldPassword"], user.password)
+
+            // If so, update
+            return if (!oldVSExistingPassword) {
+                CafeUtils.getStringResponseFor(
+                    CafeConstants.OLD_VS_EXISTING_PASSWORD_MISMATCH,
+                    HttpStatus.BAD_REQUEST
+                )
+            } else {
+                user.password = requestMap["newPassword"]
+                userRepository.save(user)
+                CafeUtils.getStringResponseFor(CafeConstants.PASSWORD_SUCCESSFULLY_CHANGED, HttpStatus.OK)
+            }
+
+        } catch (e: Exception) {
+            throw ChangePasswordException(
+                CafeConstants.CHANGE_PASSWORD_WENT_WRONG + " MESSAGE: " + e.localizedMessage,
+                HttpStatus.INTERNAL_SERVER_ERROR
+            )
+        }
+    }
+
     fun validateSignUpMap(requestMap: Map<String, String>): User? {
         val objectMapper = ObjectMapper()
 
@@ -205,6 +267,13 @@ class UserServiceImpl(
             throw SignUpValidationException("Map $requestMap could not be parsed as User object!")
         }
 
+    }
+
+    private fun checkOldVSExistingPassword(oldPassword: String?, existingPassword: String?): Boolean {
+        if (oldPassword == null || existingPassword == null) {
+            return false
+        }
+        return oldPassword == existingPassword
     }
 
     private fun register(user: User): User {

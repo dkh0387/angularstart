@@ -31,5 +31,13 @@ class UserRESTImpl(private val userService: UserService) : UserREST {
         return userService.update(requestMap)
     }
 
+    override fun checkToken(): ResponseEntity<String> {
+        return userService.checkToken()
+    }
+
+    override fun changePassword(requestMap: Map<String, String>): ResponseEntity<String> {
+        return userService.changePassword(requestMap)
+    }
+
 
 }
