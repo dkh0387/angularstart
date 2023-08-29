@@ -1,6 +1,8 @@
 package de.dkh.cafemanagementbackend.entity
 
 import com.fasterxml.jackson.annotation.JsonAutoDetect
+import de.dkh.cafemanagementbackend.utils.UserMapperFull
+import de.dkh.cafemanagementbackend.utils.UserMapperSimple
 import de.dkh.cafemanagementbackend.wrapper.UserWrapper
 import jakarta.persistence.*
 import lombok.Getter
@@ -39,6 +41,20 @@ data class User(
     val authorities: List<Authority>? = null
 ) : PersistentObject() {
 
+    constructor(
+        id: Long?,
+        name: String,
+        contactNumber: String,
+        email: String,
+        password: String?,
+        status: String,
+        role: String, authorities: List<Authority>?
+    ) : this(name, contactNumber, email, password, status, role, authorities) {
+        if (id != null) {
+            this.id = id
+        }
+    }
+
     fun toWrapper(): UserWrapper = UserWrapper(this.id, this.name, this.email, this.contactNumber, this.status)
     fun toUserDetails(): UserDetails = User(
         this.email,
@@ -52,6 +68,32 @@ data class User(
         ROLE_USER;
 
         fun nameWithoutPrefix(): String = this.name.substring(5)
+    }
+
+    companion object {
+
+        val DEFAULT_STATUS = "false"
+        val DEFAULT_ROLE = UserRoles.ROLE_USER.nameWithoutPrefix().lowercase()
+        fun createFromSimple(userMapperSimple: UserMapperSimple): de.dkh.cafemanagementbackend.entity.User = User(
+            userMapperSimple.name,
+            userMapperSimple.contactNumber,
+            userMapperSimple.email,
+            userMapperSimple.password,
+            DEFAULT_STATUS,
+            DEFAULT_ROLE,
+            null
+        )
+
+        fun createFromFull(userMapperFull: UserMapperFull): de.dkh.cafemanagementbackend.entity.User = User(
+            userMapperFull.id,
+            userMapperFull.name,
+            userMapperFull.contactNumber,
+            userMapperFull.email,
+            userMapperFull.password,
+            userMapperFull.status,
+            userMapperFull.role,
+            null
+        )
     }
 
 }

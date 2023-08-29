@@ -13,15 +13,13 @@ import de.dkh.cafemanagementbackend.utils.EmailUtils
 import de.dkh.cafemanagementbackend.wrapper.UserWrapper
 import io.mockk.*
 import io.mockk.junit5.MockKExtension
-import org.assertj.core.api.Assertions.*
+import org.assertj.core.api.Assertions.assertThat
+import org.assertj.core.api.Assertions.assertThatThrownBy
 import org.junit.jupiter.api.*
 import org.junit.jupiter.api.extension.ExtendWith
-import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.security.authentication.AuthenticationManager
-import java.lang.Exception
-import java.lang.RuntimeException
 import java.util.*
 
 
@@ -77,8 +75,8 @@ class UserServiceTest {
                     contactNumber = requestMap["contactNumber"]!!,
                     email = requestMap["email"]!!,
                     password = requestMap["password"]!!,
-                    status = "null",
-                    role = "null"
+                    status = User.DEFAULT_STATUS,
+                    role = User.DEFAULT_ROLE
                 ).toString()
             )
 
@@ -435,8 +433,15 @@ class UserServiceTest {
             )
 
             every { jwtFilter.isAdmin() } returns true
+            every { jwtFilter.getCurrentUser() } returns TestData.getSpringUserDetails()
             every { userRepository.findById(any()) } returns Optional.of(TestData.getInactiveUser())
             every { userRepository.updateStatus(any(), any()) } returns 1
+            every {
+                userRepository.getAllAdmins(
+                    User.UserRoles.ROLE_ADMIN.nameWithoutPrefix().lowercase()
+                )
+            } returns emptyList()
+            every { emailUtils.sendSimpleMessage(any(), any(), any(), any()) } just runs
 
             // when
             val responseEntity = objectUnderTest.update(requestMap)

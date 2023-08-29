@@ -30,5 +30,8 @@ class CafeConstants {
         const val OLD_VS_EXISTING_PASSWORD_MISMATCH =
             "Old password from request and existing password do not match or at least one of them is NULL!"
         const val PASSWORD_SUCCESSFULLY_CHANGED = "Password successfully changed!"
+        const val TRUE = "true"
+        const val TOKEN_KEY_WORD = "token"
+        const val MESSAGE_KEY_WORD = "message"
     }
 }

@@ -8,10 +8,7 @@ import de.dkh.cafemanagementbackend.exception.*
 import de.dkh.cafemanagementbackend.jsonwebtoken.JwtFilter
 import de.dkh.cafemanagementbackend.jsonwebtoken.JwtService
 import de.dkh.cafemanagementbackend.repository.UserRepository
-import de.dkh.cafemanagementbackend.utils.CafeUtils
-import de.dkh.cafemanagementbackend.utils.ChangePasswordMapper
-import de.dkh.cafemanagementbackend.utils.EmailUtils
-import de.dkh.cafemanagementbackend.utils.KeyMapper
+import de.dkh.cafemanagementbackend.utils.*
 import de.dkh.cafemanagementbackend.wrapper.UserWrapper
 import lombok.extern.slf4j.Slf4j
 import org.springframework.http.HttpStatus
@@ -44,25 +41,17 @@ class UserServiceImpl(
             val userFromMap = validateSignUpMap(requestMap)
 
             // If the mapped user is valid proof if he/she is already registered
-            if (userFromMap != null) {
-                val existingUser = userRepository.findByEmail(userFromMap.email)
+            val existingUser = userRepository.findByEmail(userFromMap.email)
 
-                return if (Objects.isNull(existingUser)) {
-                    val registeredUser = register(userFromMap)
-                    CafeUtils.getStringResponseFor(
-                        CafeConstants.USER_SUCCESSFULLY_REGISTERED + ": $registeredUser", HttpStatus.CREATED
-                    )
-                } else {
-                    CafeUtils.getStringResponseFor(CafeConstants.EMAIL_ALREADY_EXISTS, HttpStatus.BAD_REQUEST)
-                }
-                // If the incoming request is not valid, return a SignUpErrorResponce
-            } else {
-                return CafeUtils.getStringResponseFor(
-                    SignUpErrorResponce(
-                        HttpStatus.BAD_REQUEST.name, CafeConstants.INVALID_DATA, System.currentTimeMillis()
-                    ).toString(), HttpStatus.BAD_REQUEST
+            return if (Objects.isNull(existingUser)) {
+                val registeredUser = register(userFromMap)
+                CafeUtils.getStringResponseFor(
+                    CafeConstants.USER_SUCCESSFULLY_REGISTERED + ": $registeredUser", HttpStatus.CREATED
                 )
+            } else {
+                CafeUtils.getStringResponseFor(CafeConstants.EMAIL_ALREADY_EXISTS, HttpStatus.BAD_REQUEST)
             }
+            // If the incoming request is not valid, return a SignUpErrorResponce
         } catch (e: Exception) {
             throw SignUpException(
                 CafeConstants.SOMETHING_WENT_WRONG + " MESSAGE: " + e.localizedMessage,
@@ -79,29 +68,29 @@ class UserServiceImpl(
         println("Inside logIn $requestMap")
 
         try {
+            val userMapperSimple = getMapperFromRequestMap(requestMap, UserMapperSimple::class.java) as UserMapperSimple
+            val userFromMap = User.createFromSimple(userMapperSimple)
             // in order to set the userDetails for customerUserDetailsService
-            customerUserDetailsService.loadUserByUsername(requestMap["email"])
+            customerUserDetailsService.loadUserByUsername(userFromMap.email)
             // simple presentation of a username and password
             val authentication = authenticationManager.authenticate(
                 UsernamePasswordAuthenticationToken(
-                    requestMap["email"], requestMap["password"]
+                    userFromMap.email, userFromMap.password
                 )
             )
 
             if (authentication.isAuthenticated) {
                 // Check if the user is activated and return the token: <token> response
                 return if (customerUserDetailsService.checkUserApproved()) {
-                    val tokenKeyWord = "token"
                     val token = jwtService.generateToken(
                         customerUserDetailsService.getUserDetailWithoutPassword().email,
                         customerUserDetailsService.getUserDetailWithoutPassword().authorities!!
                             .sortedWith(authorityComparator).first().authority
                     )
-                    CafeUtils.getStringResponseFor("{\"$tokenKeyWord\":\"$token\"}", HttpStatus.OK)
+                    CafeUtils.getStringResponseFor("{\"${CafeConstants.TOKEN_KEY_WORD}\":\"$token\"}", HttpStatus.OK)
                 } else {
-                    val messageKeyWord = "message"
                     CafeUtils.getStringResponseFor(
-                        "{\"$messageKeyWord\":\"${CafeConstants.WAIT_FOR_ADMIN_APPROVAL}\"}",
+                        "{\"${CafeConstants.MESSAGE_KEY_WORD}\":\"${CafeConstants.WAIT_FOR_ADMIN_APPROVAL}\"}",
                         HttpStatus.BAD_REQUEST
                     )
                 }
@@ -124,7 +113,7 @@ class UserServiceImpl(
         try {
             return if (jwtFilter.isAdmin()) {
                 ResponseEntity<List<UserWrapper>>(
-                    userRepository.findAll().filter { it.role.equals("user", true) }.map { it.toWrapper() },
+                    userRepository.findAll().filter { it.role.equals(User.DEFAULT_ROLE, true) }.map { it.toWrapper() },
                     HttpStatus.OK
                 )
             } else {
@@ -147,26 +136,33 @@ class UserServiceImpl(
         println("Inside update $requestMap")
 
         try {
+            val userMapperFull = getMapperFromRequestMap(requestMap, UserMapperFull::class.java) as UserMapperFull
+
+            if (userMapperFull.status == "") {
+                return CafeUtils.getStringResponseFor(
+                    CafeConstants.NO_STATUS_REQUESTED_FOR_UPDATE,
+                    HttpStatus.OK
+                )
+            }
+            val userFromMap = User.createFromFull(userMapperFull)
             return if (jwtFilter.isAdmin()) {
-                val userOptional = userRepository.findById(Integer.parseInt(requestMap["id"]).toLong())
-                // if the user exists update the status
+                val userOptional = userRepository.findById(Integer.parseInt(userFromMap.id.toString()).toLong())
+                // if the user exists, update the status
                 if (userOptional.isEmpty) {
                     return CafeUtils.getStringResponseFor(CafeConstants.NO_USER_FOR_ID, HttpStatus.OK)
                 } else {
-                    if (requestMap["status"] != null) {
-                        requestMap["status"]?.let { userRepository.updateStatus(userOptional.get().id, it) }
+                    run {
+                        userRepository.updateStatus(userOptional.get().id, userFromMap.status)
                         sendEmailToAllAdmin(
-                            requestMap["status"],
+                            userFromMap.status,
                             userOptional.get().email,
-                            userRepository.getAllAdmins("admin")
+                            userRepository.getAllAdmins(
+                                User.UserRoles.ROLE_ADMIN.nameWithoutPrefix()
+                                    .lowercase(Locale.getDefault())
+                            )
                         )
                         return CafeUtils.getStringResponseFor(
                             CafeConstants.USER_STATUS_UPDATED,
-                            HttpStatus.OK
-                        )
-                    } else {
-                        return CafeUtils.getStringResponseFor(
-                            CafeConstants.NO_STATUS_REQUESTED_FOR_UPDATE,
                             HttpStatus.OK
                         )
                     }
@@ -198,14 +194,14 @@ class UserServiceImpl(
     override fun sendEmailToAllAdmin(status: String?, email: String, allAdmins: List<UserWrapper>) {
 
         if (jwtFilter.getCurrentUser() != null && status != null) {
-            if (status.equals("true", true)) {
+            if (status.equals(CafeConstants.TRUE, true)) {
                 emailUtils.sendSimpleMessage(
                     to = jwtFilter.getCurrentUser()!!.username,
                     subject = CafeConstants.SUBJECT_USER_SET_APPROVED,
                     text = CafeConstants.TEXT_USER_SET_APPROVED + " USER: $email" + " ADMIN: ${jwtFilter.getCurrentUser()}",
                     allAdmins.map { it.email }
                 )
-            } else if (status.equals("false", true)) {
+            } else if (status.equals(User.DEFAULT_STATUS, true)) {
                 emailUtils.sendSimpleMessage(
                     to = jwtFilter.getCurrentUser()!!.username,
                     subject = CafeConstants.SUBJECT_USER_SET_DISABLED,
@@ -221,7 +217,7 @@ class UserServiceImpl(
      * When a user goes through the app and access admin resources, the method returns 403, otherwise OK.
      */
     override fun checkToken(): ResponseEntity<String> {
-        return CafeUtils.getStringResponseFor("true", HttpStatus.OK)
+        return CafeUtils.getStringResponseFor(CafeConstants.TRUE, HttpStatus.OK)
     }
 
     /**
@@ -260,12 +256,11 @@ class UserServiceImpl(
         }
     }
 
-    fun validateSignUpMap(requestMap: Map<String, String>): User? {
+    fun validateSignUpMap(requestMap: Map<String, String>): User {
 
         try {
-            val json =
-                objectMapper.writer().withoutAttribute("status").withoutAttribute("role").writeValueAsString(requestMap)
-            return objectMapper.readValue(json, User::class.java)
+            val userMapperSimple = getMapperFromRequestMap(requestMap, UserMapperSimple::class.java) as UserMapperSimple
+            return User.createFromSimple(userMapperSimple)
         } catch (e: Exception) {
             throw SignUpValidationException("Map $requestMap could not be parsed as User object!")
         }
@@ -280,8 +275,8 @@ class UserServiceImpl(
     }
 
     private fun register(user: User): User {
-        user.status = "false"
-        user.role = "user"
+        user.status = User.DEFAULT_STATUS
+        user.role = User.DEFAULT_ROLE
         return if (isValidEmail(user.email)) userRepository.save(user) else throw InvalidEmailException(
             CafeConstants.INVALID_EMAIL
         )
