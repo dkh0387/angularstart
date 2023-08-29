@@ -9,7 +9,9 @@ import de.dkh.cafemanagementbackend.jsonwebtoken.JwtFilter
 import de.dkh.cafemanagementbackend.jsonwebtoken.JwtService
 import de.dkh.cafemanagementbackend.repository.UserRepository
 import de.dkh.cafemanagementbackend.utils.CafeUtils
+import de.dkh.cafemanagementbackend.utils.ChangePasswordMapper
 import de.dkh.cafemanagementbackend.utils.EmailUtils
+import de.dkh.cafemanagementbackend.utils.KeyMapper
 import de.dkh.cafemanagementbackend.wrapper.UserWrapper
 import lombok.extern.slf4j.Slf4j
 import org.springframework.http.HttpStatus
@@ -31,7 +33,8 @@ class UserServiceImpl(
     private val customerUserDetailsService: CustomerUserDetailsService,
     private val jwtService: JwtService,
     private val jwtFilter: JwtFilter,
-    private val emailUtils: EmailUtils
+    private val emailUtils: EmailUtils,
+    private val objectMapper: ObjectMapper
 ) : UserService {
     override fun signUp(requestMap: Map<String, String>): ResponseEntity<String> {
         println("Inside signUp $requestMap")
@@ -222,19 +225,20 @@ class UserServiceImpl(
     }
 
     /**
-     * @TODO: testing!
      * Changing password for a user.
      * NOTE: [de.dkh.cafemanagementbackend.jsonwebtoken.JwtFilter.currentUser] must be set here!
      */
     override fun changePassword(requestMap: Map<String, String>): ResponseEntity<String> {
         try {
+            val passwordMapper =
+                getMapperFromRequestMap(requestMap, ChangePasswordMapper::class.java) as ChangePasswordMapper
             val user = userRepository.findByEmail(jwtFilter.getCurrentUser()!!.username)
                 ?: return CafeUtils.getStringResponseFor(
                     CafeConstants.NO_USER_FOR_EMAIL,
                     HttpStatus.INTERNAL_SERVER_ERROR
                 )
             // Check if the old password in the request map and the existing one match...
-            val oldVSExistingPassword = checkOldVSExistingPassword(requestMap["oldPassword"], user.password)
+            val oldVSExistingPassword = checkOldVSExistingPassword(passwordMapper.oldPassword, user.password)
 
             // If so, update
             return if (!oldVSExistingPassword) {
@@ -243,9 +247,9 @@ class UserServiceImpl(
                     HttpStatus.BAD_REQUEST
                 )
             } else {
-                user.password = requestMap["newPassword"]
+                user.password = passwordMapper.newPassword
                 userRepository.save(user)
-                CafeUtils.getStringResponseFor(CafeConstants.PASSWORD_SUCCESSFULLY_CHANGED, HttpStatus.OK)
+                return CafeUtils.getStringResponseFor(CafeConstants.PASSWORD_SUCCESSFULLY_CHANGED, HttpStatus.OK)
             }
 
         } catch (e: Exception) {
@@ -257,7 +261,6 @@ class UserServiceImpl(
     }
 
     fun validateSignUpMap(requestMap: Map<String, String>): User? {
-        val objectMapper = ObjectMapper()
 
         try {
             val json =
@@ -297,4 +300,11 @@ class UserServiceImpl(
         }
     }
 
+    /**
+     * Maps a given request map to the corresponding mapper class.
+     */
+    private fun getMapperFromRequestMap(requestMap: Map<String, String>, clazz: Class<out KeyMapper>): KeyMapper {
+        val json = objectMapper.writer().writeValueAsString(requestMap)
+        return objectMapper.readValue(json, clazz)
+    }
 }

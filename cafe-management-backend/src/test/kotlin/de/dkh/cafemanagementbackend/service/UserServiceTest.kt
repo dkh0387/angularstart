@@ -1,11 +1,9 @@
 package de.dkh.cafemanagementbackend.service
 
+import com.fasterxml.jackson.databind.ObjectMapper
 import de.dkh.cafemanagementbackend.constants.CafeConstants
 import de.dkh.cafemanagementbackend.entity.User
-import de.dkh.cafemanagementbackend.exception.SignUpException
-import de.dkh.cafemanagementbackend.exception.SignUpValidationException
-import de.dkh.cafemanagementbackend.exception.UserUpdateStatusException
-import de.dkh.cafemanagementbackend.exception.UsersLoadException
+import de.dkh.cafemanagementbackend.exception.*
 import de.dkh.cafemanagementbackend.jsonwebtoken.JwtFilter
 import de.dkh.cafemanagementbackend.jsonwebtoken.JwtService
 import de.dkh.cafemanagementbackend.repository.UserRepository
@@ -16,12 +14,9 @@ import de.dkh.cafemanagementbackend.wrapper.UserWrapper
 import io.mockk.*
 import io.mockk.junit5.MockKExtension
 import org.assertj.core.api.Assertions.*
-import org.junit.jupiter.api.BeforeEach
-import org.junit.jupiter.api.DisplayName
-import org.junit.jupiter.api.Nested
-import org.junit.jupiter.api.Test
-import org.junit.jupiter.api.TestInstance
+import org.junit.jupiter.api.*
 import org.junit.jupiter.api.extension.ExtendWith
+import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.security.authentication.AuthenticationManager
@@ -33,6 +28,7 @@ import java.util.*
 @ExtendWith(MockKExtension::class)
 class UserServiceTest {
 
+    private val objectMapper: ObjectMapper = ObjectMapper()
     private val userRepository = mockk<UserRepository>()
     private val authenticationManager = mockk<AuthenticationManager>()
     private val customerUserDetailsService = mockk<CustomerUserDetailsService>()
@@ -46,7 +42,8 @@ class UserServiceTest {
             customerUserDetailsService,
             jwtService,
             jwtFilter,
-            emailUtils
+            emailUtils,
+            objectMapper
         )
 
     @BeforeEach
@@ -209,7 +206,8 @@ class UserServiceTest {
             )
 
             every { authenticationManager.authenticate(any()).isAuthenticated } returns false
-            every { customerUserDetailsService.loadUserByUsername(any()) } returns TestData.getInactiveUser().toUserDetails()
+            every { customerUserDetailsService.loadUserByUsername(any()) } returns TestData.getInactiveUser()
+                .toUserDetails()
 
 
             // when
@@ -234,7 +232,8 @@ class UserServiceTest {
 
             every { authenticationManager.authenticate(any()).isAuthenticated } returns true
             every { customerUserDetailsService.checkUserApproved() } returns false
-            every { customerUserDetailsService.loadUserByUsername(any()) } returns TestData.getInactiveUser().toUserDetails()
+            every { customerUserDetailsService.loadUserByUsername(any()) } returns TestData.getInactiveUser()
+                .toUserDetails()
 
             // when
             val messageKeyWord = "message"
@@ -263,7 +262,8 @@ class UserServiceTest {
             every { customerUserDetailsService.checkUserApproved() } returns true
             every { customerUserDetailsService.getUserDetailWithoutPassword() } returns TestData.getUserDetailWithoutPassword()
             every { jwtService.generateToken(any(), any()) } returns tokenKeyWord
-            every { customerUserDetailsService.loadUserByUsername(any()) } returns TestData.getInactiveUser().toUserDetails()
+            every { customerUserDetailsService.loadUserByUsername(any()) } returns TestData.getInactiveUser()
+                .toUserDetails()
 
 
             // when
@@ -449,5 +449,104 @@ class UserServiceTest {
                 )
             )
         }
+    }
+
+    @Nested
+    @DisplayName("Testing change passwort")
+    @TestInstance(TestInstance.Lifecycle.PER_CLASS)
+    inner class ChangePasswordTesting {
+
+        @Test
+        fun `should throw a ChangePasswordException if a corrupt request map is provided`() {
+            // given
+            val requestMap: Map<String, String> = mapOf(
+                "oldPassword2" to "12345",
+                "newPassword" to "123456"
+            )
+
+            every { jwtFilter.getCurrentUser() } returns TestData.getSpringUserDetails()
+            every { userRepository.findByEmail(any()) } returns TestData.getInactiveUser()
+
+            // when / then
+            assertThatThrownBy { objectUnderTest.changePassword(requestMap) }.isInstanceOf(ChangePasswordException::class.java)
+        }
+
+        @Test
+        fun `should return  a NO_USER_FOR_EMAIL response if a correct request map is provided`() {
+            // given
+            val requestMap: Map<String, String> = mapOf(
+                "oldPassword" to "12345",
+                "newPassword" to "123456"
+            )
+
+            every { jwtFilter.getCurrentUser() } returns TestData.getSpringUserDetails()
+            every { userRepository.findByEmail(any()) } returns null
+
+            // when
+            val responseEntity = objectUnderTest.changePassword(requestMap)
+
+            // then
+            assertThat(responseEntity).isEqualTo(
+                ResponseEntity<String>(
+                    CafeConstants.NO_USER_FOR_EMAIL,
+                    HttpStatus.INTERNAL_SERVER_ERROR
+                )
+            )
+        }
+
+        @Test
+        fun `should return a OLD_VS_EXISTING_PASSWORD_MISMATCH response if oldPasswort from request map and existing user password do not match`() {
+            // given
+            val requestMap: Map<String, String> = mapOf(
+                "oldPassword" to "12345",
+                "newPassword" to "123456"
+            )
+
+            every { jwtFilter.getCurrentUser() } returns TestData.getSpringUserDetails()
+            every { userRepository.findByEmail(any()) } returns TestData.getInactiveUser().copy(password = "fdkjafpoej")
+
+            // when
+            val responseEntity = objectUnderTest.changePassword(requestMap)
+
+            // then
+            assertThat(responseEntity).isEqualTo(
+                ResponseEntity<String>(
+                    CafeConstants.OLD_VS_EXISTING_PASSWORD_MISMATCH,
+                    HttpStatus.BAD_REQUEST
+                )
+            )
+        }
+
+        @Test
+        fun `should save a new password and return a PASSWORD_SUCCESSFULLY_CHANGED response if oldPasswort from request map and existing user password match`() {
+            // given
+            val requestMap: Map<String, String> = mapOf(
+                "oldPassword" to "12345",
+                "newPassword" to "123456"
+            )
+
+            every { jwtFilter.getCurrentUser() } returns TestData.getSpringUserDetails()
+            every { userRepository.findByEmail(any()) } returns TestData.getInactiveUser().copy(password = "12345")
+            every {
+                userRepository.save(
+                    userRepository.save(
+                        TestData.getInactiveUser().copy(password = "123456")
+                    )
+                )
+            } returns TestData.getInactiveUser().copy(password = "12345")
+
+            // when
+            val responseEntity = objectUnderTest.changePassword(requestMap)
+
+            // then
+            verify(exactly = 1) { userRepository.save(TestData.getInactiveUser().copy(password = "123456")) }
+            assertThat(responseEntity).isEqualTo(
+                ResponseEntity<String>(
+                    CafeConstants.PASSWORD_SUCCESSFULLY_CHANGED,
+                    HttpStatus.OK
+                )
+            )
+        }
+
     }
 }
