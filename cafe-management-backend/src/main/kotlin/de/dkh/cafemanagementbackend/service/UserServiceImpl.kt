@@ -1,7 +1,6 @@
 package de.dkh.cafemanagementbackend.service
 
 import com.fasterxml.jackson.databind.ObjectMapper
-import com.google.common.base.Strings
 import de.dkh.cafemanagementbackend.constants.CafeConstants
 import de.dkh.cafemanagementbackend.entity.Authority
 import de.dkh.cafemanagementbackend.entity.User
@@ -9,7 +8,8 @@ import de.dkh.cafemanagementbackend.exception.*
 import de.dkh.cafemanagementbackend.jsonwebtoken.JwtFilter
 import de.dkh.cafemanagementbackend.jsonwebtoken.JwtService
 import de.dkh.cafemanagementbackend.repository.UserRepository
-import de.dkh.cafemanagementbackend.utils.*
+import de.dkh.cafemanagementbackend.utils.CafeUtils
+import de.dkh.cafemanagementbackend.utils.EmailUtils
 import de.dkh.cafemanagementbackend.utils.mapper.*
 import de.dkh.cafemanagementbackend.wrapper.UserWrapper
 import lombok.extern.slf4j.Slf4j
@@ -284,12 +284,13 @@ class UserServiceImpl(
                     HttpStatus.INTERNAL_SERVER_ERROR
                 )
             // if the user is there and have a valid email, send an email with a random password
+            val randomPassword = generateRandomPassword()
             emailUtils.forgotEmail(
                 user.email,
                 CafeConstants.FORGOT_PASSWORD_SUBJECT,
-                generateRandomPassword()
+                randomPassword
             )
-            user.password = generateRandomPassword()
+            user.password = randomPassword
             userRepository.save(user)
             return ResponseEntity(CafeConstants.FORGOT_PASSWORD_SUCCESSFULLY, HttpStatus.OK)
 
