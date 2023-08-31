@@ -48,7 +48,7 @@ class EmailUtilsService(private val emailSender: JavaMailSender, private val env
         helper.setTo(to)
         helper.setSubject(subject)
         val htmlMessage =
-            "String htmlMsg = \"<p><b>Your Login details for Cafe Management System</b><br><b>Email: </b> \" + to + \" <br><b>temporäry Password (change it after the login): </b> \" + password + \"<br><a href=\\\"http://localhost:4200/\\\">Click here to login</a></p>\";"
+            "String htmlMsg = \"<p><b>Your Login details for Cafe Management System</b><br><b>Email: </b> \" + $to + \" <br><b>temporary Password (change it after the login): </b> \" + $password + \"<br><a href=\\\"http://localhost:4200/\\\">Click here to login</a></p>\";"
         mimeMessage.setContent(htmlMessage, CafeConstants.MESSAGE_TYPE_TEXT_HTML)
         emailSender.send(mimeMessage)
     }
