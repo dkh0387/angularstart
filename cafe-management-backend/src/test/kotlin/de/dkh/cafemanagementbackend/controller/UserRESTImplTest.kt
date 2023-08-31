@@ -13,6 +13,7 @@ import jakarta.servlet.ServletException
 import org.assertj.core.api.Assertions.assertThat
 import org.assertj.core.api.Assertions.assertThatThrownBy
 import org.junit.jupiter.api.*
+import org.junit.jupiter.api.Assertions.assertNotEquals
 import org.junit.jupiter.api.Assertions.assertNotNull
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc
@@ -402,6 +403,88 @@ class UserRESTImplTest {
     @TestInstance(TestInstance.Lifecycle.PER_CLASS)
     @DirtiesContext
     inner class ForgotPasswordTesting {
+
+        @Test
+        fun `should return an INTERNAL_SERVER_ERROR response if the provided map contains a non existing email`() {
+            // given
+            val email = "dkhfsaö@test.com"
+            val forgotPasswordJson = "{\n" +
+                    "  \"email\": \"${email}\" \n" +
+                    "}"
+
+            // when
+            val resultActionsDsl = (mockMvc.post("$BASE_URL/forgotPassword") {
+                contentType = MediaType.APPLICATION_JSON
+                content = forgotPasswordJson
+            })
+
+            // then
+            val mvcResult = resultActionsDsl
+                .andDo { print() }
+                .andExpect {
+                    status { isInternalServerError() }
+                    content { contentType(MediaType("text", "plain", StandardCharsets.UTF_8)) }
+                }
+                .andReturn()
+
+            assertThat(mvcResult.response.contentAsString).isEqualTo(CafeConstants.NO_USER_FOR_EMAIL)
+        }
+
+        @Test
+        fun `should throw an INTERNAL_SERVER_ERROR if the provided map contains an empty email`() {
+            // given
+            val email = ""
+            val forgotPasswordJson = "{\n" +
+                    "  \"email\": \"${email}\" \n" +
+                    "}"
+
+            // when
+            val resultActionsDsl = (mockMvc.post("$BASE_URL/forgotPassword") {
+                contentType = MediaType.APPLICATION_JSON
+                content = forgotPasswordJson
+            })
+
+            // then
+            val mvcResult = resultActionsDsl
+                .andDo { print() }
+                .andExpect {
+                    status { isInternalServerError() }
+                    content { contentType(MediaType("text", "plain", StandardCharsets.UTF_8)) }
+                }
+                .andReturn()
+
+            assertThat(mvcResult.response.contentAsString).isEqualTo(CafeConstants.NO_USER_FOR_EMAIL)
+        }
+
+        @Test
+        fun `should reset password and return a FORGOT_PASSWORD_SUCCESSFULLY response if the provided map is ok`() {
+            // given
+            val email = "david@luv2code.com"
+            val userBefore = userRepository.findByEmail(email)
+            val forgotPasswordJson = "{\n" +
+                    "  \"email\": \"${email}\" \n" +
+                    "}"
+
+            // when
+            val resultActionsDsl = (mockMvc.post("$BASE_URL/forgotPassword") {
+                contentType = MediaType.APPLICATION_JSON
+                content = forgotPasswordJson
+            })
+
+            // then
+            val mvcResult = resultActionsDsl
+                .andDo { print() }
+                .andExpect {
+                    status { isOk() }
+                    content { contentType(MediaType("text", "plain", StandardCharsets.UTF_8)) }
+                }
+                .andReturn()
+
+            assertThat(mvcResult.response.contentAsString).isEqualTo(CafeConstants.FORGOT_PASSWORD_SUCCESSFULLY)
+
+            val userAfter = userRepository.findByEmail(email)
+            assertNotEquals(userBefore!!.password, userAfter!!.password)
+        }
 
     }
 }

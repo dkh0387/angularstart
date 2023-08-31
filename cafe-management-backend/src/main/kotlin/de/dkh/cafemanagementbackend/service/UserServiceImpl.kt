@@ -284,18 +284,14 @@ class UserServiceImpl(
                     HttpStatus.INTERNAL_SERVER_ERROR
                 )
             // if the user is there and have a valid email, send an email with a random password
-            return if (!Objects.isNull(user) && !Strings.isNullOrEmpty(user.email)) {
-                emailUtils.forgotEmail(
-                    user.email,
-                    CafeConstants.FORGOT_PASSWORD_SUBJECT,
-                    generateRandomPassword()
-                )
-                user.password = generateRandomPassword()
-                userRepository.save(user)
-                ResponseEntity(CafeConstants.FORGOT_PASSWORD_SUCCESSFULLY, HttpStatus.OK)
-            } else {
-                ResponseEntity<String>(CafeConstants.FORGOT_PASSWORD_NO_USER_OR_EMAIL, HttpStatus.BAD_REQUEST)
-            }
+            emailUtils.forgotEmail(
+                user.email,
+                CafeConstants.FORGOT_PASSWORD_SUBJECT,
+                generateRandomPassword()
+            )
+            user.password = generateRandomPassword()
+            userRepository.save(user)
+            return ResponseEntity(CafeConstants.FORGOT_PASSWORD_SUCCESSFULLY, HttpStatus.OK)
 
         } catch (e: Exception) {
             throw ForgotPasswordException(CafeConstants.FORGOT_PASSWORD_WENT_WRONG, HttpStatus.INTERNAL_SERVER_ERROR)

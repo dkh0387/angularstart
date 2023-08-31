@@ -661,26 +661,6 @@ class UserServiceTest {
         }
 
         @Test
-        fun `should return a FORGOT_PASSWORD_NO_USER_OR_EMAIL response if the provided email does not exist`() {
-            // given
-            val requestMap = mapOf(
-                "email" to "dkhfsaö@test.com"
-            )
-            every { userRepository.findByEmail("dkhfsaö@test.com") } returns TestData.getInactiveUser().copy(email = "")
-
-            // when
-            val responseEntity = objectUnderTest.forgotPassword(requestMap)
-
-            // then
-            assertThat(responseEntity).isEqualTo(
-                ResponseEntity<String>(
-                    CafeConstants.FORGOT_PASSWORD_NO_USER_OR_EMAIL,
-                    HttpStatus.BAD_REQUEST
-                )
-            )
-        }
-
-        @Test
         fun `should return a FORGOT_PASSWORD_SUCCESSFULLY response and reset user password if the provided request map is ok`() {
             // given
             val requestMap = mapOf(
