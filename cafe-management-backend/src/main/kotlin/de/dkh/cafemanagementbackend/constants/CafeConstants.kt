@@ -7,7 +7,6 @@ class CafeConstants {
         const val BASE_URL = "https://localhost:8081"
 
         const val SOMETHING_WENT_WRONG = "Something went wrong!"
-        const val INVALID_DATA = "Invalid data!"
         const val EMAIL_ALREADY_EXISTS = "Email already exists!"
         const val USER_SUCCESSFULLY_REGISTERED = "User successfully registered!"
         const val INVALID_EMAIL = "Invalid email!"
@@ -35,5 +34,12 @@ class CafeConstants {
         const val TRUE = "true"
         const val TOKEN_KEY_WORD = "token"
         const val MESSAGE_KEY_WORD = "message"
+        const val FORGOT_PASSWORD_WENT_WRONG = "Forgot password went wrong!"
+        const val MESSAGE_TYPE_TEXT_HTML = "text/html"
+        const val FORGOT_PASSWORD_SUBJECT = "Credentials by Cafe Management System"
+        const val RANDOM_PASSWORD_LENGTH = 33
+        const val FORGOT_PASSWORD_SUCCESSFULLY = "Password has been successfully reset!"
+        const val FORGOT_PASSWORD_NO_USER_OR_EMAIL =
+            "Password reset could not be done because the user and/or email is not available!"
     }
 }

@@ -7,6 +7,7 @@ import org.springframework.http.ResponseEntity
 class CafeUtils {
 
     companion object {
+
         fun getStringResponseFor(body: String, httpStatus: HttpStatus): ResponseEntity<String> =
             ResponseEntity(body, httpStatus)
 

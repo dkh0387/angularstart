@@ -26,6 +26,9 @@ interface UserREST {
     @GetMapping("/checkToken")
     fun checkToken(): ResponseEntity<String>
 
-    @PostMapping("changePassword")
+    @PostMapping("/changePassword")
     fun changePassword(@RequestBody(required = true) requestMap: Map<String, String>): ResponseEntity<String>
+
+    @PostMapping("/forgotPassword")
+    fun forgotPassword(@RequestBody(required = true) requestMap: Map<String, String>): ResponseEntity<String>
 }

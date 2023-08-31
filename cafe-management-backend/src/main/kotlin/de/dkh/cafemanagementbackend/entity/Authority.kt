@@ -12,7 +12,6 @@ import org.hibernate.annotations.DynamicUpdate
 @DynamicInsert
 @DynamicUpdate
 @JsonAutoDetect(fieldVisibility = JsonAutoDetect.Visibility.ANY)
-//@IdClass(AuthorityId::class)
 data class Authority(val authority: String) : PersistentObject() {
 
     @ManyToOne

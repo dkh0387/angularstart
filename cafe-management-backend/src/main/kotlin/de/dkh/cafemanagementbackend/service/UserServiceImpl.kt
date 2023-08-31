@@ -1,6 +1,7 @@
 package de.dkh.cafemanagementbackend.service
 
 import com.fasterxml.jackson.databind.ObjectMapper
+import com.google.common.base.Strings
 import de.dkh.cafemanagementbackend.constants.CafeConstants
 import de.dkh.cafemanagementbackend.entity.Authority
 import de.dkh.cafemanagementbackend.entity.User
@@ -9,6 +10,7 @@ import de.dkh.cafemanagementbackend.jsonwebtoken.JwtFilter
 import de.dkh.cafemanagementbackend.jsonwebtoken.JwtService
 import de.dkh.cafemanagementbackend.repository.UserRepository
 import de.dkh.cafemanagementbackend.utils.*
+import de.dkh.cafemanagementbackend.utils.mapper.*
 import de.dkh.cafemanagementbackend.wrapper.UserWrapper
 import lombok.extern.slf4j.Slf4j
 import org.slf4j.Logger
@@ -266,15 +268,55 @@ class UserServiceImpl(
         }
     }
 
-    fun validateSignUpMap(requestMap: Map<String, String>): User {
+    /**
+     * @TODO: testing!
+     * Send an email if the user click on "forgot password".
+     * The method set a temporary password, which should be reset by user.
+     */
+    override fun forgotPassword(requestMap: Map<String, String>): ResponseEntity<String> {
+        try {
+            // first get the current user
+            val forgotPasswortMapper =
+                getMapperFromRequestMap(requestMap, ForgotPasswordMapper::class.java) as ForgotPasswordMapper
+            val user = userRepository.findByEmail(forgotPasswortMapper.email)
+                ?: return CafeUtils.getStringResponseFor(
+                    CafeConstants.NO_USER_FOR_EMAIL,
+                    HttpStatus.INTERNAL_SERVER_ERROR
+                )
+            // if the user is there and have a valid email, send an email with a random password
+            return if (!Objects.isNull(user) && !Strings.isNullOrEmpty(user.email)) {
+                emailUtils.forgotEmail(
+                    user.email,
+                    CafeConstants.FORGOT_PASSWORD_SUBJECT,
+                    generateRandomPassword()
+                )
+                user.password = generateRandomPassword()
+                userRepository.save(user)
+                ResponseEntity(CafeConstants.FORGOT_PASSWORD_SUCCESSFULLY, HttpStatus.OK)
+            } else {
+                ResponseEntity<String>(CafeConstants.FORGOT_PASSWORD_NO_USER_OR_EMAIL, HttpStatus.BAD_REQUEST)
+            }
 
+        } catch (e: Exception) {
+            throw ForgotPasswordException(CafeConstants.FORGOT_PASSWORD_WENT_WRONG, HttpStatus.INTERNAL_SERVER_ERROR)
+        }
+    }
+
+
+    private fun generateRandomPassword(): String {
+        val allowedChars = ('A'..'Z') + ('a'..'z') + ('0'..'9')
+        return (1..CafeConstants.RANDOM_PASSWORD_LENGTH)
+            .map { allowedChars.random() }
+            .joinToString("")
+    }
+
+    fun validateSignUpMap(requestMap: Map<String, String>): User {
         try {
             val userMapperSimple = getMapperFromRequestMap(requestMap, UserMapperSimple::class.java) as UserMapperSimple
             return User.createFromSimple(userMapperSimple)
         } catch (e: Exception) {
             throw SignUpValidationException("Map $requestMap could not be parsed as User object!")
         }
-
     }
 
     private fun checkOldVSExistingPassword(oldPassword: String?, existingPassword: String?): Boolean {

@@ -66,6 +66,11 @@ class JwtFilter(
     }
 
     fun getCurrentUser(): UserDetails? = currentUser
+
+    fun setCurrentUser(userDetails: UserDetails?) {
+        currentUser = userDetails
+    }
+
     fun isAdmin(): Boolean = hasRole(User.UserRoles.ROLE_ADMIN.name)
 
     fun isUser(): Boolean = hasRole(User.UserRoles.ROLE_USER.name)

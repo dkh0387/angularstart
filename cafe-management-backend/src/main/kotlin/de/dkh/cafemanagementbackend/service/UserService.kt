@@ -13,5 +13,6 @@ interface UserService {
     fun sendEmailToAllAdmin(status: String?, email: String, allAdmins: List<UserWrapper>)
     fun checkToken(): ResponseEntity<String>
     fun changePassword(requestMap: Map<String, String>): ResponseEntity<String>
+    fun forgotPassword(requestMap: Map<String, String>): ResponseEntity<String>
 
 }

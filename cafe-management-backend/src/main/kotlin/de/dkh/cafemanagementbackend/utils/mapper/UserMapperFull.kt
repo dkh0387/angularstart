@@ -1,4 +1,4 @@
-package de.dkh.cafemanagementbackend.utils
+package de.dkh.cafemanagementbackend.utils.mapper
 
 import com.fasterxml.jackson.annotation.JsonAutoDetect
 import lombok.AllArgsConstructor

@@ -1,8 +1,8 @@
 package de.dkh.cafemanagementbackend.entity
 
 import com.fasterxml.jackson.annotation.JsonAutoDetect
-import de.dkh.cafemanagementbackend.utils.UserMapperFull
-import de.dkh.cafemanagementbackend.utils.UserMapperSimple
+import de.dkh.cafemanagementbackend.utils.mapper.UserMapperFull
+import de.dkh.cafemanagementbackend.utils.mapper.UserMapperSimple
 import de.dkh.cafemanagementbackend.wrapper.UserWrapper
 import jakarta.persistence.*
 import lombok.Getter

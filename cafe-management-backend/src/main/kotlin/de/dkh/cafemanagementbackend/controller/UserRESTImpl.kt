@@ -1,9 +1,6 @@
 package de.dkh.cafemanagementbackend.controller
 
-import de.dkh.cafemanagementbackend.exception.LogInException
-import de.dkh.cafemanagementbackend.exception.SignUpException
-import de.dkh.cafemanagementbackend.exception.UserUpdateStatusException
-import de.dkh.cafemanagementbackend.exception.UsersLoadException
+import de.dkh.cafemanagementbackend.exception.*
 import de.dkh.cafemanagementbackend.service.UserService
 import de.dkh.cafemanagementbackend.wrapper.UserWrapper
 import org.springframework.http.ResponseEntity
@@ -35,8 +32,14 @@ class UserRESTImpl(private val userService: UserService) : UserREST {
         return userService.checkToken()
     }
 
+    @Throws(ChangePasswordException::class)
     override fun changePassword(requestMap: Map<String, String>): ResponseEntity<String> {
         return userService.changePassword(requestMap)
+    }
+
+    @Throws(ForgotPasswordException::class)
+    override fun forgotPassword(requestMap: Map<String, String>): ResponseEntity<String> {
+        return userService.forgotPassword(requestMap)
     }
 
 

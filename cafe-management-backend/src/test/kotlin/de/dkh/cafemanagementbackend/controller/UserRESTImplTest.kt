@@ -5,16 +5,15 @@ import de.dkh.cafemanagementbackend.constants.CafeConstants
 import de.dkh.cafemanagementbackend.entity.User
 import de.dkh.cafemanagementbackend.jsonwebtoken.JwtFilter
 import de.dkh.cafemanagementbackend.jsonwebtoken.JwtService
+import de.dkh.cafemanagementbackend.repository.AuthorityRepository
 import de.dkh.cafemanagementbackend.repository.UserRepository
 import de.dkh.cafemanagementbackend.testutils.TestData
+import io.mockk.clearAllMocks
 import jakarta.servlet.ServletException
 import org.assertj.core.api.Assertions.assertThat
 import org.assertj.core.api.Assertions.assertThatThrownBy
+import org.junit.jupiter.api.*
 import org.junit.jupiter.api.Assertions.assertNotNull
-import org.junit.jupiter.api.DisplayName
-import org.junit.jupiter.api.Nested
-import org.junit.jupiter.api.Test
-import org.junit.jupiter.api.TestInstance
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc
 import org.springframework.boot.test.context.SpringBootTest
@@ -43,10 +42,21 @@ class UserRESTImplTest {
     lateinit var userRepository: UserRepository
 
     @Autowired
+    lateinit var authorityRepository: AuthorityRepository
+
+    @Autowired
     lateinit var jwtService: JwtService
 
     @Autowired
     lateinit var jwtFilter: JwtFilter
+
+    @BeforeEach
+    fun setUp() {
+        clearAllMocks()
+        val admin = userRepository.findById(6)
+        admin.get().password = TestData.getAdmin().password
+        jwtFilter.setCurrentUser(null)
+    }
 
     @Nested
     @DisplayName("Testing web layer for user sign up")
@@ -253,6 +263,145 @@ class UserRESTImplTest {
                     content { contentType(MediaType("text", "plain", StandardCharsets.UTF_8)) }
                 }
         }
+
+    }
+
+
+    @Nested
+    @DisplayName("Testing web layer for change password")
+    @TestInstance(TestInstance.Lifecycle.PER_CLASS)
+    @DirtiesContext
+    inner class ChangePasswordTesting {
+
+        @Test
+        fun `should throw an exception if the service does`() {
+            // given
+            val oldPassword = "1324234325"
+            val newPassword = "grrehbth"
+            val changePasswordJson = "{\n" +
+                    "  \"oldPassword\": \"${oldPassword}\",\n" +
+                    "  \"newPassword2\": \"${newPassword}\" \n" +
+                    "}"
+
+            // when/then
+            assertThatThrownBy {
+                (mockMvc.post("$BASE_URL/changePassword") {
+                    contentType = MediaType.APPLICATION_JSON
+                    content = changePasswordJson
+                })
+            }.isInstanceOf(ServletException::class.java)
+        }
+
+        @Test
+        fun `should throw aen exception if there is no current user set`() {
+            // given
+            val oldPassword = "1324234325"
+            val newPassword = "grrehbth"
+            val changePasswordJson = "{\n" +
+                    "  \"oldPassword\": \"${oldPassword}\",\n" +
+                    "  \"newPassword\": \"${newPassword}\" \n" +
+                    "}"
+
+            // when/then
+            assertThatThrownBy {
+                (mockMvc.post("$BASE_URL/changePassword") {
+                    contentType = MediaType.APPLICATION_JSON
+                    content = changePasswordJson
+                })
+            }.isInstanceOf(ServletException::class.java)
+        }
+
+        @Test
+        fun `should return a INTERNAL_SERVER_ERROR if there is no user for provided email`() {
+            // given
+            val oldPassword = "1324234325"
+            val newPassword = "grrehbth"
+            val changePasswordJson = "{\n" +
+                    "  \"oldPassword\": \"${oldPassword}\",\n" +
+                    "  \"newPassword\": \"${newPassword}\" \n" +
+                    "}"
+            val userDetails = TestData.getSpringUserDetails(username = "sadöljewfoüj")
+            jwtFilter.setCurrentUser(userDetails)
+
+            // when
+            val resultActionsDsl = (mockMvc.post("$BASE_URL/changePassword") {
+                contentType = MediaType.APPLICATION_JSON
+                content = changePasswordJson
+            })
+
+            resultActionsDsl
+                .andDo { print() }
+                .andExpect {
+                    status { isInternalServerError() }
+                    content { contentType(MediaType("text", "plain", StandardCharsets.UTF_8)) }
+                }
+        }
+
+        @Test
+        fun `should return a BAD_REQUEST if old- and existing password do not match`() {
+            // given
+            val oldPassword = "1324234325"
+            val newPassword = "grrehbth"
+            val changePasswordJson = "{\n" +
+                    "  \"oldPassword\": \"${oldPassword}\",\n" +
+                    "  \"newPassword\": \"${newPassword}\" \n" +
+                    "}"
+            val userDetails = TestData.getSpringUserDetails()
+            jwtFilter.setCurrentUser(userDetails)
+
+            // when
+            val resultActionsDsl = (mockMvc.post("$BASE_URL/changePassword") {
+                contentType = MediaType.APPLICATION_JSON
+                content = changePasswordJson
+            })
+
+            resultActionsDsl
+                .andDo { print() }
+                .andExpect {
+                    status { isBadRequest() }
+                    content { contentType(MediaType("text", "plain", StandardCharsets.UTF_8)) }
+                }
+        }
+
+        @Test
+        fun `should return a OK if there is a valid user and old- and existing password do match`() {
+            // given
+            userRepository.deleteByName("JUnitTestuser")
+            val testUser = userRepository.save(
+                TestData.getInactiveUser().copy(name = "JUnitTestuser", email = "junittestuser@gmail.com")
+            )
+            val newPassword = "grrehbth"
+            val changePasswordJson = "{\n" +
+                    "  \"oldPassword\": \"${testUser.password}\",\n" +
+                    "  \"newPassword\": \"${newPassword}\" \n" +
+                    "}"
+            jwtFilter.setCurrentUser(TestData.getSpringUserDetails(testUser))
+
+            // when
+            val resultActionsDsl = (mockMvc.post("$BASE_URL/changePassword") {
+                contentType = MediaType.APPLICATION_JSON
+                content = changePasswordJson
+            })
+
+            resultActionsDsl
+                .andDo { print() }
+                .andExpect {
+                    status { isOk() }
+                    content { contentType(MediaType("text", "plain", StandardCharsets.UTF_8)) }
+                }
+            val user = userRepository.findByEmail(testUser.email)
+            userRepository.deleteByEmail(testUser.email)
+
+            assertThat(user!!.password).isEqualTo(newPassword)
+        }
+
+    }
+
+    @Nested
+    @DisplayName("Testing web layer for forgot password")
+    @TestInstance(TestInstance.Lifecycle.PER_CLASS)
+    @DirtiesContext
+    inner class ForgotPasswordTesting {
 
     }
 }

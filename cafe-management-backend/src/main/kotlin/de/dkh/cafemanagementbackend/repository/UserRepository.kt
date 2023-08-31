@@ -35,4 +35,9 @@ interface UserRepository : JpaRepository<User, Long> {
     @Query("DELETE FROM User u WHERE u.email =:emailInput")
     fun deleteByEmail(@Param("emailInput") email: String?): Int
 
+    @Transactional
+    @Modifying
+    @Query("DELETE FROM User u WHERE u.name =:nameInput")
+    fun deleteByName(@Param("nameInput") name: String?): Int
+
 }
