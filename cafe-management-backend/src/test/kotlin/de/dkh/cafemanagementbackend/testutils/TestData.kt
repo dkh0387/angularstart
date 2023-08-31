@@ -2,7 +2,6 @@ package de.dkh.cafemanagementbackend.testutils
 
 import de.dkh.cafemanagementbackend.entity.Authority
 import de.dkh.cafemanagementbackend.entity.User
-import org.springframework.security.core.GrantedAuthority
 
 class TestData {
 
