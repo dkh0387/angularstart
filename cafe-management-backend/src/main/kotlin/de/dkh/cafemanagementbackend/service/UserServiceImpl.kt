@@ -11,6 +11,8 @@ import de.dkh.cafemanagementbackend.repository.UserRepository
 import de.dkh.cafemanagementbackend.utils.*
 import de.dkh.cafemanagementbackend.wrapper.UserWrapper
 import lombok.extern.slf4j.Slf4j
+import org.slf4j.Logger
+import org.slf4j.LoggerFactory
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.mail.MailAuthenticationException
@@ -33,6 +35,9 @@ class UserServiceImpl(
     private val emailUtils: EmailUtils,
     private val objectMapper: ObjectMapper
 ) : UserService {
+
+    private val logger: Logger = LoggerFactory.getLogger(UserServiceImpl::class.java)
+
     override fun signUp(requestMap: Map<String, String>): ResponseEntity<String> {
         println("Inside signUp $requestMap")
 
@@ -191,7 +196,11 @@ class UserServiceImpl(
         MailParseException::class,
         MailSendException::class
     )
-    override fun sendEmailToAllAdmin(status: String?, email: String, allAdmins: List<UserWrapper>) {
+    override fun sendEmailToAllAdmin(
+        status: String?,
+        email: String,
+        allAdmins: List<UserWrapper>
+    ) {
 
         if (jwtFilter.getCurrentUser() != null && status != null) {
             if (status.equals(CafeConstants.TRUE, true)) {
@@ -209,6 +218,8 @@ class UserServiceImpl(
                     allAdmins.map { it.email }
                 )
             }
+        } else {
+            logger.warn(if (jwtFilter.getCurrentUser() == null) CafeConstants.CURRENT_USER_IS_NULL else CafeConstants.NO_STATUS_FOR_UPDATE)
         }
     }
 

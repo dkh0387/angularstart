@@ -1,5 +1,9 @@
 package de.dkh.cafemanagementbackend.service
 
+import ch.qos.logback.classic.Level
+import ch.qos.logback.classic.Logger
+import ch.qos.logback.classic.spi.ILoggingEvent
+import ch.qos.logback.core.read.ListAppender
 import com.fasterxml.jackson.databind.ObjectMapper
 import de.dkh.cafemanagementbackend.constants.CafeConstants
 import de.dkh.cafemanagementbackend.entity.User
@@ -16,7 +20,9 @@ import io.mockk.junit5.MockKExtension
 import org.assertj.core.api.Assertions.assertThat
 import org.assertj.core.api.Assertions.assertThatThrownBy
 import org.junit.jupiter.api.*
+import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.extension.ExtendWith
+import org.slf4j.LoggerFactory
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.security.authentication.AuthenticationManager
@@ -453,6 +459,68 @@ class UserServiceTest {
                     CafeConstants.NO_STATUS_REQUESTED_FOR_UPDATE, HttpStatus.OK
                 )
             )
+        }
+    }
+
+    @Nested
+    @DisplayName("Testing send email about user status update")
+    @TestInstance(TestInstance.Lifecycle.PER_CLASS)
+    inner class SendEmailTesting {
+
+        @Test
+        fun `should log a WARN message if the current user is null`() {
+            // given
+            every { jwtFilter.getCurrentUser() } returns null
+
+            val logger: Logger = LoggerFactory.getLogger(UserServiceImpl::class.java) as Logger
+            val listAppender = ListAppender<ILoggingEvent>()
+            listAppender.start()
+            logger.addAppender(listAppender)
+            val logsList = listAppender.list
+
+            // when
+            objectUnderTest.sendEmailToAllAdmin("true", "deniskh87@gmail.com", emptyList())
+
+            // then
+            assertEquals(CafeConstants.CURRENT_USER_IS_NULL, logsList[0].formattedMessage)
+            assertEquals(Level.WARN, logsList[0].level)
+
+            verify(exactly = 0) { emailUtils.sendSimpleMessage(any(), any(), any(), any()) }
+
+        }
+
+        @Test
+        fun `should log a WARN message if no status provided for update`() {
+            // given
+            every { jwtFilter.getCurrentUser() } returns TestData.getSpringUserDetails()
+
+            val logger: Logger = LoggerFactory.getLogger(UserServiceImpl::class.java) as Logger
+            val listAppender = ListAppender<ILoggingEvent>()
+            listAppender.start()
+            logger.addAppender(listAppender)
+            val logsList = listAppender.list
+
+            // when
+            objectUnderTest.sendEmailToAllAdmin(null, "deniskh87@gmail.com", emptyList())
+
+            // then
+            assertEquals(CafeConstants.NO_STATUS_FOR_UPDATE, logsList[0].formattedMessage)
+            assertEquals(Level.WARN, logsList[0].level)
+
+            verify(exactly = 0) { emailUtils.sendSimpleMessage(any(), any(), any(), any()) }
+        }
+
+        @Test
+        fun `should send an email if current user is not null and status provided for update`() {
+            // given
+            every { jwtFilter.getCurrentUser() } returns TestData.getSpringUserDetails()
+            every { emailUtils.sendSimpleMessage(any(), any(), any(), any()) } just runs
+
+            // when
+            objectUnderTest.sendEmailToAllAdmin("true", "deniskh87@gmail.com", emptyList())
+
+            // then
+            verify(exactly = 1) { emailUtils.sendSimpleMessage(any(), any(), any(), any()) }
         }
     }
 

@@ -27,6 +27,8 @@ class CafeConstants {
         const val TEXT_USER_SET_DISABLED = "User is disabled by admin"
         const val CHANGE_PASSWORD_WENT_WRONG = "Change password went wrong!"
         const val NO_USER_FOR_EMAIL = "There is no user for the given email in the database!"
+        const val CURRENT_USER_IS_NULL = "Current user is NULL, status mail will not be sending!"
+        const val NO_STATUS_FOR_UPDATE = "There is no user status for update, status mail will not be sending!"
         const val OLD_VS_EXISTING_PASSWORD_MISMATCH =
             "Old password from request and existing password do not match or at least one of them is NULL!"
         const val PASSWORD_SUCCESSFULLY_CHANGED = "Password successfully changed!"
