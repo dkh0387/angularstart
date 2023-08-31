@@ -186,8 +186,7 @@ class UserServiceImpl(
     }
 
     /**
-     * @TODO: testing!
-     * Send an email to all admins about status update for the requested user.
+     * Sends Email to all admins about status update for the requested user.
      * NOTE: the username of UserDetails is being used as email in this project, see: [de.dkh.cafemanagementbackend.service.CustomerUserDetailsService].
      */
     @Throws(

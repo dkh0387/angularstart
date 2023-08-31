@@ -2,7 +2,6 @@ package de.dkh.cafemanagementbackend.utils
 
 import org.springframework.context.annotation.PropertySource
 import org.springframework.core.env.Environment
-import org.springframework.core.env.get
 import org.springframework.mail.MailAuthenticationException
 import org.springframework.mail.MailException
 import org.springframework.mail.MailParseException
@@ -12,11 +11,13 @@ import org.springframework.mail.javamail.JavaMailSender
 import org.springframework.stereotype.Service
 
 /**
- * @TODO: testing!
+Sending emails.
+NOTE: we need to turn third party app support for a Google account in order to make it work!
  */
 @Service
 @PropertySource("classpath:application.properties")
 class EmailUtilsService(private val emailSender: JavaMailSender, private val environment: Environment) : EmailUtils {
+
     @Throws(
         MailException::class,
         MailAuthenticationException::class,
@@ -25,7 +26,7 @@ class EmailUtilsService(private val emailSender: JavaMailSender, private val env
     )
     override fun sendSimpleMessage(to: String, subject: String, text: String, emails: List<String>) {
         val simpleMailMessage = SimpleMailMessage()
-        simpleMailMessage.from = environment["spring.mail.username"]
+        simpleMailMessage.from = environment.getProperty("spring.mail.username")
         simpleMailMessage.setTo(to)
         simpleMailMessage.subject = subject
         simpleMailMessage.text = text
