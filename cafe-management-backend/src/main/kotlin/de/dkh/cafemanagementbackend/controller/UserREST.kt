@@ -31,4 +31,5 @@ interface UserREST {
 
     @PostMapping("/forgotPassword")
     fun forgotPassword(@RequestBody(required = true) requestMap: Map<String, String>): ResponseEntity<String>
+
 }

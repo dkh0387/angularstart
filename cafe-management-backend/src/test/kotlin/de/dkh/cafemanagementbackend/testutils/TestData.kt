@@ -1,6 +1,7 @@
 package de.dkh.cafemanagementbackend.testutils
 
 import de.dkh.cafemanagementbackend.entity.Authority
+import de.dkh.cafemanagementbackend.entity.Category
 import de.dkh.cafemanagementbackend.entity.User
 
 class TestData {
@@ -49,5 +50,7 @@ class TestData {
             )
 
         fun getInactiveUserWithAuthorities(): User = getInactiveUser().copy(authorities = listOf(getAuthority()))
+
+        fun getCategory(name: String): Category = Category(name)
     }
 }

@@ -32,7 +32,6 @@ import java.util.*
 @ExtendWith(MockKExtension::class)
 class UserServiceTest {
 
-    private val objectMapper: ObjectMapper = ObjectMapper()
     private val userRepository = mockk<UserRepository>()
     private val authenticationManager = mockk<AuthenticationManager>()
     private val customerUserDetailsService = mockk<CustomerUserDetailsService>()

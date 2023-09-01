@@ -10,10 +10,12 @@ import de.dkh.cafemanagementbackend.repository.UserRepository
 import de.dkh.cafemanagementbackend.utils.CafeUtils
 import de.dkh.cafemanagementbackend.utils.EmailUtils
 import de.dkh.cafemanagementbackend.utils.ServiceUtils
-import de.dkh.cafemanagementbackend.utils.mapper.*
+import de.dkh.cafemanagementbackend.utils.mapper.ChangePasswordMapper
+import de.dkh.cafemanagementbackend.utils.mapper.ForgotPasswordMapper
+import de.dkh.cafemanagementbackend.utils.mapper.UserMapperFull
+import de.dkh.cafemanagementbackend.utils.mapper.UserMapperSimple
 import de.dkh.cafemanagementbackend.wrapper.UserWrapper
 import lombok.extern.slf4j.Slf4j
-import org.apache.el.parser.BooleanNode
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import org.springframework.http.HttpStatus
