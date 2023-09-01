@@ -81,7 +81,7 @@ data class User(
             userMapperSimple.password,
             DEFAULT_STATUS,
             DEFAULT_ROLE,
-            null
+            emptyList()
         )
 
         fun createFromFull(userMapperFull: UserMapperFull): de.dkh.cafemanagementbackend.entity.User = User(
@@ -92,7 +92,7 @@ data class User(
             userMapperFull.password,
             userMapperFull.status,
             userMapperFull.role,
-            null
+            userMapperFull.authorities
         )
     }
 

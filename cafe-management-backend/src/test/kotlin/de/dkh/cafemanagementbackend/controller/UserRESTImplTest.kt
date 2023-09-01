@@ -160,12 +160,16 @@ class UserRESTImplTest {
         fun `should return 'OK' response if no exceptions occur`() {
 
             // given
-            val user = TestData.getInactiveUser().copy(email = "deniskh87@gmail.com")
+            val user = TestData.getInactiveUser()
+            val userJson = "{\n" +
+                    "  \"email\": \"${user.email}\",\n" +
+                    "  \"password\": \"${user.password}\" \n" +
+                    "}"
 
             // when / then
             val resultActionsDsl = (mockMvc.post("$BASE_URL/login") {
                 contentType = MediaType.APPLICATION_JSON
-                content = objectMapper.writeValueAsString(user)
+                content = userJson
             })
 
             resultActionsDsl

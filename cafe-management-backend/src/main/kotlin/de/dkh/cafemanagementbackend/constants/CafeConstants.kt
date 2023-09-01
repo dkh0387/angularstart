@@ -39,7 +39,8 @@ class CafeConstants {
         const val FORGOT_PASSWORD_SUBJECT = "Credentials by Cafe Management System"
         const val RANDOM_PASSWORD_LENGTH = 33
         const val FORGOT_PASSWORD_SUCCESSFULLY = "Password has been successfully reset!"
-        const val FORGOT_PASSWORD_NO_USER_OR_EMAIL =
-            "Password reset could not be done because the user and/or email is not available!"
+
+        const val ADD_CATEGORY_WENT_WRONG = "Add a new category went wrong!"
+        const val ADD_CATEGORY_SUCCESSFULLY = "Successfully added a new category!"
     }
 }

@@ -46,8 +46,7 @@ class UserServiceTest {
             customerUserDetailsService,
             jwtService,
             jwtFilter,
-            emailUtils,
-            objectMapper
+            emailUtils
         )
 
     @BeforeEach
@@ -72,7 +71,7 @@ class UserServiceTest {
 
 
             // when
-            val result = objectUnderTest.validateSignUpMap(requestMap)
+            val result = objectUnderTest.validateSignUpMap(requestMap, false)
 
             // then
             assertThat(result.toString()).isEqualTo(
@@ -82,14 +81,15 @@ class UserServiceTest {
                     email = requestMap["email"]!!,
                     password = requestMap["password"]!!,
                     status = User.DEFAULT_STATUS,
-                    role = User.DEFAULT_ROLE
+                    role = User.DEFAULT_ROLE,
+                    authorities = emptyList()
                 ).toString()
             )
 
         }
 
         @Test
-        fun `should return a valid user if the map does not contains valid User properties`() {
+        fun `should throw an exception if the map contains unknown User properties`() {
             // given
             val requestMap: Map<String, String> = mapOf(
                 "name2" to "Denis Khaskin",
@@ -99,7 +99,9 @@ class UserServiceTest {
             )
 
             // when/then
-            assertThatThrownBy { objectUnderTest.validateSignUpMap(requestMap) }.isInstanceOf(SignUpValidationException::class.java)
+            assertThatThrownBy { objectUnderTest.validateSignUpMap(requestMap, false) }.isInstanceOf(
+                SignUpValidationException::class.java
+            )
         }
 
     }

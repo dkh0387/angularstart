@@ -1,6 +1,5 @@
 package de.dkh.cafemanagementbackend.service
 
-import com.fasterxml.jackson.databind.ObjectMapper
 import de.dkh.cafemanagementbackend.constants.CafeConstants
 import de.dkh.cafemanagementbackend.entity.Authority
 import de.dkh.cafemanagementbackend.entity.User
@@ -10,9 +9,11 @@ import de.dkh.cafemanagementbackend.jsonwebtoken.JwtService
 import de.dkh.cafemanagementbackend.repository.UserRepository
 import de.dkh.cafemanagementbackend.utils.CafeUtils
 import de.dkh.cafemanagementbackend.utils.EmailUtils
+import de.dkh.cafemanagementbackend.utils.ServiceUtils
 import de.dkh.cafemanagementbackend.utils.mapper.*
 import de.dkh.cafemanagementbackend.wrapper.UserWrapper
 import lombok.extern.slf4j.Slf4j
+import org.apache.el.parser.BooleanNode
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import org.springframework.http.HttpStatus
@@ -34,8 +35,7 @@ class UserServiceImpl(
     private val customerUserDetailsService: CustomerUserDetailsService,
     private val jwtService: JwtService,
     private val jwtFilter: JwtFilter,
-    private val emailUtils: EmailUtils,
-    private val objectMapper: ObjectMapper
+    private val emailUtils: EmailUtils
 ) : UserService {
 
     private val logger: Logger = LoggerFactory.getLogger(UserServiceImpl::class.java)
@@ -45,7 +45,7 @@ class UserServiceImpl(
 
         try {
             // Validate the incoming request and map it to a User instance
-            val userFromMap = validateSignUpMap(requestMap)
+            val userFromMap = validateSignUpMap(requestMap, true)
 
             // If the mapped user is valid proof if he/she is already registered
             val existingUser = userRepository.findByEmail(userFromMap.email)
@@ -75,7 +75,8 @@ class UserServiceImpl(
         println("Inside logIn $requestMap")
 
         try {
-            val userMapperSimple = getMapperFromRequestMap(requestMap, UserMapperSimple::class.java) as UserMapperSimple
+            val userMapperSimple =
+                ServiceUtils.getMapperFromRequestMap(requestMap, UserMapperSimple::class.java) as UserMapperSimple
             val userFromMap = User.createFromSimple(userMapperSimple)
             // in order to set the userDetails for customerUserDetailsService
             customerUserDetailsService.loadUserByUsername(userFromMap.email)
@@ -143,7 +144,8 @@ class UserServiceImpl(
         println("Inside update $requestMap")
 
         try {
-            val userMapperFull = getMapperFromRequestMap(requestMap, UserMapperFull::class.java) as UserMapperFull
+            val userMapperFull =
+                ServiceUtils.getMapperFromRequestMap(requestMap, UserMapperFull::class.java) as UserMapperFull
 
             if (userMapperFull.status == "") {
                 return CafeUtils.getStringResponseFor(
@@ -239,7 +241,10 @@ class UserServiceImpl(
     override fun changePassword(requestMap: Map<String, String>): ResponseEntity<String> {
         try {
             val passwordMapper =
-                getMapperFromRequestMap(requestMap, ChangePasswordMapper::class.java) as ChangePasswordMapper
+                ServiceUtils.getMapperFromRequestMap(
+                    requestMap,
+                    ChangePasswordMapper::class.java
+                ) as ChangePasswordMapper
             val user = userRepository.findByEmail(jwtFilter.getCurrentUser()!!.username)
                 ?: return CafeUtils.getStringResponseFor(
                     CafeConstants.NO_USER_FOR_EMAIL,
@@ -269,15 +274,17 @@ class UserServiceImpl(
     }
 
     /**
-     * @TODO: testing!
-     * Send an email if the user click on "forgot password".
-     * The method set a temporary password, which should be reset by user.
+     * Send an email if the user clicks on "forgot password".
+     * The method sets a temporary password, which should be reset by user.
      */
     override fun forgotPassword(requestMap: Map<String, String>): ResponseEntity<String> {
         try {
             // first get the current user
             val forgotPasswortMapper =
-                getMapperFromRequestMap(requestMap, ForgotPasswordMapper::class.java) as ForgotPasswordMapper
+                ServiceUtils.getMapperFromRequestMap(
+                    requestMap,
+                    ForgotPasswordMapper::class.java
+                ) as ForgotPasswordMapper
             val user = userRepository.findByEmail(forgotPasswortMapper.email)
                 ?: return CafeUtils.getStringResponseFor(
                     CafeConstants.NO_USER_FOR_EMAIL,
@@ -295,7 +302,10 @@ class UserServiceImpl(
             return ResponseEntity(CafeConstants.FORGOT_PASSWORD_SUCCESSFULLY, HttpStatus.OK)
 
         } catch (e: Exception) {
-            throw ForgotPasswordException(CafeConstants.FORGOT_PASSWORD_WENT_WRONG, HttpStatus.INTERNAL_SERVER_ERROR)
+            throw ForgotPasswordException(
+                CafeConstants.FORGOT_PASSWORD_WENT_WRONG + " MESSAGE: " + e.localizedMessage,
+                HttpStatus.INTERNAL_SERVER_ERROR
+            )
         }
     }
 
@@ -307,10 +317,18 @@ class UserServiceImpl(
             .joinToString("")
     }
 
-    fun validateSignUpMap(requestMap: Map<String, String>): User {
+    fun validateSignUpMap(requestMap: Map<String, String>, allProperties: Boolean): User {
         try {
-            val userMapperSimple = getMapperFromRequestMap(requestMap, UserMapperSimple::class.java) as UserMapperSimple
-            return User.createFromSimple(userMapperSimple)
+            return if (!allProperties) {
+                val userMapperSimple =
+                    ServiceUtils.getMapperFromRequestMap(requestMap, UserMapperSimple::class.java) as UserMapperSimple
+                User.createFromSimple(userMapperSimple)
+            } else {
+                val userMapperFull =
+                    ServiceUtils.getMapperFromRequestMap(requestMap, UserMapperFull::class.java) as UserMapperFull
+                User.createFromSimple(userMapperFull)
+            }
+
         } catch (e: Exception) {
             throw SignUpValidationException("Map $requestMap could not be parsed as User object!")
         }
@@ -342,13 +360,5 @@ class UserServiceImpl(
             (a1 == null) -> -1
             else -> User.UserRoles.valueOf(a1.authority).compareTo(User.UserRoles.valueOf(a2.authority))
         }
-    }
-
-    /**
-     * Maps a given request map to the corresponding mapper class.
-     */
-    private fun getMapperFromRequestMap(requestMap: Map<String, String>, clazz: Class<out KeyMapper>): KeyMapper {
-        val json = objectMapper.writer().writeValueAsString(requestMap)
-        return objectMapper.readValue(json, clazz)
     }
 }
