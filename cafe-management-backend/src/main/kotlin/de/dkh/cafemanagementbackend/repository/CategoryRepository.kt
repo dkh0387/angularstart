@@ -7,9 +7,10 @@ import org.springframework.transaction.annotation.Transactional
 
 interface CategoryRepository : JpaRepository<Category, Long> {
 
-    fun findAllForProduct(): List<Category>
+    fun getAllCategory(): List<Category>
 
     @Transactional
     @Modifying
     fun deleteByName(name: String)
+
 }

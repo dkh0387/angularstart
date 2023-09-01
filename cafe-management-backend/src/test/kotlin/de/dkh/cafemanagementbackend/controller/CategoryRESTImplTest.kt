@@ -1,12 +1,9 @@
 package de.dkh.cafemanagementbackend.controller
 
-import com.fasterxml.jackson.databind.ObjectMapper
 import de.dkh.cafemanagementbackend.constants.CafeConstants
 import de.dkh.cafemanagementbackend.entity.User
-import de.dkh.cafemanagementbackend.exception.AddCategoryException
 import de.dkh.cafemanagementbackend.jsonwebtoken.JwtFilter
 import de.dkh.cafemanagementbackend.jsonwebtoken.JwtService
-import de.dkh.cafemanagementbackend.repository.AuthorityRepository
 import de.dkh.cafemanagementbackend.repository.CategoryRepository
 import de.dkh.cafemanagementbackend.repository.UserRepository
 import de.dkh.cafemanagementbackend.testutils.TestData

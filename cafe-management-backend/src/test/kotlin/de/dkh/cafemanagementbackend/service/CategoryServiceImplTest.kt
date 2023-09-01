@@ -97,4 +97,42 @@ class CategoryServiceImplTest {
         }
 
     }
+
+    @Nested
+    @DisplayName("Testing get all category")
+    @TestInstance(TestInstance.Lifecycle.PER_CLASS)
+    inner class GetAllCategoryTesting {
+
+        @Test
+        fun `should return all categories if everything ok and no filter value provided`() {
+            // given
+            every { categoryRepository.findAll() } returns listOf(TestData.getCategory("Pasta"))
+
+
+            // when
+            val responseEntity = objectUnderTest.getAllCategory(null)
+
+            // then
+            assertThat(responseEntity.statusCode.is2xxSuccessful)
+            assertThat(responseEntity.body).isEqualTo(listOf(TestData.getCategory("Pasta").toWrapper()))
+        }
+
+        /**
+         * @TODO: probably the test should be modified if other logic for filtering will be implemented!
+         */
+        @Test
+        fun `should return filtered categories if everything ok and a filter value provided`() {
+            // given
+            every { categoryRepository.getAllCategory() } returns listOf(TestData.getCategory("Pasta"))
+
+
+            // when
+            val responseEntity = objectUnderTest.getAllCategory("true")
+
+            // then
+            assertThat(responseEntity.statusCode.is2xxSuccessful)
+            assertThat(responseEntity.body).isEqualTo(listOf(TestData.getCategory("Pasta").toWrapper()))
+        }
+
+    }
 }
