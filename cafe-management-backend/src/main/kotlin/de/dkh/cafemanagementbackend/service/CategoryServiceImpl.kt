@@ -4,6 +4,7 @@ import com.google.common.base.Strings
 import de.dkh.cafemanagementbackend.constants.CafeConstants
 import de.dkh.cafemanagementbackend.entity.Category
 import de.dkh.cafemanagementbackend.exception.AddCategoryException
+import de.dkh.cafemanagementbackend.exception.UpdateCategoryException
 import de.dkh.cafemanagementbackend.jsonwebtoken.JwtFilter
 import de.dkh.cafemanagementbackend.repository.CategoryRepository
 import de.dkh.cafemanagementbackend.utils.CafeUtils
@@ -53,19 +54,44 @@ class CategoryServiceImpl(private val categoryRepository: CategoryRepository, pr
         try {
             return if (!Strings.isNullOrEmpty(filterValue) && filterValue.equals(CafeConstants.TRUE, true)) {
                 CafeUtils.getCategoryResponseFor(
-                    categoryRepository.getAllCategory().map { it.toWrapper() },
-                    HttpStatus.OK
+                    categoryRepository.getAllCategory().map { it.toWrapper() }, HttpStatus.OK
                 )
             } else {
                 CafeUtils.getCategoryResponseFor(
-                    categoryRepository.findAll().map { it.toWrapper() },
-                    HttpStatus.OK
+                    categoryRepository.findAll().map { it.toWrapper() }, HttpStatus.OK
                 )
             }
 
         } catch (e: Exception) {
+            logger.error(CafeConstants.GET_ALL_CATEGORIES_WENT_WRONG + " MESSAGE : ${e.localizedMessage}")
             return CafeUtils.getCategoryResponseFor(
-                emptyList(),
+                emptyList(), HttpStatus.INTERNAL_SERVER_ERROR
+            )
+        }
+    }
+
+    override fun updateCategory(requestMap: Map<String, String>): ResponseEntity<String> {
+        try {
+            val categoryMapper =
+                ServiceUtils.getMapperFromRequestMap(requestMap, CategoryMapper::class.java) as CategoryMapper
+            val categoryOptional = categoryMapper.id?.let { categoryRepository.findById(it) }
+
+            return if (jwtFilter.isAdmin()) {
+                if (categoryOptional != null && categoryOptional.isPresent) {
+                    val category = categoryOptional.get()
+                    category.name = categoryMapper.name
+                    categoryRepository.save(category)
+                    CafeUtils.getStringResponseFor(CafeConstants.UPDATE_CATEGORY_SUCCESSFULLY, HttpStatus.OK)
+                } else {
+                    CafeUtils.getStringResponseFor(CafeConstants.UPDATE_CATEGORY_WENT_WRONG, HttpStatus.BAD_REQUEST)
+                }
+            } else {
+                CafeUtils.getStringResponseFor(CafeConstants.UNAUTHORIZED_ACCESS, HttpStatus.UNAUTHORIZED)
+            }
+
+        } catch (e: Exception) {
+            throw UpdateCategoryException(
+                CafeConstants.GET_ALL_CATEGORIES_WENT_WRONG + " MESSAGE : ${e.localizedMessage}",
                 HttpStatus.INTERNAL_SERVER_ERROR
             )
         }

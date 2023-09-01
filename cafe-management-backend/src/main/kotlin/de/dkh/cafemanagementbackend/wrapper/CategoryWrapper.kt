@@ -1,7 +1,6 @@
 package de.dkh.cafemanagementbackend.wrapper
 
 import com.fasterxml.jackson.annotation.JsonAutoDetect
-import lombok.Getter
 import lombok.NoArgsConstructor
 import lombok.ToString
 

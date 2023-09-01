@@ -1,6 +1,5 @@
 package de.dkh.cafemanagementbackend.utils
 
-import de.dkh.cafemanagementbackend.entity.Category
 import de.dkh.cafemanagementbackend.wrapper.CategoryWrapper
 import de.dkh.cafemanagementbackend.wrapper.UserWrapper
 import org.springframework.http.HttpStatus

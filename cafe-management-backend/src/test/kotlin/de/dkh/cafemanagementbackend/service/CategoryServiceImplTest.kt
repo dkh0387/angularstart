@@ -2,6 +2,7 @@ package de.dkh.cafemanagementbackend.service
 
 import de.dkh.cafemanagementbackend.constants.CafeConstants
 import de.dkh.cafemanagementbackend.exception.AddCategoryException
+import de.dkh.cafemanagementbackend.exception.UpdateCategoryException
 import de.dkh.cafemanagementbackend.jsonwebtoken.JwtFilter
 import de.dkh.cafemanagementbackend.repository.CategoryRepository
 import de.dkh.cafemanagementbackend.testutils.TestData
@@ -16,6 +17,7 @@ import org.junit.jupiter.api.*
 import org.junit.jupiter.api.extension.ExtendWith
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
+import java.util.*
 
 @ExtendWith(MockKExtension::class)
 class CategoryServiceImplTest {
@@ -69,8 +71,7 @@ class CategoryServiceImplTest {
             verify(exactly = 0) { categoryRepository.save(category) }
             assertThat(responseEntity).isEqualTo(
                 ResponseEntity<String>(
-                    CafeConstants.UNAUTHORIZED_ACCESS,
-                    HttpStatus.UNAUTHORIZED
+                    CafeConstants.UNAUTHORIZED_ACCESS, HttpStatus.UNAUTHORIZED
                 )
             )
         }
@@ -90,8 +91,7 @@ class CategoryServiceImplTest {
             verify(exactly = 1) { categoryRepository.save(category) }
             assertThat(responseEntity).isEqualTo(
                 ResponseEntity<String>(
-                    CafeConstants.ADD_CATEGORY_SUCCESSFULLY,
-                    HttpStatus.OK
+                    CafeConstants.ADD_CATEGORY_SUCCESSFULLY, HttpStatus.OK
                 )
             )
         }
@@ -134,5 +134,102 @@ class CategoryServiceImplTest {
             assertThat(responseEntity.body).isEqualTo(listOf(TestData.getCategory("Pasta").toWrapper()))
         }
 
+    }
+
+    @Nested
+    @DisplayName("Testing update category")
+    @TestInstance(TestInstance.Lifecycle.PER_CLASS)
+    inner class UpdateCategoryTesting {
+
+        @Test
+        fun `should throw an exception if the provided request map contains wrong fields`() {
+            // given
+            val category = TestData.getCategory("Pasta")
+            val requestMap = mapOf("name2" to category.name)
+
+            // when/then
+            assertThatThrownBy { objectUnderTest.updateCategory(requestMap) }.isInstanceOf(UpdateCategoryException::class.java)
+        }
+
+        @Test
+        fun `should return a UPDATE_CATEGORY_WENT_WRONG response if the provided request map does not contain an id`() {
+            // given
+            val category = TestData.getCategory("Pasta")
+            val requestMap = mapOf("name" to category.name)
+
+            every { jwtFilter.isAdmin() } returns true
+
+            // when
+            val responseEntity = objectUnderTest.updateCategory(requestMap)
+
+            // then
+            assertThat(responseEntity).isEqualTo(
+                ResponseEntity<String>(
+                    CafeConstants.UPDATE_CATEGORY_WENT_WRONG, HttpStatus.BAD_REQUEST
+                )
+            )
+        }
+
+        @Test
+        fun `should return a UNAUTHORIZED_ACCESS response if the current user is not an admin`() {
+            // given
+            val category = TestData.getCategory("Pasta")
+            val requestMap = mapOf("id" to "1", "name" to category.name)
+
+            every { jwtFilter.isAdmin() } returns false
+            every { categoryRepository.findById(1) } returns Optional.of(TestData.getCategory("Pasta"))
+
+            // when
+            val responseEntity = objectUnderTest.updateCategory(requestMap)
+
+            // then
+            assertThat(responseEntity).isEqualTo(
+                ResponseEntity<String>(
+                    CafeConstants.UNAUTHORIZED_ACCESS, HttpStatus.UNAUTHORIZED
+                )
+            )
+        }
+
+        @Test
+        fun `should return a UPDATE_CATEGORY_WENT_WRONG response if there is no category for provided id`() {
+            // given
+            val category = TestData.getCategory("Pasta")
+            val requestMap = mapOf("id" to "11111", "name" to category.name)
+
+            every { jwtFilter.isAdmin() } returns true
+            every { categoryRepository.findById(11111) } returns Optional.empty()
+
+            // when
+            val responseEntity = objectUnderTest.updateCategory(requestMap)
+
+            // then
+            assertThat(responseEntity).isEqualTo(
+                ResponseEntity<String>(
+                    CafeConstants.UPDATE_CATEGORY_WENT_WRONG, HttpStatus.BAD_REQUEST
+                )
+            )
+        }
+
+        @Test
+        fun `should return a UPDATE_CATEGORY_SUCCESSFULLY response if there is a category for provided id`() {
+            // given
+            val category = TestData.getCategory("Pasta")
+            val requestMap = mapOf("id" to "1", "name" to category.name)
+
+            every { jwtFilter.isAdmin() } returns true
+            every { categoryRepository.findById(1) } returns Optional.of(TestData.getCategory("Pasta"))
+            every { categoryRepository.save(TestData.getCategory("Pasta")) } returns TestData.getCategory("Pasta")
+
+            // when
+            val responseEntity = objectUnderTest.updateCategory(requestMap)
+
+            // then
+            verify(exactly = 1) { categoryRepository.save(any()) }
+            assertThat(responseEntity).isEqualTo(
+                ResponseEntity<String>(
+                    CafeConstants.UPDATE_CATEGORY_SUCCESSFULLY, HttpStatus.OK
+                )
+            )
+        }
     }
 }
