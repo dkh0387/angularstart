@@ -48,8 +48,6 @@ data class Category(
     fun toWrapper(): CategoryWrapper = CategoryWrapper(this.id, this.name)
 
     companion object {
-
-        //val defaultCategory = Category("Undefined category")
         fun createFromMapper(categoryMapper: CategoryMapper): Category = Category(categoryMapper.name, emptyList())
     }
 
