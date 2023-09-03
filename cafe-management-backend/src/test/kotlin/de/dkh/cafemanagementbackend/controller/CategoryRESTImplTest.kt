@@ -10,7 +10,6 @@ import de.dkh.cafemanagementbackend.repository.UserRepository
 import de.dkh.cafemanagementbackend.testutils.TestData
 import io.mockk.clearAllMocks
 import jakarta.servlet.ServletException
-import org.assertj.core.api.Assertions
 import org.assertj.core.api.Assertions.assertThat
 import org.assertj.core.api.Assertions.assertThatThrownBy
 import org.junit.jupiter.api.*
@@ -95,7 +94,7 @@ class CategoryRESTImplTest {
                 content { contentType(MediaType("text", "plain", StandardCharsets.UTF_8)) }
             }.andReturn()
 
-            Assertions.assertThat(mvcResult.response.contentAsString).isEqualTo(CafeConstants.UNAUTHORIZED_ACCESS)
+            assertThat(mvcResult.response.contentAsString).isEqualTo(CafeConstants.UNAUTHORIZED_ACCESS)
         }
 
         @Test
@@ -121,7 +120,7 @@ class CategoryRESTImplTest {
                 content { contentType(MediaType("text", "plain", StandardCharsets.UTF_8)) }
             }.andReturn()
 
-            Assertions.assertThat(mvcResult.response.contentAsString).isEqualTo(CafeConstants.ADD_CATEGORY_SUCCESSFULLY)
+            assertThat(mvcResult.response.contentAsString).isEqualTo(CafeConstants.ADD_CATEGORY_SUCCESSFULLY)
 
             categoryRepository.deleteByName(name)
         }
@@ -171,7 +170,7 @@ class CategoryRESTImplTest {
                 content { contentType(MediaType("text", "plain", StandardCharsets.UTF_8)) }
             }.andReturn()
 
-            Assertions.assertThat(mvcResult.response.contentAsString)
+            assertThat(mvcResult.response.contentAsString)
                 .isEqualTo(CafeConstants.UPDATE_CATEGORY_WENT_WRONG)
         }
 
@@ -196,7 +195,7 @@ class CategoryRESTImplTest {
                 content { contentType(MediaType("text", "plain", StandardCharsets.UTF_8)) }
             }.andReturn()
 
-            Assertions.assertThat(mvcResult.response.contentAsString).isEqualTo(CafeConstants.UNAUTHORIZED_ACCESS)
+            assertThat(mvcResult.response.contentAsString).isEqualTo(CafeConstants.UNAUTHORIZED_ACCESS)
         }
 
         @Test
@@ -220,7 +219,7 @@ class CategoryRESTImplTest {
                 content { contentType(MediaType("text", "plain", StandardCharsets.UTF_8)) }
             }.andReturn()
 
-            Assertions.assertThat(mvcResult.response.contentAsString)
+            assertThat(mvcResult.response.contentAsString)
                 .isEqualTo(CafeConstants.UPDATE_CATEGORY_WENT_WRONG)
         }
 
