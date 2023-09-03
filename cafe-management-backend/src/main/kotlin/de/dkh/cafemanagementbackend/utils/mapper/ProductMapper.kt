@@ -1,6 +1,7 @@
 package de.dkh.cafemanagementbackend.utils.mapper
 
 import com.fasterxml.jackson.annotation.JsonAutoDetect
+import de.dkh.cafemanagementbackend.entity.Category
 import lombok.AllArgsConstructor
 import lombok.NoArgsConstructor
 
@@ -14,5 +15,6 @@ class ProductMapper() : KeyMapper() {
     var description: String = ""
     var price: Double = 0.0
     var status: String = ""
+    var category: Category? = null
 
 }

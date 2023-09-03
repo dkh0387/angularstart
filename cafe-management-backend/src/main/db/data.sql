@@ -186,7 +186,7 @@ LOCK
     DISABLE KEYS */;
 
 INSERT INTO `product`
-VALUES (1, 1, 'Small salat', 'different veggies, with dressing', 6.5, 'available');
+VALUES (1, 1, 'Small salat', 'different veggies, with dressing', 6.5, 'true');
 
 /*!40000 ALTER TABLE `product`
     ENABLE KEYS */;

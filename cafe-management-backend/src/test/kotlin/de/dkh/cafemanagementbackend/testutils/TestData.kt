@@ -2,6 +2,7 @@ package de.dkh.cafemanagementbackend.testutils
 
 import de.dkh.cafemanagementbackend.entity.Authority
 import de.dkh.cafemanagementbackend.entity.Category
+import de.dkh.cafemanagementbackend.entity.Product
 import de.dkh.cafemanagementbackend.entity.User
 
 class TestData {
@@ -52,5 +53,12 @@ class TestData {
         fun getInactiveUserWithAuthorities(): User = getInactiveUser().copy(authorities = listOf(getAuthority()))
 
         fun getCategory(name: String): Category = Category(name, emptyList())
+
+        fun getProduct(name: String): Product {
+            val category = getCategory("Testcategory")
+            val product = Product(name, "Testdescription", 20.5, "true", category)
+            //category.products = listOf(product)
+            return product
+        }
     }
 }
