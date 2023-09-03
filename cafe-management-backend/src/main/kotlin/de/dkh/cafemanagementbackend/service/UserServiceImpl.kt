@@ -62,8 +62,9 @@ class UserServiceImpl(
             }
             // If the incoming request is not valid, return a SignUpErrorResponce
         } catch (e: Exception) {
+            logger.error(CafeConstants.SIGN_UP_WENT_WRONG + " MESSAGE: + ${e.localizedMessage}")
             throw SignUpException(
-                CafeConstants.SOMETHING_WENT_WRONG + " MESSAGE: " + e.localizedMessage,
+                CafeConstants.SIGN_UP_WENT_WRONG + " MESSAGE: + ${e.localizedMessage}",
                 HttpStatus.INTERNAL_SERVER_ERROR
             )
         }
@@ -109,6 +110,7 @@ class UserServiceImpl(
             }
 
         } catch (e: Exception) {
+            logger.error(CafeConstants.LOGIN_WENT_WRONG + " MESSAGE: + ${e.localizedMessage}")
             throw SignUpException(
                 CafeConstants.LOGIN_WENT_WRONG + " MESSAGE: " + e.localizedMessage,
                 HttpStatus.INTERNAL_SERVER_ERROR
@@ -130,8 +132,9 @@ class UserServiceImpl(
                 CafeUtils.getUsersResponseFor(emptyList(), HttpStatus.UNAUTHORIZED)
             }
         } catch (e: Exception) {
+            logger.error(CafeConstants.LOAD_USERS_WENT_WRONG + " MESSAGE:  + ${e.localizedMessage}")
             throw UsersLoadException(
-                CafeConstants.LOAD_USERS_WENT_WRONG + " MESSAGE: " + e.localizedMessage,
+                CafeConstants.LOAD_USERS_WENT_WRONG + " MESSAGE:  + ${e.localizedMessage}",
                 HttpStatus.BAD_REQUEST
             )
         }
@@ -184,8 +187,9 @@ class UserServiceImpl(
             }
 
         } catch (e: Exception) {
+            logger.error(CafeConstants.USER_STATUS_UPDATE_WENT_WRONG + " MESSAGE:  + ${e.localizedMessage}")
             throw UserUpdateStatusException(
-                CafeConstants.USER_STATUS_UPDATE_WENT_WRONG + " MESSAGE: " + e.localizedMessage,
+                CafeConstants.USER_STATUS_UPDATE_WENT_WRONG + " MESSAGE:  + ${e.localizedMessage}",
                 HttpStatus.INTERNAL_SERVER_ERROR
             )
         }
@@ -268,8 +272,9 @@ class UserServiceImpl(
             }
 
         } catch (e: Exception) {
+            logger.error(CafeConstants.CHANGE_PASSWORD_WENT_WRONG + " MESSAGE:  + ${e.localizedMessage}")
             throw ChangePasswordException(
-                CafeConstants.CHANGE_PASSWORD_WENT_WRONG + " MESSAGE: " + e.localizedMessage,
+                CafeConstants.CHANGE_PASSWORD_WENT_WRONG + " MESSAGE:  + ${e.localizedMessage}",
                 HttpStatus.INTERNAL_SERVER_ERROR
             )
         }
@@ -304,8 +309,9 @@ class UserServiceImpl(
             return ResponseEntity(CafeConstants.FORGOT_PASSWORD_SUCCESSFULLY, HttpStatus.OK)
 
         } catch (e: Exception) {
+            logger.error(CafeConstants.FORGOT_PASSWORD_WENT_WRONG + " MESSAGE:  + ${e.localizedMessage}")
             throw ForgotPasswordException(
-                CafeConstants.FORGOT_PASSWORD_WENT_WRONG + " MESSAGE: " + e.localizedMessage,
+                CafeConstants.FORGOT_PASSWORD_WENT_WRONG + " MESSAGE:  + ${e.localizedMessage}",
                 HttpStatus.INTERNAL_SERVER_ERROR
             )
         }

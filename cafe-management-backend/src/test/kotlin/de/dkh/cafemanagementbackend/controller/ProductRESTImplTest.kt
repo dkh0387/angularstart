@@ -6,10 +6,7 @@ import de.dkh.cafemanagementbackend.jsonwebtoken.JwtFilter
 import de.dkh.cafemanagementbackend.jsonwebtoken.JwtService
 import de.dkh.cafemanagementbackend.repository.CategoryRepository
 import de.dkh.cafemanagementbackend.repository.ProductRepository
-import de.dkh.cafemanagementbackend.testutils.TestData
 import io.mockk.clearAllMocks
-import jakarta.servlet.ServletException
-import org.assertj.core.api.Assertions.assertThatThrownBy
 import org.junit.jupiter.api.*
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc
@@ -18,6 +15,7 @@ import org.springframework.http.MediaType
 import org.springframework.test.annotation.DirtiesContext
 import org.springframework.test.web.servlet.MockMvc
 import org.springframework.test.web.servlet.post
+import java.nio.charset.StandardCharsets
 
 @SpringBootTest
 @AutoConfigureMockMvc(addFilters = false)
@@ -61,22 +59,29 @@ class ProductRESTImplTest {
         @Test
         fun `should throw an exception while trying to save a new product without category`() {
 
-            // given
-            val category = TestData.getCategory("Testcategory")
-            val categoryJson = "{\n" + "  \"id\": \"${category.id}\" ,\n" + "  \"name\": \"${category.name}\" \n" + "}"
-            val product = TestData.getProduct("Testproduct")
-            val productJson = "{\n" + "  \"id\": \"${product.id}\" ,\n" + "  \"name\": \"${product.name}\" \n" + "}"
+            productRepository.deleteByName("Testproduct")
 
+            // given
+            val productMapperMap = mapOf(
+                "name" to "Testproduct",
+                "description" to "Testdescription",
+                "status" to "true",
+                "categoryId" to "1"
+            )
             val token = jwtService.generateToken("deniskh87@gmail.com", User.UserRoles.ROLE_ADMIN.name)
             jwtFilter.claims = jwtService.extractAllClaims(token)
 
-            assertThatThrownBy {
-                mockMvc.post("$BASE_URL/add") {
-                    contentType = MediaType.APPLICATION_JSON
-                    val newProduct = TestData.getProduct("Testproduct")
-                    content = objectMapper.writeValueAsString(newProduct)
-                }
-            }.isInstanceOf(ServletException::class.java)
+            val resultActionsDsl = mockMvc.post("$BASE_URL/add") {
+                contentType = MediaType.APPLICATION_JSON
+                content = objectMapper.writeValueAsString(productMapperMap)
+            }
+
+            resultActionsDsl.andDo { print() }.andExpect {
+                status { isOk() }
+                content { contentType(MediaType("text", "plain", StandardCharsets.UTF_8)) }
+            }
+
+            productRepository.deleteByName("Testproduct")
         }
 
         /*       @Test

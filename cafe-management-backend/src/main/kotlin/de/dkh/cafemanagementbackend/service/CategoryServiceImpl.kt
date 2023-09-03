@@ -41,6 +41,7 @@ class CategoryServiceImpl(private val categoryRepository: CategoryRepository, pr
             }
 
         } catch (e: Exception) {
+            logger.error(CafeConstants.ADD_CATEGORY_WENT_WRONG + " MESSAGE: + ${e.localizedMessage}")
             throw AddCategoryException(
                 CafeConstants.ADD_CATEGORY_WENT_WRONG + " MESSAGE: " + e.localizedMessage,
                 HttpStatus.INTERNAL_SERVER_ERROR
@@ -63,7 +64,7 @@ class CategoryServiceImpl(private val categoryRepository: CategoryRepository, pr
             }
 
         } catch (e: Exception) {
-            logger.error(CafeConstants.GET_ALL_CATEGORIES_WENT_WRONG + " MESSAGE : ${e.localizedMessage}")
+            logger.error(CafeConstants.GET_ALL_CATEGORIES_WENT_WRONG + " MESSAGE : ${e.localizedMessage}}")
             return CafeUtils.getCategoryResponseFor(
                 emptyList(), HttpStatus.INTERNAL_SERVER_ERROR
             )
@@ -90,6 +91,7 @@ class CategoryServiceImpl(private val categoryRepository: CategoryRepository, pr
             }
 
         } catch (e: Exception) {
+            logger.error(CafeConstants.GET_ALL_CATEGORIES_WENT_WRONG + " MESSAGE : ${e.localizedMessage}")
             throw UpdateCategoryException(
                 CafeConstants.GET_ALL_CATEGORIES_WENT_WRONG + " MESSAGE : ${e.localizedMessage}",
                 HttpStatus.INTERNAL_SERVER_ERROR

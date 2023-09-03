@@ -3,6 +3,7 @@ package de.dkh.cafemanagementbackend.service
 import de.dkh.cafemanagementbackend.constants.CafeConstants
 import de.dkh.cafemanagementbackend.exception.AddProductException
 import de.dkh.cafemanagementbackend.jsonwebtoken.JwtFilter
+import de.dkh.cafemanagementbackend.repository.CategoryRepository
 import de.dkh.cafemanagementbackend.repository.ProductRepository
 import de.dkh.cafemanagementbackend.testutils.TestData
 import de.dkh.cafemanagementbackend.utils.ServiceUtils
@@ -17,13 +18,15 @@ import org.junit.jupiter.api.*
 import org.junit.jupiter.api.extension.ExtendWith
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
+import java.util.*
 
 @ExtendWith(MockKExtension::class)
 class ProductServiceImplTest {
 
     private val productRepository = mockk<ProductRepository>()
+    private val categoryRepository = mockk<CategoryRepository>()
     private val jwtFilter = mockk<JwtFilter>()
-    private val objectUnderTest = ProductServiceImpl(productRepository, jwtFilter)
+    private val objectUnderTest = ProductServiceImpl(productRepository, categoryRepository, jwtFilter)
 
     @BeforeEach
     fun setUp() {
@@ -74,13 +77,16 @@ class ProductServiceImplTest {
             // given
             val product = TestData.getProduct("Testproduct")
             val requestMap = mapOf(
+                "id" to product.id.toString(),
                 "name" to product.name,
                 "description" to product.description,
                 "status" to product.status,
                 "price" to product.price.toString(),
-                "category" to ServiceUtils.objectMapper.writeValueAsString(product.category)
+                "categoryId" to product.category.id.toString()
             )
             every { jwtFilter.isAdmin() } returns true
+            every { productRepository.findById(any()) } returns Optional.of(TestData.getProduct("Testproduct"))
+            every { categoryRepository.findById(any()) } returns Optional.of(TestData.getCategory("Testcategory"))
             every { productRepository.save(product) } returns product
 
             // when

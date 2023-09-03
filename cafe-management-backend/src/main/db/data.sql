@@ -169,8 +169,7 @@ CREATE TABLE `product`
     `price`       float        NOT NULL,
     `status`      varchar(50)  NOT NULL,
     PRIMARY KEY (`id`),
-    UNIQUE KEY `authorities_user_key` (`category_id`),
-    CONSTRAINT `authorities_user_constr` FOREIGN KEY (`category_id`) REFERENCES `category` (`id`)
+    CONSTRAINT product_category_constr FOREIGN KEY (`category_id`) REFERENCES `category` (`id`)
 ) ENGINE = InnoDB
   AUTO_INCREMENT = 6
   DEFAULT CHARSET = latin1;

@@ -7,6 +7,8 @@ class CafeConstants {
         const val BASE_URL = "https://localhost:8081"
 
         const val SOMETHING_WENT_WRONG = "Something went wrong!"
+
+        const val SIGN_UP_WENT_WRONG = "Sign up went wrong!"
         const val EMAIL_ALREADY_EXISTS = "Email already exists!"
         const val USER_SUCCESSFULLY_REGISTERED = "User successfully registered!"
         const val INVALID_EMAIL = "Invalid email!"

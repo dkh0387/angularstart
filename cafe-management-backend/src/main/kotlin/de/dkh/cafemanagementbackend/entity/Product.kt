@@ -27,8 +27,10 @@ data class Product(
     @Column(name = "status") val status: String,
     @ManyToOne(fetch = FetchType.LAZY)
     @JsonBackReference
-    @JoinColumn(name = "category_id", nullable = false)
-    var category: Category
+    @JoinColumn(
+        name = "category_id",
+        nullable = false
+    ) var category: Category
 ) : PersistentObject() {
     companion object {
         fun createFromMapper(productMapper: ProductMapper): Product = Product(
@@ -36,7 +38,7 @@ data class Product(
             productMapper.description,
             productMapper.price,
             productMapper.status,
-            productMapper.category!!
+            productMapper.getCategory().get()
         )
     }
 
