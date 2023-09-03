@@ -5,6 +5,7 @@ import de.dkh.cafemanagementbackend.utils.mapper.CategoryMapper
 import de.dkh.cafemanagementbackend.wrapper.CategoryWrapper
 import jakarta.persistence.Column
 import jakarta.persistence.Entity
+import jakarta.persistence.OneToMany
 import jakarta.persistence.Table
 import org.hibernate.annotations.DynamicInsert
 import org.hibernate.annotations.DynamicUpdate
@@ -28,11 +29,14 @@ Private fields within data class and by default, Jackson doesn't scan private fi
 We have to instruct it to do otherwise by putting @JsonAutoDetect annotation.
  */
 @JsonAutoDetect(fieldVisibility = JsonAutoDetect.Visibility.ANY)
-data class Category(@Column(name = "name") var name: String) : PersistentObject() {
+data class Category(
+    @Column(name = "name") var name: String, @OneToMany(mappedBy = "category")
+    private val products: List<Product>
+) : PersistentObject() {
 
     fun toWrapper(): CategoryWrapper = CategoryWrapper(this.id, this.name)
 
     companion object {
-        fun createFromMapper(categoryMapper: CategoryMapper): Category = Category(categoryMapper.name)
+        fun createFromMapper(categoryMapper: CategoryMapper): Category = Category(categoryMapper.name, emptyList())
     }
 }

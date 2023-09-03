@@ -229,7 +229,7 @@ class CategoryRESTImplTest {
             // given
             categoryRepository.deleteByName("Testcategory")
             categoryRepository.deleteByName("Testcategory2")
-            val category = categoryRepository.save(Category(name = "Testcategory"))
+            val category = categoryRepository.save(Category(name = "Testcategory", products = emptyList()))
             val id = category.id
             val name = "Testcategory2"
             val categoryJson = "{\n" + "  \"id\": \"${id}\" ,\n" + "  \"name\": \"${name}\" \n" + "}"

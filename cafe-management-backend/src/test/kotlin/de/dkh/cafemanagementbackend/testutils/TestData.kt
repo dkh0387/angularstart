@@ -51,6 +51,6 @@ class TestData {
 
         fun getInactiveUserWithAuthorities(): User = getInactiveUser().copy(authorities = listOf(getAuthority()))
 
-        fun getCategory(name: String): Category = Category(name)
+        fun getCategory(name: String): Category = Category(name, emptyList())
     }
 }

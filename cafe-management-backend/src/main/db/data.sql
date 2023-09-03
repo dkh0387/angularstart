@@ -116,15 +116,6 @@ VALUES (1, 1, 'ROLE_EMPLOYEE'),
     ENABLE KEYS */;
 UNLOCK
     TABLES;
-/*!40103 SET TIME_ZONE = @OLD_TIME_ZONE */;
-
-/*!40101 SET SQL_MODE = @OLD_SQL_MODE */;
-/*!40014 SET FOREIGN_KEY_CHECKS = @OLD_FOREIGN_KEY_CHECKS */;
-/*!40014 SET UNIQUE_CHECKS = @OLD_UNIQUE_CHECKS */;
-/*!40101 SET CHARACTER_SET_CLIENT = @OLD_CHARACTER_SET_CLIENT */;
-/*!40101 SET CHARACTER_SET_RESULTS = @OLD_CHARACTER_SET_RESULTS */;
-/*!40101 SET COLLATION_CONNECTION = @OLD_COLLATION_CONNECTION */;
-/*!40111 SET SQL_NOTES = @OLD_SQL_NOTES */;
 
 --
 -- Table structure for table `category`
@@ -153,22 +144,55 @@ LOCK
     DISABLE KEYS */;
 
 INSERT INTO `category`
-VALUES (1, 'ROLE_EMPLOYEE'),
-       (2, 'ROLE_EMPLOYEE'),
-       (3, 'ROLE_MANAGER'),
-       (4, 'ROLE_EMPLOYEE'),
-       (5, 'ROLE_ADMIN');
+VALUES (1, 'Starter'),
+       (2, 'Main dishes'),
+       (3, 'Dessert'),
+       (4, 'Veggie'),
+       (5, 'Supplements'),
+       (6, 'Drinks');
+
 
 /*!40000 ALTER TABLE `category`
     ENABLE KEYS */;
 UNLOCK
     TABLES;
-/*!40103 SET TIME_ZONE = @OLD_TIME_ZONE */;
 
-/*!40101 SET SQL_MODE = @OLD_SQL_MODE */;
-/*!40014 SET FOREIGN_KEY_CHECKS = @OLD_FOREIGN_KEY_CHECKS */;
-/*!40014 SET UNIQUE_CHECKS = @OLD_UNIQUE_CHECKS */;
-/*!40101 SET CHARACTER_SET_CLIENT = @OLD_CHARACTER_SET_CLIENT */;
-/*!40101 SET CHARACTER_SET_RESULTS = @OLD_CHARACTER_SET_RESULTS */;
-/*!40101 SET COLLATION_CONNECTION = @OLD_COLLATION_CONNECTION */;
-/*!40111 SET SQL_NOTES = @OLD_SQL_NOTES */;
+DROP TABLE IF EXISTS `product`;
+/*!40101 SET @saved_cs_client = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `product`
+(
+    `id`          int(11)      NOT NULL AUTO_INCREMENT,
+    `category_id` int(11)      NOT NULL,
+    `name`        varchar(50)  NOT NULL,
+    `description` varchar(255) NOT NULL,
+    `price`       float        NOT NULL,
+    `status`      varchar(50)  NOT NULL,
+    PRIMARY KEY (`id`),
+    UNIQUE KEY `authorities_user_key` (`category_id`),
+    CONSTRAINT `authorities_user_constr` FOREIGN KEY (`category_id`) REFERENCES `category` (`id`)
+) ENGINE = InnoDB
+  AUTO_INCREMENT = 6
+  DEFAULT CHARSET = latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `category`
+--
+
+LOCK
+    TABLES `product` WRITE;
+/*!40000 ALTER TABLE `product`
+    DISABLE KEYS */;
+
+INSERT INTO `product`
+VALUES (1, 1, 'Small salat', 'different veggies, with dressing', 6.5, 'available');
+
+/*!40000 ALTER TABLE `product`
+    ENABLE KEYS */;
+UNLOCK
+    TABLES;
+
+
+
+
