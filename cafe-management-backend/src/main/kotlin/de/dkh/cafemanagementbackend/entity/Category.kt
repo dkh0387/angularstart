@@ -49,7 +49,7 @@ data class Category(
 
     companion object {
 
-        val defaultCategory = Category("Undefined category")
+        //val defaultCategory = Category("Undefined category")
         fun createFromMapper(categoryMapper: CategoryMapper): Category = Category(categoryMapper.name, emptyList())
     }
 
