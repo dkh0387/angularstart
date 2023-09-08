@@ -7,7 +7,7 @@ import org.springframework.transaction.annotation.Transactional
 
 interface CategoryRepository : JpaRepository<Category, Long> {
 
-    fun getAllCategory(): List<Category>
+    fun getAllCategoryWithActiveProdukt(): List<Category>
 
     @Transactional
     @Modifying

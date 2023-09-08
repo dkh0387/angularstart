@@ -47,8 +47,9 @@ class CafeConstants {
         const val UPDATE_CATEGORY_WENT_WRONG = "Update category went wrong!"
 
 
-        const val ADD_PRODUCT_WENTWRONG = "Add new product went wrong!"
+        const val ADD_PRODUCT_WENT_WRONG = "Add new product went wrong!"
         const val ADD_PRODUCT_SUCCESSFULLY = "Successfully added a new product!"
         const val DEFAULT_PRODUCT_CATEGORY_NAME = "Default category"
+        const val GET_ALL_PRODUCT_WENT_WRONG = "Get all products went wrong!"
     }
 }

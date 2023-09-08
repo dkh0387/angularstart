@@ -3,12 +3,14 @@ package de.dkh.cafemanagementbackend.service
 import de.dkh.cafemanagementbackend.constants.CafeConstants
 import de.dkh.cafemanagementbackend.entity.Product
 import de.dkh.cafemanagementbackend.exception.AddProductException
+import de.dkh.cafemanagementbackend.exception.GetAllProductException
 import de.dkh.cafemanagementbackend.jsonwebtoken.JwtFilter
 import de.dkh.cafemanagementbackend.repository.CategoryRepository
 import de.dkh.cafemanagementbackend.repository.ProductRepository
 import de.dkh.cafemanagementbackend.utils.CafeUtils
 import de.dkh.cafemanagementbackend.utils.ServiceUtils
 import de.dkh.cafemanagementbackend.utils.mapper.ProductMapper
+import de.dkh.cafemanagementbackend.wrapper.ProductWrapper
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import org.springframework.http.HttpStatus
@@ -20,8 +22,7 @@ class ProductServiceImpl(
     private val productRepository: ProductRepository,
     private val categoryRepository: CategoryRepository,
     private val jwtFilter: JwtFilter
-) :
-    ProductService {
+) : ProductService {
 
     private val logger: Logger = LoggerFactory.getLogger(ProductServiceImpl::class.java)
 
@@ -40,9 +41,27 @@ class ProductServiceImpl(
             }
 
         } catch (e: Exception) {
-            logger.error(CafeConstants.ADD_PRODUCT_WENTWRONG + " MESSAGE: + ${e.localizedMessage}")
+            logger.error(CafeConstants.ADD_PRODUCT_WENT_WRONG + " MESSAGE: + ${e.localizedMessage}")
             throw AddProductException(
-                CafeConstants.ADD_PRODUCT_WENTWRONG + " MESSAGE: + ${e.localizedMessage}",
+                CafeConstants.ADD_PRODUCT_WENT_WRONG + " MESSAGE: + ${e.localizedMessage}",
+                HttpStatus.INTERNAL_SERVER_ERROR
+            )
+        }
+    }
+
+    override fun getAllProduct(): ResponseEntity<List<ProductWrapper>> {
+        try {
+            return if (jwtFilter.isAdmin()) {
+                CafeUtils.getProductResponseFor(
+                    productRepository.getAllProduct(), HttpStatus.OK
+                )
+            } else {
+                CafeUtils.getProductResponseFor(emptyList(), HttpStatus.UNAUTHORIZED)
+            }
+        } catch (e: Exception) {
+            logger.error(CafeConstants.GET_ALL_PRODUCT_WENT_WRONG + " MESSAGE: + ${e.localizedMessage}")
+            throw GetAllProductException(
+                CafeConstants.GET_ALL_PRODUCT_WENT_WRONG + " MESSAGE: + ${e.localizedMessage}",
                 HttpStatus.INTERNAL_SERVER_ERROR
             )
         }

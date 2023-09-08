@@ -4,6 +4,8 @@ import de.dkh.cafemanagementbackend.entity.Authority
 import de.dkh.cafemanagementbackend.entity.Category
 import de.dkh.cafemanagementbackend.entity.Product
 import de.dkh.cafemanagementbackend.entity.User
+import de.dkh.cafemanagementbackend.utils.ServiceUtils
+import de.dkh.cafemanagementbackend.wrapper.ProductWrapper
 
 class TestData {
 
@@ -59,6 +61,19 @@ class TestData {
             val product = Product(name, "Testdescription", 20.5, "true", category)
             //category.products = listOf(product)
             return product
+        }
+
+        fun getProductWrapperJson(): String {
+            val product = ProductWrapper(
+                id = 1,
+                name = "Small salat",
+                description = "different veggies, with dressing",
+                price = 6.5,
+                status = "true",
+                categoryId = 1,
+                categoryName = "Starter"
+            )
+            return ServiceUtils.objectMapper.writeValueAsString(product)
         }
     }
 }

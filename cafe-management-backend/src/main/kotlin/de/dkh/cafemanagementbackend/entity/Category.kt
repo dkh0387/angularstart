@@ -13,14 +13,11 @@ import org.hibernate.annotations.DynamicInsert
 import org.hibernate.annotations.DynamicUpdate
 import org.hibernate.annotations.NamedQuery
 
-/**
- * No specific condition for now, coming soon...
- */
 
-/**
- * @TODO: WHERE condition will be changed after product logic is ready!
- */
-@NamedQuery(name = "Category.getAllCategory", query = "SELECT c FROM Category c WHERE id = 1")
+@NamedQuery(
+    name = "Category.getAllCategoryWithActiveProdukt",
+    query = "SELECT c FROM Category c WHERE id IN (SELECT p.category FROM Product p WHERE p.status = 'true')"
+)
 @Entity
 @Table(name = "category")
 @DynamicInsert

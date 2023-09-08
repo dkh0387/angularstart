@@ -55,7 +55,7 @@ class CategoryServiceImpl(private val categoryRepository: CategoryRepository, pr
         try {
             return if (!Strings.isNullOrEmpty(filterValue) && filterValue.equals(CafeConstants.TRUE, true)) {
                 CafeUtils.getCategoryResponseFor(
-                    categoryRepository.getAllCategory().map { it.toWrapper() }, HttpStatus.OK
+                    categoryRepository.getAllCategoryWithActiveProdukt().map { it.toWrapper() }, HttpStatus.OK
                 )
             } else {
                 CafeUtils.getCategoryResponseFor(

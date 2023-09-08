@@ -2,11 +2,13 @@ package de.dkh.cafemanagementbackend.service
 
 import de.dkh.cafemanagementbackend.constants.CafeConstants
 import de.dkh.cafemanagementbackend.exception.AddProductException
+import de.dkh.cafemanagementbackend.exception.GetAllProductException
 import de.dkh.cafemanagementbackend.jsonwebtoken.JwtFilter
 import de.dkh.cafemanagementbackend.repository.CategoryRepository
 import de.dkh.cafemanagementbackend.repository.ProductRepository
 import de.dkh.cafemanagementbackend.testutils.TestData
 import de.dkh.cafemanagementbackend.utils.ServiceUtils
+import de.dkh.cafemanagementbackend.wrapper.ProductWrapper
 import io.mockk.clearAllMocks
 import io.mockk.every
 import io.mockk.junit5.MockKExtension
@@ -97,6 +99,57 @@ class ProductServiceImplTest {
             assertThat(responseEntity).isEqualTo(
                 ResponseEntity<String>(
                     CafeConstants.ADD_PRODUCT_SUCCESSFULLY, HttpStatus.OK
+                )
+            )
+        }
+
+    }
+
+    @Nested
+    @DisplayName("Testing getting all products")
+    @TestInstance(TestInstance.Lifecycle.PER_CLASS)
+    inner class GetProductTesting {
+
+        @Test
+        fun `should throw an exception if the productRepository does`() {
+            // given
+            every { productRepository.getAllProduct() } throws RuntimeException()
+
+            // when/then
+            assertThatThrownBy { objectUnderTest.getAllProduct() }.isInstanceOf(GetAllProductException::class.java)
+        }
+
+        @Test
+        fun `should return an UNAUTHORIZED response if the current user is not an admin`() {
+            // given
+            every { jwtFilter.isAdmin() } returns false
+
+            // when
+            val responseEntity = objectUnderTest.getAllProduct()
+
+            // then
+            verify(exactly = 0) { productRepository.getAllProduct() }
+            assertThat(responseEntity).isEqualTo(
+                ResponseEntity<List<ProductWrapper>>(
+                    emptyList(), HttpStatus.UNAUTHORIZED
+                )
+            )
+        }
+
+        @Test
+        fun `should return an OK response if the current user is an admin`() {
+            // given
+            every { jwtFilter.isAdmin() } returns true
+            every { productRepository.getAllProduct() } returns listOf(TestData.getProduct("Testproduct").toWrapper())
+
+            // when
+            val responseEntity = objectUnderTest.getAllProduct()
+
+            // then
+            verify(exactly = 1) { productRepository.getAllProduct() }
+            assertThat(responseEntity).isEqualTo(
+                ResponseEntity<List<ProductWrapper>>(
+                    listOf(TestData.getProduct("Testproduct").toWrapper()), HttpStatus.OK
                 )
             )
         }

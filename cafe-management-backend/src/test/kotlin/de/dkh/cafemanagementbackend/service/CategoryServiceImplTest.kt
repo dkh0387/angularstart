@@ -123,7 +123,7 @@ class CategoryServiceImplTest {
         @Test
         fun `should return filtered categories if everything ok and a filter value provided`() {
             // given
-            every { categoryRepository.getAllCategory() } returns listOf(TestData.getCategory("Pasta"))
+            every { categoryRepository.getAllCategoryWithActiveProdukt() } returns listOf(TestData.getCategory("Pasta"))
 
 
             // when

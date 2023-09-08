@@ -6,7 +6,11 @@ import de.dkh.cafemanagementbackend.jsonwebtoken.JwtFilter
 import de.dkh.cafemanagementbackend.jsonwebtoken.JwtService
 import de.dkh.cafemanagementbackend.repository.CategoryRepository
 import de.dkh.cafemanagementbackend.repository.ProductRepository
+import de.dkh.cafemanagementbackend.testutils.TestData
 import io.mockk.clearAllMocks
+import jakarta.servlet.ServletException
+import org.assertj.core.api.Assertions.assertThat
+import org.assertj.core.api.Assertions.assertThatThrownBy
 import org.junit.jupiter.api.*
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc
@@ -14,6 +18,7 @@ import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.http.MediaType
 import org.springframework.test.annotation.DirtiesContext
 import org.springframework.test.web.servlet.MockMvc
+import org.springframework.test.web.servlet.get
 import org.springframework.test.web.servlet.post
 import java.nio.charset.StandardCharsets
 
@@ -53,9 +58,25 @@ class ProductRESTImplTest {
     @TestInstance(TestInstance.Lifecycle.PER_CLASS)
     @DirtiesContext
     inner class AddingProduct {
-        /**
-         * @TODO: deserialization problems with Product-Categroy relation!
-         */
+
+        @Test
+        fun `should throw an exception while trying to save a new product with a corrupt request map`() {
+            // given
+            val productMapperMap = mapOf(
+                "name2" to "Testproduct", "description" to "Testdescription", "status" to "true", "categoryId" to "1"
+            )
+            val token = jwtService.generateToken("deniskh87@gmail.com", User.UserRoles.ROLE_ADMIN.name)
+            jwtFilter.claims = jwtService.extractAllClaims(token)
+
+            assertThatThrownBy {
+                mockMvc.post("$BASE_URL/add") {
+                    contentType = MediaType.APPLICATION_JSON
+                    content = objectMapper.writeValueAsString(productMapperMap)
+                }
+            }.isInstanceOf(ServletException::class.java)
+
+        }
+
         @Test
         fun `should throw an exception while trying to save a new product without category`() {
 
@@ -63,10 +84,28 @@ class ProductRESTImplTest {
 
             // given
             val productMapperMap = mapOf(
-                "name" to "Testproduct",
-                "description" to "Testdescription",
-                "status" to "true",
-                "categoryId" to "1"
+                "name" to "Testproduct", "description" to "Testdescription", "status" to "true", "categoryId" to "-1"
+            )
+            val token = jwtService.generateToken("deniskh87@gmail.com", User.UserRoles.ROLE_ADMIN.name)
+            jwtFilter.claims = jwtService.extractAllClaims(token)
+
+            assertThatThrownBy {
+                mockMvc.post("$BASE_URL/add") {
+                    contentType = MediaType.APPLICATION_JSON
+                    content = objectMapper.writeValueAsString(productMapperMap)
+                }
+            }.isInstanceOf(ServletException::class.java)
+
+        }
+
+        @Test
+        fun `should save a new product if the request map is coccectly provided`() {
+
+            productRepository.deleteByName("Testproduct")
+
+            // given
+            val productMapperMap = mapOf(
+                "name" to "Testproduct", "description" to "Testdescription", "status" to "true", "categoryId" to "1"
             )
             val token = jwtService.generateToken("deniskh87@gmail.com", User.UserRoles.ROLE_ADMIN.name)
             jwtFilter.claims = jwtService.extractAllClaims(token)
@@ -84,41 +123,47 @@ class ProductRESTImplTest {
             productRepository.deleteByName("Testproduct")
         }
 
-        /*       @Test
-               fun `should return 'EMAIL_ALREADY_EXISTS' response if there is a user with the given email`() {
+    }
 
-                   val numberOFUsersBeforePOST = userRepository.findAll().count()
+    @Nested
+    @DisplayName("Testing web layer for getting all products")
+    @TestInstance(TestInstance.Lifecycle.PER_CLASS)
+    @DirtiesContext
+    inner class GettingAllProducts {
 
-                   val resultActionsDsl = mockMvc.post("$BASE_URL/signup") {
-                       contentType = MediaType.APPLICATION_JSON
-                       val newUser = TestData.getInactiveUser()
-                       content = objectMapper.writeValueAsString(newUser)
-                   }
+        @Test
+        fun `should return an UNAUTHORIZED response if the current user is not an admin`() {
+            // given
+            val token = jwtService.generateToken("deniskh87@gmail.com", User.UserRoles.ROLE_USER.name)
+            jwtFilter.claims = jwtService.extractAllClaims(token)
 
-                   resultActionsDsl
-                       .andDo { print() }
-                       .andExpect {
-                           status { isBadRequest() }
-                           content { contentType(MediaType("text", "plain", StandardCharsets.UTF_8)) }
-                       }
+            // when
+            val resultActionsDsl = mockMvc.get("$BASE_URL/get") {}
 
-                   val numberOFUsersAfterPOST = userRepository.findAll().count()
+            // then
+            resultActionsDsl.andDo { print() }.andExpect {
+                status { isUnauthorized() }
+                content { contentType(MediaType.APPLICATION_JSON) }
+            }
+        }
 
-                   assert(numberOFUsersAfterPOST == numberOFUsersBeforePOST)
+        @Test
+        fun `should return an OK response if the current user is an admin`() {
+            // given
+            val token = jwtService.generateToken("deniskh87@gmail.com", User.UserRoles.ROLE_ADMIN.name)
+            jwtFilter.claims = jwtService.extractAllClaims(token)
 
-               }
+            // when
+            val resultActionsDsl = mockMvc.get("$BASE_URL/get") {}
 
-               @Test
-               fun `should return 'INTERNAL_SERVER_ERROR' response if an exception occurs`() {
+            // then
+            val mvcResult = resultActionsDsl.andDo { print() }.andExpect {
+                status { isOk() }
+                content { contentType(MediaType.APPLICATION_JSON) }
+            }.andReturn()
 
-                   Assertions.assertThatThrownBy {
-                       (mockMvc.post("$BASE_URL/signup") {
-                           contentType = MediaType.APPLICATION_JSON
-                           val newUser = TestData.getInactiveUser().copy(email = "fjgroltkoksd")
-                           content = objectMapper.writeValueAsString(newUser)
-                       })
-                   }.isInstanceOf(ServletException::class.java)
-               }*/
+            assertThat(mvcResult.response.contentAsString).isEqualTo("[" + TestData.getProductWrapperJson() + "]")
+        }
 
     }
 }

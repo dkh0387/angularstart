@@ -5,10 +5,16 @@ import com.fasterxml.jackson.annotation.JsonBackReference
 import com.fasterxml.jackson.annotation.JsonIdentityInfo
 import com.fasterxml.jackson.annotation.ObjectIdGenerators
 import de.dkh.cafemanagementbackend.utils.mapper.ProductMapper
+import de.dkh.cafemanagementbackend.wrapper.ProductWrapper
 import jakarta.persistence.*
 import org.hibernate.annotations.DynamicInsert
 import org.hibernate.annotations.DynamicUpdate
 
+
+@NamedQuery(
+    name = "Product.getAllProduct",
+    query = "SELECT new de.dkh.cafemanagementbackend.wrapper.ProductWrapper(p.id, p.name, p.description,p.price,p.status,p.category.id, p.category.name) FROM Product p"
+)
 @Entity
 @Table(name = "product")
 @DynamicInsert
@@ -41,6 +47,16 @@ data class Product(
             productMapper.getCategory().get()
         )
     }
+
+    fun toWrapper(): ProductWrapper = ProductWrapper(
+        this.id,
+        this.name,
+        this.description,
+        this.price,
+        this.status,
+        this.category.id,
+        this.category.name
+    )
 
     @Override
     override fun toString(): String {
