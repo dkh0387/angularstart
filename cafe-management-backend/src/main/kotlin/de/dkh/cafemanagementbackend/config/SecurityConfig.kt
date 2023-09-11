@@ -88,7 +88,8 @@ class SecurityConfig(
                         "category/update",
                         "product/add",
                         "product/get",
-                        "product/update"
+                        "product/update",
+                        "product/delete/*"
                     )
                     .hasAuthority("ROLE_ADMIN")
                     .anyRequest()

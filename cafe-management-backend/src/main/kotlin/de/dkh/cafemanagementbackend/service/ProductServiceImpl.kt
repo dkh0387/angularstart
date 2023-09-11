@@ -3,6 +3,7 @@ package de.dkh.cafemanagementbackend.service
 import de.dkh.cafemanagementbackend.constants.CafeConstants
 import de.dkh.cafemanagementbackend.entity.Product
 import de.dkh.cafemanagementbackend.exception.AddProductException
+import de.dkh.cafemanagementbackend.exception.DeleteProductException
 import de.dkh.cafemanagementbackend.exception.GetAllProductException
 import de.dkh.cafemanagementbackend.exception.UpdateProductException
 import de.dkh.cafemanagementbackend.jsonwebtoken.JwtFilter
@@ -99,6 +100,32 @@ class ProductServiceImpl(
             logger.error(CafeConstants.UPDATE_PRODUCT_WENT_WRONG + " MESSAGE: + ${e.localizedMessage}")
             throw UpdateProductException(
                 CafeConstants.UPDATE_PRODUCT_WENT_WRONG + " MESSAGE: + ${e.localizedMessage}",
+                HttpStatus.INTERNAL_SERVER_ERROR
+            )
+        }
+    }
+
+    override fun deleteProduct(id: Long): ResponseEntity<String> {
+        try {
+            return if (jwtFilter.isAdmin()) {
+                val productOptional = productRepository.findById(id)
+
+                if (productOptional.isPresent) {
+                    productRepository.deleteById(productOptional.get().id)
+                    CafeUtils.getStringResponseFor(CafeConstants.DELETE_PRODUCT_SUCCESSFULLY, HttpStatus.OK)
+                } else {
+                    CafeUtils.getStringResponseFor(
+                        CafeConstants.DELETE_PRODUCT_WENT_WRONG,
+                        HttpStatus.BAD_REQUEST
+                    )
+                }
+            } else {
+                CafeUtils.getStringResponseFor(CafeConstants.UNAUTHORIZED_ACCESS, HttpStatus.UNAUTHORIZED)
+            }
+        } catch (e: Exception) {
+            logger.error(CafeConstants.DELETE_PRODUCT_WENT_WRONG + " MESSAGE: + ${e.localizedMessage}")
+            throw DeleteProductException(
+                CafeConstants.DELETE_PRODUCT_WENT_WRONG + " MESSAGE: + ${e.localizedMessage}",
                 HttpStatus.INTERNAL_SERVER_ERROR
             )
         }

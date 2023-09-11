@@ -53,5 +53,7 @@ class CafeConstants {
         const val GET_ALL_PRODUCT_WENT_WRONG = "Get all products went wrong!"
         const val UPDATE_PRODUCT_WENT_WRONG = "Update product went wrong!"
         const val UPDATE_PRODUCT_SUCCESSFULLY = "Product successfully updated!"
+        const val DELETE_PRODUCT_WENT_WRONG = "Delete product went wrong!"
+        const val DELETE_PRODUCT_SUCCESSFULLY = "Successfully deleted the product!"
     }
 }
