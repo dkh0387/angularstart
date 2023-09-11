@@ -5,6 +5,7 @@ import de.dkh.cafemanagementbackend.wrapper.ProductWrapper
 import org.springframework.data.jpa.repository.JpaRepository
 import org.springframework.data.jpa.repository.Modifying
 import org.springframework.transaction.annotation.Transactional
+import java.util.*
 
 interface ProductRepository : JpaRepository<Product, Long> {
 
@@ -13,4 +14,6 @@ interface ProductRepository : JpaRepository<Product, Long> {
     fun deleteByName(name: String)
 
     fun getAllProduct(): List<ProductWrapper>
+
+    fun findByName(name: String): Optional<Product>
 }

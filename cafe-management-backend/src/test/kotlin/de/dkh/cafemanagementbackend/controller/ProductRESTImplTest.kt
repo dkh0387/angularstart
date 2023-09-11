@@ -150,6 +150,7 @@ class ProductRESTImplTest {
         @Test
         fun `should return an OK response if the current user is an admin`() {
             // given
+            val productOptional = productRepository.findByName("Small salat")
             val token = jwtService.generateToken("deniskh87@gmail.com", User.UserRoles.ROLE_ADMIN.name)
             jwtFilter.claims = jwtService.extractAllClaims(token)
 
@@ -162,7 +163,8 @@ class ProductRESTImplTest {
                 content { contentType(MediaType.APPLICATION_JSON) }
             }.andReturn()
 
-            assertThat(mvcResult.response.contentAsString).contains(TestData.getProductWrapperJson())
+            val contentAsString = mvcResult.response.contentAsString
+            assertThat(contentAsString).contains(TestData.getProductWrapperJson(productOptional.get().id))
         }
 
     }
@@ -190,7 +192,7 @@ class ProductRESTImplTest {
         }
 
         @Test
-        fun `should throw an exception while trying to update a product without status`() {
+        fun `should return a UPDATE_PRODUCT_WENT_WRONG response while trying to update a product without status`() {
 
             productRepository.deleteByName("Testproduct")
 
@@ -199,24 +201,28 @@ class ProductRESTImplTest {
             val token = jwtService.generateToken("deniskh87@gmail.com", User.UserRoles.ROLE_ADMIN.name)
             jwtFilter.claims = jwtService.extractAllClaims(token)
 
-            assertThatThrownBy {
-                mockMvc.post("$BASE_URL/update") {
-                    contentType = MediaType.APPLICATION_JSON
-                    content = objectMapper.writeValueAsString(productMapperMap)
-                }
-            }.isInstanceOf(ServletException::class.java)
+            val resultActionsDsl = mockMvc.post("$BASE_URL/update") {
+                contentType = MediaType.APPLICATION_JSON
+                content = objectMapper.writeValueAsString(productMapperMap)
+            }
+
+            resultActionsDsl.andDo { print() }.andExpect {
+                status { isBadRequest() }
+                content { contentType(MediaType("text", "plain", StandardCharsets.UTF_8)) }
+            }
 
         }
 
         @Test
         fun `should update a product if the request map is correctly provided`() {
             val category = TestData.getCategory("Testcategory")
-            categoryRepository.save(category)
+            val savedCategory = categoryRepository.save(category)
             val product = TestData.getProduct("Testproduct")
             product.category = category
-            productRepository.save(product)
+            val savedProduct = productRepository.save(product)
             // given
-            val productMapperMap = mapOf("id" to "1", "status" to "true")
+            val productMapperMap =
+                mapOf("id" to "${savedProduct.id}", "status" to "true", "categoryId" to "${savedCategory.id}")
             val token = jwtService.generateToken("deniskh87@gmail.com", User.UserRoles.ROLE_ADMIN.name)
             jwtFilter.claims = jwtService.extractAllClaims(token)
 

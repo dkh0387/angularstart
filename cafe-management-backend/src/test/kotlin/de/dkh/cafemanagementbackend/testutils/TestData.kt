@@ -63,9 +63,9 @@ class TestData {
             return product
         }
 
-        fun getProductWrapperJson(): String {
+        fun getProductWrapperJson(id: Long): String {
             val product = ProductWrapper(
-                id = 1,
+                id = id,
                 name = "Small salat",
                 description = "different veggies, with dressing",
                 price = 6.5,

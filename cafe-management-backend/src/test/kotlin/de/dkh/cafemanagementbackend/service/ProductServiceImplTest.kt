@@ -206,6 +206,7 @@ class ProductServiceImplTest {
             @Test
             fun `should return an OK response if the current user is an admin`() {
                 // given
+                val category = TestData.getCategory("Testcategory")
                 val product = TestData.getProduct("Testproduct")
                 val requestMap = mapOf(
                     "id" to product.id.toString(),
@@ -216,7 +217,8 @@ class ProductServiceImplTest {
                     "categoryId" to product.category.id.toString()
                 )
                 every { jwtFilter.isAdmin() } returns true
-                every { productRepository.findById(any()) } returns Optional.of(product)
+                every { categoryRepository.findById(product.category.id) } returns Optional.of(category)
+                every { productRepository.findById(product.id) } returns Optional.of(product)
                 every { productRepository.save(any()) } returns product
 
                 // when

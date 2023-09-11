@@ -74,11 +74,16 @@ class ProductServiceImpl(
         try {
             val productMapper =
                 ServiceUtils.getMapperFromRequestMap(requestMap, ProductMapper::class.java) as ProductMapper
+            productMapper.categoryRepository = categoryRepository
             val productOptional = productMapper.id?.let { productRepository.findById(it) }
 
             return if (jwtFilter.isAdmin()) {
                 if (productOptional != null && productOptional.isPresent) {
                     val product = productOptional.get()
+                    product.name = productMapper.name
+                    product.description = productMapper.description
+                    product.price = productMapper.price
+                    product.category = productMapper.getCategory().get()
                     product.status = productMapper.status!!
                     productRepository.save(product)
                     CafeUtils.getStringResponseFor(CafeConstants.UPDATE_PRODUCT_SUCCESSFULLY, HttpStatus.OK)

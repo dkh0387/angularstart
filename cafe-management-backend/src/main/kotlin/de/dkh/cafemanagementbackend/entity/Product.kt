@@ -27,9 +27,9 @@ We have to instruct it to do otherwise by putting @JsonAutoDetect annotation.
 @JsonAutoDetect(fieldVisibility = JsonAutoDetect.Visibility.ANY)
 @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator::class, property = "id")
 data class Product(
-    @Column(name = "name") val name: String,
-    @Column(name = "description") val description: String,
-    @Column(name = "price") val price: Double,
+    @Column(name = "name") var name: String,
+    @Column(name = "description") var description: String,
+    @Column(name = "price") var price: Double,
     @Column(name = "status") var status: String,
     @ManyToOne(fetch = FetchType.LAZY)
     @JsonBackReference

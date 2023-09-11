@@ -11,7 +11,7 @@ import java.util.*
 @JsonAutoDetect(fieldVisibility = JsonAutoDetect.Visibility.ANY)
 @NoArgsConstructor
 @AllArgsConstructor
-class ProductMapper() : KeyMapper() {
+class ProductMapper : KeyMapper() {
 
     lateinit var categoryRepository: CategoryRepository
 
@@ -25,7 +25,7 @@ class ProductMapper() : KeyMapper() {
 
     fun getCategory(): Optional<Category> {
         return if (categoryId == null) {
-            Optional.of(Category(CafeConstants.DEFAULT_PRODUCT_CATEGORY_NAME))
+            Optional.of(Category(CafeConstants.DEFAULT_PRODUCT_CATEGORY_NAME, emptyList()))
         } else {
             categoryRepository.findById(categoryId!!)
         }
