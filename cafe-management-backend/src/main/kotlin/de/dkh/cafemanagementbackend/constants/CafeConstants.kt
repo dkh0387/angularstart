@@ -19,7 +19,7 @@ class CafeConstants {
         const val NO_USER_FOR_ID = "There is no user for the given id in the database!"
         const val USER_STATUS_UPDATED = "User status successfully updated!"
         const val NO_STATUS_REQUESTED_FOR_UPDATE = "There is no status key provided in the request map!"
-        const val USER_STATUS_UPDATE_WENT_WRONG = "User status update went wrong!"
+        const val USER_STATUS_UPDATE_WENT_WRONG = "Update user status went wrong!"
         const val SUBJECT_USER_SET_APPROVED = "User approved"
         const val TEXT_USER_SET_APPROVED = "User is approved by admin"
         const val SUBJECT_USER_SET_DISABLED = "User disabled"
@@ -40,16 +40,18 @@ class CafeConstants {
         const val RANDOM_PASSWORD_LENGTH = 33
         const val FORGOT_PASSWORD_SUCCESSFULLY = "Password has been successfully reset!"
 
-        const val ADD_CATEGORY_WENT_WRONG = "Add a new category went wrong!"
-        const val ADD_CATEGORY_SUCCESSFULLY = "Successfully added a new category!"
+        const val ADD_CATEGORY_WENT_WRONG = "Add category went wrong!"
+        const val ADD_CATEGORY_SUCCESSFULLY = "New category successfully added!"
         const val GET_ALL_CATEGORIES_WENT_WRONG = "Get all categories went wrong!"
         const val UPDATE_CATEGORY_SUCCESSFULLY = "Successfully updated the category!"
         const val UPDATE_CATEGORY_WENT_WRONG = "Update category went wrong!"
 
 
-        const val ADD_PRODUCT_WENT_WRONG = "Add new product went wrong!"
-        const val ADD_PRODUCT_SUCCESSFULLY = "Successfully added a new product!"
+        const val ADD_PRODUCT_WENT_WRONG = "Add product went wrong!"
+        const val ADD_PRODUCT_SUCCESSFULLY = "New product successfully added!"
         const val DEFAULT_PRODUCT_CATEGORY_NAME = "Default category"
         const val GET_ALL_PRODUCT_WENT_WRONG = "Get all products went wrong!"
+        const val UPDATE_PRODUCT_WENT_WRONG = "Update product went wrong!"
+        const val UPDATE_PRODUCT_SUCCESSFULLY = "Product successfully updated!"
     }
 }

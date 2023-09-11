@@ -77,9 +77,19 @@ class SecurityConfig(
         http
             .authorizeHttpRequests { authorizeHttpRequests ->
                 authorizeHttpRequests
-                    //.requestMatchers("/**").hasRole("USER")
-                    .requestMatchers("user/login", "user/signup", "user/forgotPassword").permitAll()
-                    .requestMatchers("user/get", "user/update", "category/add", "product/add")
+                    //.requestMatchers("/**").hasAuthority("ROLE_USER")
+                    .requestMatchers("user/login", "user/signup", "user/forgotPassword", "user/changePassword")
+                    .permitAll()
+                    .requestMatchers(
+                        "user/get",
+                        "user/update",
+                        "category/add",
+                        "category/get",
+                        "category/update",
+                        "product/add",
+                        "product/get",
+                        "product/update"
+                    )
                     .hasAuthority("ROLE_ADMIN")
                     .anyRequest()
                     .authenticated()

@@ -30,7 +30,7 @@ data class Product(
     @Column(name = "name") val name: String,
     @Column(name = "description") val description: String,
     @Column(name = "price") val price: Double,
-    @Column(name = "status") val status: String,
+    @Column(name = "status") var status: String,
     @ManyToOne(fetch = FetchType.LAZY)
     @JsonBackReference
     @JoinColumn(
@@ -43,7 +43,7 @@ data class Product(
             productMapper.name,
             productMapper.description,
             productMapper.price,
-            productMapper.status,
+            productMapper.status!!,
             productMapper.getCategory().get()
         )
     }

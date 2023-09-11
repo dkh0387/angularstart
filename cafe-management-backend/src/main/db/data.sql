@@ -90,7 +90,7 @@ CREATE TABLE `authorities`
     `authority` varchar(50) NOT NULL,
     PRIMARY KEY (`id`),
     UNIQUE KEY `authorities_user_key` (`user_id`, `authority`),
-    CONSTRAINT `authorities_user_constr` FOREIGN KEY (`user_id`) REFERENCES `user` (`id`)
+    CONSTRAINT `authorities_user_constr` FOREIGN KEY (`user_id`) REFERENCES `user` (`id`) ON DELETE CASCADE
 ) ENGINE = InnoDB
   AUTO_INCREMENT = 6
   DEFAULT CHARSET = latin1;
@@ -169,7 +169,7 @@ CREATE TABLE `product`
     `price`       float        NOT NULL,
     `status`      varchar(50)  NOT NULL,
     PRIMARY KEY (`id`),
-    CONSTRAINT product_category_constr FOREIGN KEY (`category_id`) REFERENCES `category` (`id`)
+    CONSTRAINT product_category_constr FOREIGN KEY (`category_id`) REFERENCES `category` (`id`) ON DELETE CASCADE
 ) ENGINE = InnoDB
   AUTO_INCREMENT = 6
   DEFAULT CHARSET = latin1;

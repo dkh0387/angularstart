@@ -5,10 +5,7 @@ import com.fasterxml.jackson.annotation.JsonManagedReference
 import de.dkh.cafemanagementbackend.utils.ServiceUtils
 import de.dkh.cafemanagementbackend.utils.mapper.CategoryMapper
 import de.dkh.cafemanagementbackend.wrapper.CategoryWrapper
-import jakarta.persistence.Column
-import jakarta.persistence.Entity
-import jakarta.persistence.OneToMany
-import jakarta.persistence.Table
+import jakarta.persistence.*
 import org.hibernate.annotations.DynamicInsert
 import org.hibernate.annotations.DynamicUpdate
 import org.hibernate.annotations.NamedQuery
@@ -30,7 +27,7 @@ We have to instruct it to do otherwise by putting @JsonAutoDetect annotation.
 @JsonAutoDetect(fieldVisibility = JsonAutoDetect.Visibility.ANY)
 data class Category(
     @Column(name = "name") var name: String,
-    @OneToMany(mappedBy = "category") @JsonManagedReference var products: List<Product>?
+    @OneToMany(mappedBy = "category", cascade = [CascadeType.ALL]) @JsonManagedReference var products: List<Product>?
 ) : PersistentObject() {
 
     /**

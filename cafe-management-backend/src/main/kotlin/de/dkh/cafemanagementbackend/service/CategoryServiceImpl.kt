@@ -72,6 +72,8 @@ class CategoryServiceImpl(private val categoryRepository: CategoryRepository, pr
     }
 
     override fun updateCategory(requestMap: Map<String, String>): ResponseEntity<String> {
+        println("Inside updateCategory $requestMap")
+
         try {
             val categoryMapper =
                 ServiceUtils.getMapperFromRequestMap(requestMap, CategoryMapper::class.java) as CategoryMapper
@@ -89,7 +91,6 @@ class CategoryServiceImpl(private val categoryRepository: CategoryRepository, pr
             } else {
                 CafeUtils.getStringResponseFor(CafeConstants.UNAUTHORIZED_ACCESS, HttpStatus.UNAUTHORIZED)
             }
-
         } catch (e: Exception) {
             logger.error(CafeConstants.GET_ALL_CATEGORIES_WENT_WRONG + " MESSAGE : ${e.localizedMessage}")
             throw UpdateCategoryException(

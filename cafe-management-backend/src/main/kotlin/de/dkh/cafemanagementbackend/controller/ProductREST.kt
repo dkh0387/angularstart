@@ -15,4 +15,7 @@ interface ProductREST {
 
     @GetMapping("/get")
     fun getAllProduct(): ResponseEntity<List<ProductWrapper>>
+
+    @PostMapping("/update")
+    fun updateProduct(@RequestBody(required = true) requestMap: Map<String, String>): ResponseEntity<String>
 }

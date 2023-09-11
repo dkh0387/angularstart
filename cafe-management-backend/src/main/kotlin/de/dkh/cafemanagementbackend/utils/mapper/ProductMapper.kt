@@ -19,7 +19,7 @@ class ProductMapper() : KeyMapper() {
     var name: String = ""
     var description: String = ""
     var price: Double = 0.0
-    var status: String = ""
+    var status: String? = null
     var categoryId: Long? = null
 
 

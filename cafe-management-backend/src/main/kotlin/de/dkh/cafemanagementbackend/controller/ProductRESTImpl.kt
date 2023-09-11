@@ -2,6 +2,7 @@ package de.dkh.cafemanagementbackend.controller
 
 import de.dkh.cafemanagementbackend.exception.AddProductException
 import de.dkh.cafemanagementbackend.exception.GetAllProductException
+import de.dkh.cafemanagementbackend.exception.UpdateProductException
 import de.dkh.cafemanagementbackend.service.ProductService
 import de.dkh.cafemanagementbackend.wrapper.ProductWrapper
 import org.springframework.http.ResponseEntity
@@ -18,5 +19,10 @@ class ProductRESTImpl(private val productService: ProductService) : ProductREST 
     @Throws(GetAllProductException::class)
     override fun getAllProduct(): ResponseEntity<List<ProductWrapper>> {
         return productService.getAllProduct()
+    }
+
+    @Throws(UpdateProductException::class)
+    override fun updateProduct(requestMap: Map<String, String>): ResponseEntity<String> {
+        return productService.updateProduct(requestMap)
     }
 }
