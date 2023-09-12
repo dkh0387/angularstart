@@ -24,4 +24,6 @@ interface ProductRepository : JpaRepository<Product, Long> {
     fun updateStatus(@Param("status") status: String, @Param("id") id: Long): Int
 
     fun findByCategoryAndStatus(category: Category, status: String): List<ProductWrapper>
+
+    fun findByIdAndStatus(id: Long, status: String): Optional<Product>
 }

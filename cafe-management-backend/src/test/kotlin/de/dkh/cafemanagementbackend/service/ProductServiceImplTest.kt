@@ -470,7 +470,7 @@ class ProductServiceImplTest {
         @Test
         fun `should throw an exception if the productRepository does`() {
             // given
-            every { productRepository.findById(any()) } throws RuntimeException()
+            every { productRepository.findByIdAndStatus(any(), any()) } throws RuntimeException()
 
             // when/then
             assertThatThrownBy { objectUnderTest.getProductById(0) }.isInstanceOf(
@@ -482,13 +482,13 @@ class ProductServiceImplTest {
         fun `should return an BAD_REQUEST response if there is no product fo privided id`() {
             // given
             val product = TestData.getProduct("Testproduct")
-            every { productRepository.findById(product.id) } returns Optional.empty()
+            every { productRepository.findByIdAndStatus(product.id, CafeConstants.TRUE) } returns Optional.empty()
 
             // when
             val responseEntity = objectUnderTest.getProductById(product.id)
 
             // then
-            verify(exactly = 1) { productRepository.findById(product.id) }
+            verify(exactly = 1) { productRepository.findByIdAndStatus(product.id, CafeConstants.TRUE) }
             assertThat(responseEntity).isEqualTo(
                 ResponseEntity<ProductWrapper>(null, HttpStatus.BAD_REQUEST)
             )
@@ -498,13 +498,13 @@ class ProductServiceImplTest {
         fun `should return an OK response if a valid id is provided`() {
             // given
             val product = TestData.getProduct("Testproduct")
-            every { productRepository.findById(product.id) } returns Optional.of(product)
+            every { productRepository.findByIdAndStatus(product.id, CafeConstants.TRUE) } returns Optional.of(product)
 
             // when
             val responseEntity = objectUnderTest.getProductById(product.id)
 
             // then
-            verify(exactly = 1) { productRepository.findById(product.id) }
+            verify(exactly = 1) { productRepository.findByIdAndStatus(product.id, CafeConstants.TRUE) }
             assertThat(responseEntity).isEqualTo(
                 ResponseEntity<ProductWrapper>(product.toWrapper(), HttpStatus.OK)
             )

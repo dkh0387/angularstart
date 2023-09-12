@@ -186,7 +186,7 @@ class ProductServiceImpl(
         println("Inside getProductById $id")
 
         try {
-            val productOptional = productRepository.findById(id)
+            val productOptional = productRepository.findByIdAndStatus(id, CafeConstants.TRUE)
 
             return if (productOptional.isPresent) {
                 CafeUtils.getSingleProductResponseFor(productOptional.get().toWrapper(), HttpStatus.OK)
