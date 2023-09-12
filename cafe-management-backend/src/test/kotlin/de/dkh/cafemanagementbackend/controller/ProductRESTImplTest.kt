@@ -1,6 +1,7 @@
 package de.dkh.cafemanagementbackend.controller
 
 import com.fasterxml.jackson.databind.ObjectMapper
+import de.dkh.cafemanagementbackend.constants.CafeConstants
 import de.dkh.cafemanagementbackend.entity.User
 import de.dkh.cafemanagementbackend.jsonwebtoken.JwtFilter
 import de.dkh.cafemanagementbackend.jsonwebtoken.JwtService
@@ -192,6 +193,26 @@ class ProductRESTImplTest {
         }
 
         @Test
+        fun `should return a UNAUTHORIZED response while trying to update a product as non admin`() {
+            // given
+            val productMapperMap = mapOf("id" to "1", "status" to "true")
+            val token = jwtService.generateToken("david@luv2code.com", User.UserRoles.ROLE_USER.name)
+            jwtFilter.claims = jwtService.extractAllClaims(token)
+
+            val resultActionsDsl = mockMvc.post("$BASE_URL/update") {
+                contentType = MediaType.APPLICATION_JSON
+                content = objectMapper.writeValueAsString(productMapperMap)
+            }
+
+            resultActionsDsl.andDo { print() }.andExpect {
+                status { isUnauthorized() }
+                content { contentType(MediaType("text", "plain", StandardCharsets.UTF_8)) }
+            }
+
+            assertThat(resultActionsDsl.andReturn().response.contentAsString).isEqualTo(CafeConstants.UNAUTHORIZED_ACCESS)
+        }
+
+        @Test
         fun `should return a UPDATE_PRODUCT_WENT_WRONG response while trying to update a product without status`() {
 
             productRepository.deleteByName("Testproduct")
@@ -230,6 +251,68 @@ class ProductRESTImplTest {
                 contentType = MediaType.APPLICATION_JSON
                 content = objectMapper.writeValueAsString(productMapperMap)
             }
+
+            resultActionsDsl.andDo { print() }.andExpect {
+                status { isOk() }
+                content { contentType(MediaType("text", "plain", StandardCharsets.UTF_8)) }
+            }
+            categoryRepository.deleteByName("Testcategory")
+        }
+
+    }
+
+    @Nested
+    @DisplayName("Testing web layer for deleting a product")
+    @TestInstance(TestInstance.Lifecycle.PER_CLASS)
+    @DirtiesContext
+    inner class DeletingProduct {
+
+        @Test
+        fun `should return a DELETE_PRODUCT_WENT_WRONG response while trying to delete a product with non existing id`() {
+            // given
+            val id = -1
+            val token = jwtService.generateToken("deniskh87@gmail.com", User.UserRoles.ROLE_ADMIN.name)
+            jwtFilter.claims = jwtService.extractAllClaims(token)
+
+            val resultActionsDsl = mockMvc.post("$BASE_URL/delete/$id") {}
+
+            resultActionsDsl.andDo { print() }.andExpect {
+                status { isBadRequest() }
+                content { contentType(MediaType("text", "plain", StandardCharsets.UTF_8)) }
+            }
+
+            assertThat(resultActionsDsl.andReturn().response.contentAsString).isEqualTo(CafeConstants.DELETE_PRODUCT_WENT_WRONG)
+        }
+
+        @Test
+        fun `should return a UNAUTHORIZED response while trying to delete a product as non admin`() {
+            // given
+            val id = 1
+            val token = jwtService.generateToken("david@luv2code.com", User.UserRoles.ROLE_USER.name)
+            jwtFilter.claims = jwtService.extractAllClaims(token)
+
+            val resultActionsDsl = mockMvc.post("$BASE_URL/delete/$id") {}
+
+            resultActionsDsl.andDo { print() }.andExpect {
+                status { isUnauthorized() }
+                content { contentType(MediaType("text", "plain", StandardCharsets.UTF_8)) }
+            }
+
+            assertThat(resultActionsDsl.andReturn().response.contentAsString).isEqualTo(CafeConstants.UNAUTHORIZED_ACCESS)
+        }
+
+        @Test
+        fun `should delete a product if the request map is correctly provided`() {
+            val category = TestData.getCategory("Testcategory")
+            val savedCategory = categoryRepository.save(category)
+            val product = TestData.getProduct("Testproduct")
+            product.category = savedCategory
+            val savedProduct = productRepository.save(product)
+            // given
+            val token = jwtService.generateToken("deniskh87@gmail.com", User.UserRoles.ROLE_ADMIN.name)
+            jwtFilter.claims = jwtService.extractAllClaims(token)
+
+            val resultActionsDsl = mockMvc.post("$BASE_URL/delete/${savedProduct.id}") {}
 
             resultActionsDsl.andDo { print() }.andExpect {
                 status { isOk() }

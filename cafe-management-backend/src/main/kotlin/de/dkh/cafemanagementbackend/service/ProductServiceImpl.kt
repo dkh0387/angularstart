@@ -106,6 +106,8 @@ class ProductServiceImpl(
     }
 
     override fun deleteProduct(id: Long): ResponseEntity<String> {
+        println("Inside deleteProduct $id")
+
         try {
             return if (jwtFilter.isAdmin()) {
                 val productOptional = productRepository.findById(id)

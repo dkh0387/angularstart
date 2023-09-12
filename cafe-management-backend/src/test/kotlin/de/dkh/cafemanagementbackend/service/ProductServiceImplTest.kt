@@ -2,6 +2,7 @@ package de.dkh.cafemanagementbackend.service
 
 import de.dkh.cafemanagementbackend.constants.CafeConstants
 import de.dkh.cafemanagementbackend.exception.AddProductException
+import de.dkh.cafemanagementbackend.exception.DeleteProductException
 import de.dkh.cafemanagementbackend.exception.GetAllProductException
 import de.dkh.cafemanagementbackend.exception.UpdateProductException
 import de.dkh.cafemanagementbackend.jsonwebtoken.JwtFilter
@@ -10,11 +11,8 @@ import de.dkh.cafemanagementbackend.repository.ProductRepository
 import de.dkh.cafemanagementbackend.testutils.TestData
 import de.dkh.cafemanagementbackend.utils.ServiceUtils
 import de.dkh.cafemanagementbackend.wrapper.ProductWrapper
-import io.mockk.clearAllMocks
-import io.mockk.every
+import io.mockk.*
 import io.mockk.junit5.MockKExtension
-import io.mockk.mockk
-import io.mockk.verify
 import org.assertj.core.api.Assertions.assertThat
 import org.assertj.core.api.Assertions.assertThatThrownBy
 import org.junit.jupiter.api.*
@@ -232,5 +230,57 @@ class ProductServiceImplTest {
             }
 
         }
+    }
+
+    @Nested
+    @DisplayName("Testing deleting products")
+    @TestInstance(TestInstance.Lifecycle.PER_CLASS)
+    inner class DeleteProductTesting {
+
+        @Test
+        fun `should throw an exception if the productRepository does`() {
+            // given
+            val product = TestData.getProduct("Testproduct")
+            every { productRepository.findById(any()) } throws RuntimeException()
+
+            // when/then
+            assertThatThrownBy { objectUnderTest.deleteProduct(product.id) }.isInstanceOf(DeleteProductException::class.java)
+        }
+
+        @Test
+        fun `should return an UNAUTHORIZED response if the current user is not an admin`() {
+            // given
+            val product = TestData.getProduct("Testproduct")
+            every { jwtFilter.isAdmin() } returns false
+            every { productRepository.findById(product.id) } returns Optional.of(product)
+
+            // when
+            val responseEntity = objectUnderTest.deleteProduct(product.id)
+
+            // then
+            verify(exactly = 0) { productRepository.findById(any()) }
+            assertThat(responseEntity).isEqualTo(
+                ResponseEntity<String>(CafeConstants.UNAUTHORIZED_ACCESS, HttpStatus.UNAUTHORIZED)
+            )
+        }
+
+        @Test
+        fun `should return an OK response if the current user is an admin`() {
+            // given
+            val product = TestData.getProduct("Testproduct")
+            every { jwtFilter.isAdmin() } returns true
+            every { productRepository.findById(product.id) } returns Optional.of(product)
+            every { productRepository.deleteById(product.id) } just runs
+
+            // when
+            val responseEntity = objectUnderTest.deleteProduct(product.id)
+
+            // then
+            verify(exactly = 1) { productRepository.deleteById(product.id) }
+            assertThat(responseEntity).isEqualTo(
+                ResponseEntity<String>(CafeConstants.DELETE_PRODUCT_SUCCESSFULLY, HttpStatus.OK)
+            )
+        }
+
     }
 }

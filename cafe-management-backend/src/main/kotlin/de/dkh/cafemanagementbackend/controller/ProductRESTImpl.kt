@@ -28,7 +28,14 @@ class ProductRESTImpl(private val productService: ProductService) : ProductREST 
     }
 
     @Throws(DeleteProductException::class)
-    override fun deleteProduct(id: Long): ResponseEntity<String> {
+    override fun deleteProductWithRequestParam(id: Long): ResponseEntity<String> {
         return productService.deleteProduct(id)
     }
+
+    @Throws(DeleteProductException::class)
+    override fun deleteProductWithPathVariable(id: Long): ResponseEntity<String> {
+        return productService.deleteProduct(id)
+    }
+
+
 }
