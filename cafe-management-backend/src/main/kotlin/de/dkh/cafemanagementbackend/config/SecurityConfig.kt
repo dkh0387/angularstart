@@ -29,15 +29,13 @@ import org.springframework.web.filter.CorsFilter
  * @EnableMethodSecurity allowes to use annotion based configuration of role each endpoint, see [de.dkh.cafemanagementbackend.controller.UserREST].
  */
 @Configuration
-@EnableWebSecurity
-/*@EnableMethodSecurity(
+@EnableWebSecurity/*@EnableMethodSecurity(
     securedEnabled = true,
     jsr250Enabled = true,
     prePostEnabled = true
 )*/
 class SecurityConfig(
-    private val customerUserDetailsService: CustomerUserDetailsService,
-    private val jwtFilter: JwtFilter
+    private val customerUserDetailsService: CustomerUserDetailsService, private val jwtFilter: JwtFilter
 ) {
     /**
      * In the old version, you inject AuthenticationManagerBuilder, set userDetailsService, passwordEncoder, and build it.
@@ -74,32 +72,29 @@ class SecurityConfig(
     @Bean
     @Throws(java.lang.Exception::class)
     fun securityFilterChain(http: HttpSecurity): SecurityFilterChain {
-        http
-            .authorizeHttpRequests { authorizeHttpRequests ->
-                authorizeHttpRequests
-                    //.requestMatchers("/**").hasAuthority("ROLE_USER")
-                    .requestMatchers("user/login", "user/signup", "user/forgotPassword", "user/changePassword")
-                    .permitAll()
-                    .requestMatchers(
-                        "user/get",
-                        "user/update",
-                        "category/add",
-                        "category/get",
-                        "category/update",
-                        "product/add",
-                        "product/get",
-                        "product/update",
-                        "product/delete/*"
-                    )
-                    .hasAuthority("ROLE_ADMIN")
-                    .anyRequest()
-                    .authenticated()
-            }
-            .csrf { csrf -> csrf.disable() }
-            .exceptionHandling { exceptionHandling ->
-                exceptionHandling
-                    .accessDeniedPage("/errors/access-denied")
-            }
+        http.authorizeHttpRequests { authorizeHttpRequests ->
+            authorizeHttpRequests
+                //.requestMatchers("/**").hasAuthority("ROLE_USER")
+                .requestMatchers("user/login", "user/signup", "user/forgotPassword", "user/changePassword")
+                .permitAll()
+                .requestMatchers(
+                    "product/getByCategory/*", "product/getById/*"
+                )
+                .hasAuthority("ROLE_USER")
+                .requestMatchers(
+                    "user/get",
+                    "user/update",
+                    "category/add",
+                    "category/get",
+                    "category/update",
+                    "product/add",
+                    "product/get",
+                    "product/update",
+                    "product/delete/*"
+                ).hasAuthority("ROLE_ADMIN").anyRequest().authenticated()
+        }.csrf { csrf -> csrf.disable() }.exceptionHandling { exceptionHandling ->
+            exceptionHandling.accessDeniedPage("/errors/access-denied")
+        }
             .sessionManagement { sessionManagement -> sessionManagement.sessionCreationPolicy(SessionCreationPolicy.STATELESS) }
             .logout { lo -> lo.permitAll() }
         //.formLogin(withDefaults())
