@@ -39,5 +39,10 @@ class ProductRESTImpl(private val productService: ProductService) : ProductREST 
         return productService.updateProductStatus(requestMap)
     }
 
+    @Throws(GetAllProductByCategoryException::class)
+    override fun getProductsByCategory(categoryId: Long): ResponseEntity<List<ProductWrapper>> {
+        return productService.getProductsByCategory(categoryId)
+    }
+
 
 }

@@ -1,5 +1,6 @@
 package de.dkh.cafemanagementbackend.repository
 
+import de.dkh.cafemanagementbackend.entity.Category
 import de.dkh.cafemanagementbackend.entity.Product
 import de.dkh.cafemanagementbackend.wrapper.ProductWrapper
 import org.springframework.data.jpa.repository.JpaRepository
@@ -21,4 +22,6 @@ interface ProductRepository : JpaRepository<Product, Long> {
     @Transactional
     @Modifying
     fun updateStatus(@Param("status") status: String, @Param("id") id: Long): Int
+
+    fun findByCategoryAndStatus(category: Category, status: String): List<ProductWrapper>
 }

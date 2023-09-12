@@ -391,7 +391,7 @@ class ProductRESTImplTest {
             val category = TestData.getCategory("Testcategory")
             val savedCategory = categoryRepository.save(category)
             val product = TestData.getProduct("Testproduct")
-            product.category = category
+            product.category = savedCategory
             val savedProduct = productRepository.save(product)
             // given
             val productMapperMap =

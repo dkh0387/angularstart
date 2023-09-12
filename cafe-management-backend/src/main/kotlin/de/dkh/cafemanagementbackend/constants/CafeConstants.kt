@@ -57,6 +57,7 @@ class CafeConstants {
         const val DELETE_PRODUCT_SUCCESSFULLY = "Successfully deleted the product!"
         const val UPDATE_PRODUCT_STATUS_WENT_WRONG = "Update product status went wrong!"
         const val UPDATE_PRODUCT_STATUS_SUCCESSFULLY = "Product status successfully updated!"
+        const val GET_ALL_PRODUCT_BY_CATEGORY_STATUS_WENT_WRONG = "Get all products by category went wrong!"
 
     }
 }

@@ -30,4 +30,7 @@ interface ProductREST {
 
     @PostMapping("/updateStatus")
     fun updateProductStatus(@RequestBody(required = true) requestMap: Map<String, String>): ResponseEntity<String>
+
+    @GetMapping("/getByCategory/{categoryId}")
+    fun getProductsByCategory(@PathVariable categoryId: Long): ResponseEntity<List<ProductWrapper>>
 }

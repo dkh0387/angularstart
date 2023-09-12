@@ -160,4 +160,31 @@ class ProductServiceImpl(
             )
         }
     }
+
+    override fun getProductsByCategory(categoryId: Long): ResponseEntity<List<ProductWrapper>> {
+        println("Inside getProductsByCategory $categoryId")
+
+        try {
+            return if (jwtFilter.isAdmin()) {
+                val categoryOptional = categoryRepository.findById(categoryId)
+
+                if (categoryOptional.isPresent) {
+                    val products = productRepository.findByCategoryAndStatus(categoryOptional.get(), CafeConstants.TRUE)
+                    CafeUtils.getProductResponseFor(products, HttpStatus.OK)
+                } else {
+                    CafeUtils.getProductResponseFor(emptyList(), HttpStatus.BAD_REQUEST)
+                }
+
+            } else {
+                CafeUtils.getProductResponseFor(emptyList(), HttpStatus.UNAUTHORIZED)
+            }
+
+        } catch (e: Exception) {
+            logger.error(CafeConstants.GET_ALL_PRODUCT_BY_CATEGORY_STATUS_WENT_WRONG + " MESSAGE: + ${e.localizedMessage}")
+            throw GetAllProductByCategoryException(
+                CafeConstants.GET_ALL_PRODUCT_BY_CATEGORY_STATUS_WENT_WRONG + " MESSAGE: + ${e.localizedMessage}",
+                HttpStatus.INTERNAL_SERVER_ERROR
+            )
+        }
+    }
 }
