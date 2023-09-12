@@ -20,11 +20,14 @@ interface ProductREST {
      * 1. Way to use parametrized URL: http://localhost:8081/product/delete/?id=52
      */
     @PostMapping("/delete/")
-    fun deleteProductWithRequestParam(@RequestParam id: Long): ResponseEntity<String>
+    fun deleteProductWithRequestParam(@RequestParam id: String): ResponseEntity<String>
 
     /**
      * 2. Way to use parametrized URL: http://localhost:8081/product/delete/52
      */
     @PostMapping("/delete/{id}")
     fun deleteProductWithPathVariable(@PathVariable id: Long): ResponseEntity<String>
+
+    @PostMapping("/updateStatus")
+    fun updateProductStatus(@RequestBody(required = true) requestMap: Map<String, String>): ResponseEntity<String>
 }

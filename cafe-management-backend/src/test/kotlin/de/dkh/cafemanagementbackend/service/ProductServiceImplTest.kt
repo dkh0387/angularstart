@@ -1,10 +1,7 @@
 package de.dkh.cafemanagementbackend.service
 
 import de.dkh.cafemanagementbackend.constants.CafeConstants
-import de.dkh.cafemanagementbackend.exception.AddProductException
-import de.dkh.cafemanagementbackend.exception.DeleteProductException
-import de.dkh.cafemanagementbackend.exception.GetAllProductException
-import de.dkh.cafemanagementbackend.exception.UpdateProductException
+import de.dkh.cafemanagementbackend.exception.*
 import de.dkh.cafemanagementbackend.jsonwebtoken.JwtFilter
 import de.dkh.cafemanagementbackend.repository.CategoryRepository
 import de.dkh.cafemanagementbackend.repository.ProductRepository
@@ -233,6 +230,84 @@ class ProductServiceImplTest {
     }
 
     @Nested
+    @DisplayName("Testing updating products")
+    @TestInstance(TestInstance.Lifecycle.PER_CLASS)
+    inner class UpdateProductTesting {
+
+        @Test
+        fun `should throw an exception if the productRepository does`() {
+            // given
+            val product = TestData.getProduct("Testproduct")
+            val requestMap = mapOf(
+                "id" to product.id.toString(),
+                "name" to product.name,
+                "description" to product.description,
+                "status" to product.status,
+                "price" to product.price.toString(),
+                "categoryId" to product.category.id.toString()
+            )
+            every { productRepository.findById(any()) } throws RuntimeException()
+
+            // when/then
+            assertThatThrownBy { objectUnderTest.updateProduct(requestMap) }.isInstanceOf(UpdateProductException::class.java)
+        }
+
+        @Test
+        fun `should return an UNAUTHORIZED response if the current user is not an admin`() {
+            // given
+            val product = TestData.getProduct("Testproduct")
+            val requestMap = mapOf(
+                "id" to product.id.toString(),
+                "name" to product.name,
+                "description" to product.description,
+                "status" to product.status,
+                "price" to product.price.toString(),
+                "categoryId" to product.category.id.toString()
+            )
+            every { jwtFilter.isAdmin() } returns false
+            every { productRepository.findById(any()) } returns Optional.of(product)
+
+            // when
+            val responseEntity = objectUnderTest.updateProduct(requestMap)
+
+            // then
+            verify(exactly = 0) { productRepository.save(any()) }
+            assertThat(responseEntity).isEqualTo(
+                ResponseEntity<String>(CafeConstants.UNAUTHORIZED_ACCESS, HttpStatus.UNAUTHORIZED)
+            )
+        }
+
+        @Test
+        fun `should return an OK response if the current user is an admin`() {
+            // given
+            val product = TestData.getProduct("Testproduct")
+            val category = TestData.getCategory("Testcategory")
+            val requestMap = mapOf(
+                "id" to product.id.toString(),
+                "name" to product.name,
+                "description" to product.description,
+                "status" to product.status,
+                "price" to product.price.toString(),
+                "categoryId" to product.category.id.toString()
+            )
+            every { jwtFilter.isAdmin() } returns true
+            every { productRepository.findById(product.id) } returns Optional.of(product)
+            every { categoryRepository.findById(category.id) } returns Optional.of(category)
+            every { productRepository.save(any()) } returns product
+
+            // when
+            val responseEntity = objectUnderTest.updateProduct(requestMap)
+
+            // then
+            verify(exactly = 1) { productRepository.save(any()) }
+            assertThat(responseEntity).isEqualTo(
+                ResponseEntity<String>(CafeConstants.UPDATE_PRODUCT_SUCCESSFULLY, HttpStatus.OK)
+            )
+        }
+
+    }
+
+    @Nested
     @DisplayName("Testing deleting products")
     @TestInstance(TestInstance.Lifecycle.PER_CLASS)
     inner class DeleteProductTesting {
@@ -279,6 +354,69 @@ class ProductServiceImplTest {
             verify(exactly = 1) { productRepository.deleteById(product.id) }
             assertThat(responseEntity).isEqualTo(
                 ResponseEntity<String>(CafeConstants.DELETE_PRODUCT_SUCCESSFULLY, HttpStatus.OK)
+            )
+        }
+
+    }
+
+    @Nested
+    @DisplayName("Testing updating product status")
+    @TestInstance(TestInstance.Lifecycle.PER_CLASS)
+    inner class UpdateProductStatusTesting {
+
+        @Test
+        fun `should throw an exception if the productRepository does`() {
+            // given
+            val product = TestData.getProduct("Testproduct")
+            val requestMap = mapOf(
+                "id" to product.id.toString(), "status" to product.status
+            )
+            every { productRepository.findById(any()) } throws RuntimeException()
+
+            // when/then
+            assertThatThrownBy { objectUnderTest.updateProductStatus(requestMap) }.isInstanceOf(
+                UpdateProductStatusException::class.java
+            )
+        }
+
+        @Test
+        fun `should return an UNAUTHORIZED response if the current user is not an admin`() {
+            // given
+            val product = TestData.getProduct("Testproduct")
+            val requestMap = mapOf(
+                "id" to product.id.toString(), "status" to product.status
+            )
+            every { jwtFilter.isAdmin() } returns false
+            every { productRepository.findById(any()) } returns Optional.of(product)
+
+            // when
+            val responseEntity = objectUnderTest.updateProductStatus(requestMap)
+
+            // then
+            verify(exactly = 0) { productRepository.updateStatus(product.status, product.id) }
+            assertThat(responseEntity).isEqualTo(
+                ResponseEntity<String>(CafeConstants.UNAUTHORIZED_ACCESS, HttpStatus.UNAUTHORIZED)
+            )
+        }
+
+        @Test
+        fun `should return an OK response if the current user is an admin`() {
+            // given
+            val product = TestData.getProduct("Testproduct")
+            val requestMap = mapOf(
+                "id" to product.id.toString(), "status" to product.status
+            )
+            every { jwtFilter.isAdmin() } returns true
+            every { productRepository.findById(any()) } returns Optional.of(product)
+            every { productRepository.updateStatus(product.status, product.id) } returns product.id.toInt()
+
+            // when
+            val responseEntity = objectUnderTest.updateProductStatus(requestMap)
+
+            // then
+            verify(exactly = 1) { productRepository.updateStatus(product.status, product.id) }
+            assertThat(responseEntity).isEqualTo(
+                ResponseEntity<String>(CafeConstants.UPDATE_PRODUCT_STATUS_SUCCESSFULLY, HttpStatus.OK)
             )
         }
 

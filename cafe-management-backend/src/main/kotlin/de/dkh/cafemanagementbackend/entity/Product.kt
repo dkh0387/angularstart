@@ -15,6 +15,8 @@ import org.hibernate.annotations.DynamicUpdate
     name = "Product.getAllProduct",
     query = "SELECT new de.dkh.cafemanagementbackend.wrapper.ProductWrapper(p.id, p.name, p.description,p.price,p.status,p.category.id, p.category.name) FROM Product p"
 )
+@NamedQuery(name = "Product.updateStatus", query = "UPDATE Product p SET p.status = :status WHERE p.id =:id")
+
 @Entity
 @Table(name = "product")
 @DynamicInsert

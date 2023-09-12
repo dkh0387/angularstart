@@ -2,10 +2,7 @@ package de.dkh.cafemanagementbackend.service
 
 import de.dkh.cafemanagementbackend.constants.CafeConstants
 import de.dkh.cafemanagementbackend.entity.Product
-import de.dkh.cafemanagementbackend.exception.AddProductException
-import de.dkh.cafemanagementbackend.exception.DeleteProductException
-import de.dkh.cafemanagementbackend.exception.GetAllProductException
-import de.dkh.cafemanagementbackend.exception.UpdateProductException
+import de.dkh.cafemanagementbackend.exception.*
 import de.dkh.cafemanagementbackend.jsonwebtoken.JwtFilter
 import de.dkh.cafemanagementbackend.repository.CategoryRepository
 import de.dkh.cafemanagementbackend.repository.ProductRepository
@@ -128,6 +125,37 @@ class ProductServiceImpl(
             logger.error(CafeConstants.DELETE_PRODUCT_WENT_WRONG + " MESSAGE: + ${e.localizedMessage}")
             throw DeleteProductException(
                 CafeConstants.DELETE_PRODUCT_WENT_WRONG + " MESSAGE: + ${e.localizedMessage}",
+                HttpStatus.INTERNAL_SERVER_ERROR
+            )
+        }
+    }
+
+    override fun updateProductStatus(requestMap: Map<String, String>): ResponseEntity<String> {
+        println("Inside updateProductStatus $requestMap")
+
+        try {
+            val productMapper =
+                ServiceUtils.getMapperFromRequestMap(requestMap, ProductMapper::class.java) as ProductMapper
+            productMapper.categoryRepository = categoryRepository
+            val productOptional = productMapper.id?.let { productRepository.findById(it) }
+
+            return if (jwtFilter.isAdmin()) {
+                if (productOptional != null && productOptional.isPresent) {
+                    val product = productOptional.get()
+                    productRepository.updateStatus(productMapper.status!!, product.id)
+                    CafeUtils.getStringResponseFor(CafeConstants.UPDATE_PRODUCT_STATUS_SUCCESSFULLY, HttpStatus.OK)
+                } else {
+                    CafeUtils.getStringResponseFor(
+                        CafeConstants.UPDATE_PRODUCT_STATUS_WENT_WRONG, HttpStatus.BAD_REQUEST
+                    )
+                }
+            } else {
+                CafeUtils.getStringResponseFor(CafeConstants.UNAUTHORIZED_ACCESS, HttpStatus.UNAUTHORIZED)
+            }
+        } catch (e: Exception) {
+            logger.error(CafeConstants.UPDATE_PRODUCT_STATUS_WENT_WRONG + " MESSAGE: + ${e.localizedMessage}")
+            throw UpdateProductStatusException(
+                CafeConstants.UPDATE_PRODUCT_STATUS_WENT_WRONG + " MESSAGE: + ${e.localizedMessage}",
                 HttpStatus.INTERNAL_SERVER_ERROR
             )
         }

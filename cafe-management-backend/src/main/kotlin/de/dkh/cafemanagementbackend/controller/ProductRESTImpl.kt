@@ -1,9 +1,6 @@
 package de.dkh.cafemanagementbackend.controller
 
-import de.dkh.cafemanagementbackend.exception.AddProductException
-import de.dkh.cafemanagementbackend.exception.DeleteProductException
-import de.dkh.cafemanagementbackend.exception.GetAllProductException
-import de.dkh.cafemanagementbackend.exception.UpdateProductException
+import de.dkh.cafemanagementbackend.exception.*
 import de.dkh.cafemanagementbackend.service.ProductService
 import de.dkh.cafemanagementbackend.wrapper.ProductWrapper
 import org.springframework.http.ResponseEntity
@@ -28,13 +25,18 @@ class ProductRESTImpl(private val productService: ProductService) : ProductREST 
     }
 
     @Throws(DeleteProductException::class)
-    override fun deleteProductWithRequestParam(id: Long): ResponseEntity<String> {
-        return productService.deleteProduct(id)
+    override fun deleteProductWithRequestParam(id: String): ResponseEntity<String> {
+        return productService.deleteProduct(Integer.parseInt(id).toLong())
     }
 
     @Throws(DeleteProductException::class)
     override fun deleteProductWithPathVariable(id: Long): ResponseEntity<String> {
         return productService.deleteProduct(id)
+    }
+
+    @Throws(UpdateProductStatusException::class)
+    override fun updateProductStatus(requestMap: Map<String, String>): ResponseEntity<String> {
+        return productService.updateProductStatus(requestMap)
     }
 
 

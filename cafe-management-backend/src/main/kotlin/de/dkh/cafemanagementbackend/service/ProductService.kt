@@ -8,6 +8,7 @@ interface ProductService {
     fun getAllProduct(): ResponseEntity<List<ProductWrapper>>
     fun updateProduct(requestMap: Map<String, String>): ResponseEntity<String>
     fun deleteProduct(id: Long): ResponseEntity<String>
+    fun updateProductStatus(requestMap: Map<String, String>): ResponseEntity<String>
 
 
 }

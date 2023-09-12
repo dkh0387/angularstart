@@ -322,4 +322,94 @@ class ProductRESTImplTest {
         }
 
     }
+
+    @Nested
+    @DisplayName("Testing web layer for updating product status")
+    @TestInstance(TestInstance.Lifecycle.PER_CLASS)
+    @DirtiesContext
+    inner class UpdatingProductStatus {
+
+        @Test
+        fun `should throw an exception while trying to update product status with a corrupt request map`() {
+            // given
+            val productMapperMap = mapOf("id" to "1", "status2" to "true")
+            val token = jwtService.generateToken("deniskh87@gmail.com", User.UserRoles.ROLE_ADMIN.name)
+            jwtFilter.claims = jwtService.extractAllClaims(token)
+
+            assertThatThrownBy {
+                mockMvc.post("$BASE_URL/updateStatus") {
+                    contentType = MediaType.APPLICATION_JSON
+                    content = objectMapper.writeValueAsString(productMapperMap)
+                }
+            }.isInstanceOf(ServletException::class.java)
+
+        }
+
+        @Test
+        fun `should return a UNAUTHORIZED response while trying to update product status as non admin`() {
+            // given
+            val productMapperMap = mapOf("id" to "1", "status" to "true")
+            val token = jwtService.generateToken("david@luv2code.com", User.UserRoles.ROLE_USER.name)
+            jwtFilter.claims = jwtService.extractAllClaims(token)
+
+            val resultActionsDsl = mockMvc.post("$BASE_URL/updateStatus") {
+                contentType = MediaType.APPLICATION_JSON
+                content = objectMapper.writeValueAsString(productMapperMap)
+            }
+
+            resultActionsDsl.andDo { print() }.andExpect {
+                status { isUnauthorized() }
+                content { contentType(MediaType("text", "plain", StandardCharsets.UTF_8)) }
+            }
+
+            assertThat(resultActionsDsl.andReturn().response.contentAsString).isEqualTo(CafeConstants.UNAUTHORIZED_ACCESS)
+        }
+
+        @Test
+        fun `should return a UPDATE_PRODUCT_STATUS_WENT_WRONG response while trying to update product status without status`() {
+
+            productRepository.deleteByName("Testproduct")
+
+            // given
+            val productMapperMap = mapOf("id" to "1")
+            val token = jwtService.generateToken("deniskh87@gmail.com", User.UserRoles.ROLE_ADMIN.name)
+            jwtFilter.claims = jwtService.extractAllClaims(token)
+
+            val resultActionsDsl = mockMvc.post("$BASE_URL/updateStatus") {
+                contentType = MediaType.APPLICATION_JSON
+                content = objectMapper.writeValueAsString(productMapperMap)
+            }
+
+            resultActionsDsl.andDo { print() }.andExpect {
+                status { isBadRequest() }
+                content { contentType(MediaType("text", "plain", StandardCharsets.UTF_8)) }
+            }
+        }
+
+        @Test
+        fun `should update product status if the request map is correctly provided`() {
+            val category = TestData.getCategory("Testcategory")
+            val savedCategory = categoryRepository.save(category)
+            val product = TestData.getProduct("Testproduct")
+            product.category = category
+            val savedProduct = productRepository.save(product)
+            // given
+            val productMapperMap =
+                mapOf("id" to "${savedProduct.id}", "status" to "true")
+            val token = jwtService.generateToken("deniskh87@gmail.com", User.UserRoles.ROLE_ADMIN.name)
+            jwtFilter.claims = jwtService.extractAllClaims(token)
+
+            val resultActionsDsl = mockMvc.post("$BASE_URL/updateStatus") {
+                contentType = MediaType.APPLICATION_JSON
+                content = objectMapper.writeValueAsString(productMapperMap)
+            }
+
+            resultActionsDsl.andDo { print() }.andExpect {
+                status { isOk() }
+                content { contentType(MediaType("text", "plain", StandardCharsets.UTF_8)) }
+            }
+            categoryRepository.deleteByName("Testcategory")
+        }
+
+    }
 }
