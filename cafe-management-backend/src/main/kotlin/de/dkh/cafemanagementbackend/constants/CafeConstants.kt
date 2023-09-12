@@ -58,6 +58,7 @@ class CafeConstants {
         const val UPDATE_PRODUCT_STATUS_WENT_WRONG = "Update product status went wrong!"
         const val UPDATE_PRODUCT_STATUS_SUCCESSFULLY = "Product status successfully updated!"
         const val GET_ALL_PRODUCT_BY_CATEGORY_STATUS_WENT_WRONG = "Get all products by category went wrong!"
+        const val GET_PRODUCT_BY_ID_WENT_WRONG = "Get product by id went wrong!"
 
     }
 }

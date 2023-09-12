@@ -165,24 +165,38 @@ class ProductServiceImpl(
         println("Inside getProductsByCategory $categoryId")
 
         try {
-            return if (jwtFilter.isAdmin()) {
-                val categoryOptional = categoryRepository.findById(categoryId)
+            val categoryOptional = categoryRepository.findById(categoryId)
 
-                if (categoryOptional.isPresent) {
-                    val products = productRepository.findByCategoryAndStatus(categoryOptional.get(), CafeConstants.TRUE)
-                    CafeUtils.getProductResponseFor(products, HttpStatus.OK)
-                } else {
-                    CafeUtils.getProductResponseFor(emptyList(), HttpStatus.BAD_REQUEST)
-                }
-
+            return if (categoryOptional.isPresent) {
+                val products = productRepository.findByCategoryAndStatus(categoryOptional.get(), CafeConstants.TRUE)
+                CafeUtils.getProductResponseFor(products, HttpStatus.OK)
             } else {
-                CafeUtils.getProductResponseFor(emptyList(), HttpStatus.UNAUTHORIZED)
+                CafeUtils.getProductResponseFor(emptyList(), HttpStatus.BAD_REQUEST)
             }
-
         } catch (e: Exception) {
             logger.error(CafeConstants.GET_ALL_PRODUCT_BY_CATEGORY_STATUS_WENT_WRONG + " MESSAGE: + ${e.localizedMessage}")
             throw GetAllProductByCategoryException(
                 CafeConstants.GET_ALL_PRODUCT_BY_CATEGORY_STATUS_WENT_WRONG + " MESSAGE: + ${e.localizedMessage}",
+                HttpStatus.INTERNAL_SERVER_ERROR
+            )
+        }
+    }
+
+    override fun getProductById(id: Long): ResponseEntity<ProductWrapper> {
+        println("Inside getProductById $id")
+
+        try {
+            val productOptional = productRepository.findById(id)
+
+            return if (productOptional.isPresent) {
+                CafeUtils.getSingleProductResponseFor(productOptional.get().toWrapper(), HttpStatus.OK)
+            } else {
+                CafeUtils.getSingleProductResponseFor(null, HttpStatus.BAD_REQUEST)
+            }
+        } catch (e: Exception) {
+            logger.error(CafeConstants.GET_PRODUCT_BY_ID_WENT_WRONG + " MESSAGE: + ${e.localizedMessage}")
+            throw GetProductByIdException(
+                CafeConstants.GET_PRODUCT_BY_ID_WENT_WRONG + " MESSAGE: + ${e.localizedMessage}",
                 HttpStatus.INTERNAL_SERVER_ERROR
             )
         }

@@ -44,5 +44,9 @@ class ProductRESTImpl(private val productService: ProductService) : ProductREST 
         return productService.getProductsByCategory(categoryId)
     }
 
+    override fun getProductById(id: Long): ResponseEntity<ProductWrapper> {
+        return productService.getProductById(id)
+    }
+
 
 }

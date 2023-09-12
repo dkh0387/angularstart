@@ -439,33 +439,14 @@ class ProductServiceImplTest {
         }
 
         @Test
-        fun `should return an UNAUTHORIZED response if the current user is not an admin`() {
-            // given
-            val category = TestData.getCategory("Testcategory")
-            every { jwtFilter.isAdmin() } returns false
-            every { categoryRepository.findById(any()) } returns Optional.of(category)
-
-            // when
-            val responseEntity = objectUnderTest.getProductsByCategory(category.id)
-
-            // then
-            verify(exactly = 0) { productRepository.findByCategoryAndStatus(category, CafeConstants.TRUE) }
-            assertThat(responseEntity).isEqualTo(
-                ResponseEntity<List<ProductWrapper>>(emptyList(), HttpStatus.UNAUTHORIZED)
-            )
-        }
-
-        @Test
-        fun `should return an OK response if the current user is an admin`() {
+        fun `should return an OK response if a valid category is provided`() {
             // given
             val product = TestData.getProduct("Testproduct")
             val category = TestData.getCategory("Testcategory")
-            every { jwtFilter.isAdmin() } returns true
             every { categoryRepository.findById(any()) } returns Optional.of(category)
             every {
                 productRepository.findByCategoryAndStatus(
-                    category,
-                    CafeConstants.TRUE
+                    category, CafeConstants.TRUE
                 )
             } returns listOf(product.toWrapper())
 
@@ -476,6 +457,56 @@ class ProductServiceImplTest {
             verify(exactly = 1) { productRepository.findByCategoryAndStatus(category, CafeConstants.TRUE) }
             assertThat(responseEntity).isEqualTo(
                 ResponseEntity<List<ProductWrapper>>(listOf(product.toWrapper()), HttpStatus.OK)
+            )
+        }
+
+    }
+
+    @Nested
+    @DisplayName("Testing getting product by id")
+    @TestInstance(TestInstance.Lifecycle.PER_CLASS)
+    inner class GetProductByIdTesting {
+
+        @Test
+        fun `should throw an exception if the productRepository does`() {
+            // given
+            every { productRepository.findById(any()) } throws RuntimeException()
+
+            // when/then
+            assertThatThrownBy { objectUnderTest.getProductById(0) }.isInstanceOf(
+                GetProductByIdException::class.java
+            )
+        }
+
+        @Test
+        fun `should return an BAD_REQUEST response if there is no product fo privided id`() {
+            // given
+            val product = TestData.getProduct("Testproduct")
+            every { productRepository.findById(product.id) } returns Optional.empty()
+
+            // when
+            val responseEntity = objectUnderTest.getProductById(product.id)
+
+            // then
+            verify(exactly = 1) { productRepository.findById(product.id) }
+            assertThat(responseEntity).isEqualTo(
+                ResponseEntity<ProductWrapper>(null, HttpStatus.BAD_REQUEST)
+            )
+        }
+
+        @Test
+        fun `should return an OK response if a valid id is provided`() {
+            // given
+            val product = TestData.getProduct("Testproduct")
+            every { productRepository.findById(product.id) } returns Optional.of(product)
+
+            // when
+            val responseEntity = objectUnderTest.getProductById(product.id)
+
+            // then
+            verify(exactly = 1) { productRepository.findById(product.id) }
+            assertThat(responseEntity).isEqualTo(
+                ResponseEntity<ProductWrapper>(product.toWrapper(), HttpStatus.OK)
             )
         }
 

@@ -436,23 +436,6 @@ class ProductRESTImplTest {
         }
 
         @Test
-        fun `should return a UNAUTHORIZED response while trying to get products as non admin`() {
-            // given
-            val categoryId = 1
-            val token = jwtService.generateToken("david@luv2code.com", User.UserRoles.ROLE_USER.name)
-            jwtFilter.claims = jwtService.extractAllClaims(token)
-
-            val resultActionsDsl = mockMvc.get("$BASE_URL/getByCategory/$categoryId") {}
-
-            resultActionsDsl.andDo { print() }.andExpect {
-                status { isUnauthorized() }
-                content { MediaType.APPLICATION_JSON }
-            }
-
-            assertThat(resultActionsDsl.andReturn().response.contentAsString).isEqualTo("[]")
-        }
-
-        @Test
         fun `should get products by category if category id is correctly provided`() {
             val category = TestData.getCategory("Testcategory")
             val savedCategory = categoryRepository.save(category)
@@ -485,5 +468,47 @@ class ProductRESTImplTest {
             categoryRepository.deleteByName("Testcategory")
         }
 
+    }
+
+    @Nested
+    @DisplayName("Testing web layer for getting a product by id")
+    @TestInstance(TestInstance.Lifecycle.PER_CLASS)
+    inner class GettingProductByIdTesting {
+
+        @Test
+        fun `should return a BAD_REQUEST if there is no product for provided id`() {
+            // given
+            val id = -1
+            val token = jwtService.generateToken("deniskh87@gmail.com", User.UserRoles.ROLE_USER.name)
+            jwtFilter.claims = jwtService.extractAllClaims(token)
+
+            val resultActionsDsl = mockMvc.get("$BASE_URL/getById/$id") {}
+
+            resultActionsDsl.andDo { print() }.andExpect {
+                status { isBadRequest() }
+                content { MediaType.APPLICATION_JSON }
+            }
+        }
+
+        @Test
+        fun `should throw an exception if the productRepository does`() {
+            // given
+            val product = productRepository.findAll().first()
+            val id = product.id
+            val token = jwtService.generateToken("deniskh87@gmail.com", User.UserRoles.ROLE_USER.name)
+            jwtFilter.claims = jwtService.extractAllClaims(token)
+
+            val resultActionsDsl = mockMvc.get("$BASE_URL/getById/$id") {}
+
+            val mvcResult = resultActionsDsl.andDo { print() }.andExpect {
+                status { isOk() }
+                content { MediaType.APPLICATION_JSON }
+            }.andReturn()
+
+            assertThat(mvcResult.response.contentAsString).contains(product.id.toString())
+            assertThat(mvcResult.response.contentAsString).contains(product.name)
+            assertThat(mvcResult.response.contentAsString).contains(product.category.id.toString())
+            assertThat(mvcResult.response.contentAsString).contains(product.category.name)
+        }
     }
 }

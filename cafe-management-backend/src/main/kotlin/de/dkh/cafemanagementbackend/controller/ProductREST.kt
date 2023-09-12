@@ -33,4 +33,7 @@ interface ProductREST {
 
     @GetMapping("/getByCategory/{categoryId}")
     fun getProductsByCategory(@PathVariable categoryId: Long): ResponseEntity<List<ProductWrapper>>
+
+    @GetMapping("/getById/{id}")
+    fun getProductById(@PathVariable id: Long): ResponseEntity<ProductWrapper>
 }

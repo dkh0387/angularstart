@@ -28,6 +28,11 @@ class CafeUtils {
         ): ResponseEntity<List<ProductWrapper>> =
             ResponseEntity(body, httpStatus)
 
+        fun getSingleProductResponseFor(
+            body: ProductWrapper?,
+            httpStatus: HttpStatus
+        ): ResponseEntity<ProductWrapper> =
+            ResponseEntity(body, httpStatus)
 
     }
 }
