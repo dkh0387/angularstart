@@ -8,6 +8,7 @@ import de.dkh.cafemanagementbackend.jsonwebtoken.JwtService
 import de.dkh.cafemanagementbackend.repository.CategoryRepository
 import de.dkh.cafemanagementbackend.repository.ProductRepository
 import de.dkh.cafemanagementbackend.testutils.TestData
+import de.dkh.cafemanagementbackend.utils.ServiceUtils
 import io.mockk.clearAllMocks
 import jakarta.servlet.ServletException
 import org.assertj.core.api.Assertions.assertThat
@@ -394,8 +395,7 @@ class ProductRESTImplTest {
             product.category = savedCategory
             val savedProduct = productRepository.save(product)
             // given
-            val productMapperMap =
-                mapOf("id" to "${savedProduct.id}", "status" to "true")
+            val productMapperMap = mapOf("id" to "${savedProduct.id}", "status" to "true")
             val token = jwtService.generateToken("deniskh87@gmail.com", User.UserRoles.ROLE_ADMIN.name)
             jwtFilter.claims = jwtService.extractAllClaims(token)
 
@@ -408,6 +408,80 @@ class ProductRESTImplTest {
                 status { isOk() }
                 content { contentType(MediaType("text", "plain", StandardCharsets.UTF_8)) }
             }
+            categoryRepository.deleteByName("Testcategory")
+        }
+
+    }
+
+    @Nested
+    @DisplayName("Testing web layer for getting all active products by category")
+    @TestInstance(TestInstance.Lifecycle.PER_CLASS)
+    @DirtiesContext
+    inner class GettingAllActiveProductsByCategory {
+
+        @Test
+        fun `should throw an exception while trying to get products status with a corrupt category id`() {
+            // given
+            val categoryId = -1
+            val token = jwtService.generateToken("deniskh87@gmail.com", User.UserRoles.ROLE_ADMIN.name)
+            jwtFilter.claims = jwtService.extractAllClaims(token)
+
+            val resultActionsDsl = mockMvc.get("$BASE_URL/getByCategory/$categoryId") {}
+
+            resultActionsDsl.andDo { print() }.andExpect {
+                status { isBadRequest() }
+                content { MediaType.APPLICATION_JSON }
+            }
+
+        }
+
+        @Test
+        fun `should return a UNAUTHORIZED response while trying to get products as non admin`() {
+            // given
+            val categoryId = 1
+            val token = jwtService.generateToken("david@luv2code.com", User.UserRoles.ROLE_USER.name)
+            jwtFilter.claims = jwtService.extractAllClaims(token)
+
+            val resultActionsDsl = mockMvc.get("$BASE_URL/getByCategory/$categoryId") {}
+
+            resultActionsDsl.andDo { print() }.andExpect {
+                status { isUnauthorized() }
+                content { MediaType.APPLICATION_JSON }
+            }
+
+            assertThat(resultActionsDsl.andReturn().response.contentAsString).isEqualTo("[]")
+        }
+
+        @Test
+        fun `should get products by category if category id is correctly provided`() {
+            val category = TestData.getCategory("Testcategory")
+            val savedCategory = categoryRepository.save(category)
+            val product = TestData.getProduct("Testproduct")
+            product.category = savedCategory
+            val savedProduct = productRepository.save(product)
+            // given
+            val token = jwtService.generateToken("deniskh87@gmail.com", User.UserRoles.ROLE_ADMIN.name)
+            jwtFilter.claims = jwtService.extractAllClaims(token)
+
+            val resultActionsDsl = mockMvc.get("$BASE_URL/getByCategory/${savedCategory.id}") {}
+
+            val mvcResult = resultActionsDsl.andDo { print() }.andExpect {
+                status { isOk() }
+                content { MediaType.APPLICATION_JSON }
+            }.andReturn()
+
+            assertThat(mvcResult.response.contentAsString).contains(
+                ServiceUtils.objectMapper.writeValueAsString(savedProduct.id)
+            )
+            assertThat(mvcResult.response.contentAsString).contains(
+                ServiceUtils.objectMapper.writeValueAsString(savedProduct.name)
+            )
+            assertThat(mvcResult.response.contentAsString).contains(
+                ServiceUtils.objectMapper.writeValueAsString(savedCategory.id)
+            )
+            assertThat(mvcResult.response.contentAsString).contains(
+                ServiceUtils.objectMapper.writeValueAsString(savedCategory.name)
+            )
             categoryRepository.deleteByName("Testcategory")
         }
 

@@ -421,4 +421,63 @@ class ProductServiceImplTest {
         }
 
     }
+
+    @Nested
+    @DisplayName("Testing getting all products by category with active status")
+    @TestInstance(TestInstance.Lifecycle.PER_CLASS)
+    inner class GetAllProductsByCategoryTesting {
+
+        @Test
+        fun `should throw an exception if the productRepository does`() {
+            // given
+            every { categoryRepository.findById(any()) } throws RuntimeException()
+
+            // when/then
+            assertThatThrownBy { objectUnderTest.getProductsByCategory(0) }.isInstanceOf(
+                GetAllProductByCategoryException::class.java
+            )
+        }
+
+        @Test
+        fun `should return an UNAUTHORIZED response if the current user is not an admin`() {
+            // given
+            val category = TestData.getCategory("Testcategory")
+            every { jwtFilter.isAdmin() } returns false
+            every { categoryRepository.findById(any()) } returns Optional.of(category)
+
+            // when
+            val responseEntity = objectUnderTest.getProductsByCategory(category.id)
+
+            // then
+            verify(exactly = 0) { productRepository.findByCategoryAndStatus(category, CafeConstants.TRUE) }
+            assertThat(responseEntity).isEqualTo(
+                ResponseEntity<List<ProductWrapper>>(emptyList(), HttpStatus.UNAUTHORIZED)
+            )
+        }
+
+        @Test
+        fun `should return an OK response if the current user is an admin`() {
+            // given
+            val product = TestData.getProduct("Testproduct")
+            val category = TestData.getCategory("Testcategory")
+            every { jwtFilter.isAdmin() } returns true
+            every { categoryRepository.findById(any()) } returns Optional.of(category)
+            every {
+                productRepository.findByCategoryAndStatus(
+                    category,
+                    CafeConstants.TRUE
+                )
+            } returns listOf(product.toWrapper())
+
+            // when
+            val responseEntity = objectUnderTest.getProductsByCategory(category.id)
+
+            // then
+            verify(exactly = 1) { productRepository.findByCategoryAndStatus(category, CafeConstants.TRUE) }
+            assertThat(responseEntity).isEqualTo(
+                ResponseEntity<List<ProductWrapper>>(listOf(product.toWrapper()), HttpStatus.OK)
+            )
+        }
+
+    }
 }
