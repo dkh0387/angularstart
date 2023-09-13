@@ -10,7 +10,6 @@ import de.dkh.cafemanagementbackend.utils.ServiceUtils
 import de.dkh.cafemanagementbackend.utils.mapper.BillMapper
 import org.springframework.stereotype.Component
 import java.io.ByteArrayOutputStream
-import java.io.FileOutputStream
 import java.util.stream.Stream
 
 /**
@@ -21,14 +20,14 @@ import java.util.stream.Stream
 @Component
 class DocumentCreator {
 
-    fun createAndSaveBill(billMapper: BillMapper, header: String, filePath: String) {
+    fun createAndSaveBill(billMapper: BillMapper, header: String, filePath: String): ByteArray {
         //if we want to store the document as bytearray in the db
         val baos = ByteArrayOutputStream()
 
-        val document = Document()
-        val pdfWriter = PdfWriter.getInstance(
-            document, FileOutputStream(filePath)
-        )
+        val document = Document()/*        val pdfWriter = PdfWriter.getInstance(
+                    document, FileOutputStream(filePath)
+                )*/
+        val pdfWriter = PdfWriter.getInstance(document, baos)
         document.open()
         setRectangleInDocument(document)
         //create title
@@ -51,14 +50,13 @@ class DocumentCreator {
         document.add(table)
         //create footer
         val footer = Paragraph(
-            "Total: ${billMapper.total} \n ${CafeConstants.BILL_FOOTER_TEXT}",
-            getFont(CafeConstants.HEADER_FOOTER_TYPE)
+            "Total: ${billMapper.total} \n ${CafeConstants.BILL_FOOTER_TEXT}", getFont(CafeConstants.HEADER_FOOTER_TYPE)
         )
         document.add(footer)
         document.close()
         pdfWriter.flush()
         //document as byteArray to persist...
-        val pdfAsBytes = baos.toByteArray()
+        return baos.toByteArray()
     }
 
     /**

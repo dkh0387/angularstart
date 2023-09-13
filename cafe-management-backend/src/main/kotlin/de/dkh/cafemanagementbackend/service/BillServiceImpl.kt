@@ -40,12 +40,14 @@ class BillServiceImpl(
             } else {
                 fileName = CafeUtils.getUUID()
                 billMapper.uuid = fileName
-                billRepository.save(Bill.createFromMapper(billMapper, jwtFilter.getCurrentUser()))
             }
             val header =
                 "Name: ${billMapper.name} \n Contact Number: ${billMapper.contactNumber} \n Email: ${billMapper.email} \n Payment method: ${billMapper.paymentMethod}"
             val filePath = CafeConstants.STORE_LOCATION + fileName + CafeConstants.PDF_FILE_EXTENSION
-            documentCreator.createAndSaveBill(billMapper, header, filePath)
+            val bytes = documentCreator.createAndSaveBill(billMapper, header, filePath)
+            val bill = Bill.createFromMapper(billMapper, jwtFilter.getCurrentUser())
+            bill.document = bytes
+            billRepository.save(bill)
             return CafeUtils.getStringResponseFor("{\"uuid:\":\" $fileName \"}", HttpStatus.OK)
         } catch (e: Exception) {
             logAndThrow(

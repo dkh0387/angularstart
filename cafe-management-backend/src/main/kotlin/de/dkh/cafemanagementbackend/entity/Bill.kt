@@ -30,6 +30,9 @@ data class Bill(
     @Column(name = "created_by") private val createdBy: String
 ) : PersistentObject() {
 
+    @Column(name = "document")
+    lateinit var document: ByteArray
+
     companion object {
 
         fun createFromMapper(billMapper: BillMapper, currentUser: UserDetails?): Bill =

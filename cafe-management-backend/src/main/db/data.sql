@@ -206,6 +206,7 @@ CREATE TABLE `bill`
     `total`           float        NOT NULL,
     `product_details` text         NOT NULL,
     `created_by`      varchar(45)  NOT NULL,
+    `document`        text         NOT NULL,
     PRIMARY KEY (`id`)
 ) ENGINE = InnoDB
   AUTO_INCREMENT = 6
@@ -224,7 +225,7 @@ LOCK
 INSERT INTO `bill`
 VALUES (1, 'filename - 2498240923', 'Testbill', 'deniskh87@gmail.com', '39284203810', 'cash', 234.56,
         '"[{\"id\":18,\"name\":\"Doppio Coffee\",\"category\":\"Coffeeeeeee\",\"quantity\":\"1\",\"price\":120,\"total\":120},{\"id\":5,\"name\":\"Chocolate Frosted Doughnut\",\"category\":\"Doughnut\",\"quantity\":\"1\",\"price\":159,\"total\":159},{\"id\":18,\"name\":\"Doppio Coffee\",\"category\":\"Coffee\",\"quantity\":\"1\",\"price\":120,\"total\":120},{\"id\":5,\"name\":\"Chocolate Frosted Doughnut\",\"category\":\"Doughnut\",\"quantity\":\"1\",\"price\":159,\"total\":159}]"',
-        'deniskh87@gmail.com');
+        'deniskh87@gmail.com', 'lösfkjewofjeofjeqüojfqwüofjdowüq');
 
 /*!40000 ALTER TABLE `bill`
     ENABLE KEYS */;
