@@ -21,7 +21,7 @@ class ProductServiceImpl(
     private val productRepository: ProductRepository,
     private val categoryRepository: CategoryRepository,
     private val jwtFilter: JwtFilter
-) : ProductService {
+) : ProductService, LoggerService {
 
     private val logger: Logger = LoggerFactory.getLogger(ProductServiceImpl::class.java)
 
@@ -40,12 +40,14 @@ class ProductServiceImpl(
             }
 
         } catch (e: Exception) {
-            logger.error(CafeConstants.ADD_PRODUCT_WENT_WRONG + " MESSAGE: + ${e.localizedMessage}")
-            throw AddProductException(
-                CafeConstants.ADD_PRODUCT_WENT_WRONG + " MESSAGE: + ${e.localizedMessage}",
-                HttpStatus.INTERNAL_SERVER_ERROR
+            logAndThrow(
+                logger, CafeConstants.ADD_PRODUCT_WENT_WRONG, e, AddProductException(
+                    CafeConstants.ADD_PRODUCT_WENT_WRONG + " MESSAGE: + ${e.localizedMessage}",
+                    HttpStatus.INTERNAL_SERVER_ERROR
+                )
             )
         }
+        return CafeUtils.getStringResponseFor(CafeConstants.ADD_PRODUCT_WENT_WRONG, HttpStatus.INTERNAL_SERVER_ERROR)
     }
 
     override fun getAllProduct(): ResponseEntity<List<ProductWrapper>> {
@@ -58,12 +60,14 @@ class ProductServiceImpl(
                 CafeUtils.getProductResponseFor(emptyList(), HttpStatus.UNAUTHORIZED)
             }
         } catch (e: Exception) {
-            logger.error(CafeConstants.GET_ALL_PRODUCT_WENT_WRONG + " MESSAGE: + ${e.localizedMessage}")
-            throw GetAllProductException(
-                CafeConstants.GET_ALL_PRODUCT_WENT_WRONG + " MESSAGE: + ${e.localizedMessage}",
-                HttpStatus.INTERNAL_SERVER_ERROR
+            logAndThrow(
+                logger, CafeConstants.GET_ALL_PRODUCT_WENT_WRONG, e, GetAllProductException(
+                    CafeConstants.GET_ALL_PRODUCT_WENT_WRONG + " MESSAGE: + ${e.localizedMessage}",
+                    HttpStatus.INTERNAL_SERVER_ERROR
+                )
             )
         }
+        return CafeUtils.getProductResponseFor(emptyList(), HttpStatus.INTERNAL_SERVER_ERROR)
     }
 
     override fun updateProduct(requestMap: Map<String, String>): ResponseEntity<String> {
@@ -94,12 +98,14 @@ class ProductServiceImpl(
                 CafeUtils.getStringResponseFor(CafeConstants.UNAUTHORIZED_ACCESS, HttpStatus.UNAUTHORIZED)
             }
         } catch (e: Exception) {
-            logger.error(CafeConstants.UPDATE_PRODUCT_WENT_WRONG + " MESSAGE: + ${e.localizedMessage}")
-            throw UpdateProductException(
-                CafeConstants.UPDATE_PRODUCT_WENT_WRONG + " MESSAGE: + ${e.localizedMessage}",
-                HttpStatus.INTERNAL_SERVER_ERROR
+            logAndThrow(
+                logger, CafeConstants.UPDATE_PRODUCT_WENT_WRONG, e, UpdateProductException(
+                    CafeConstants.UPDATE_PRODUCT_WENT_WRONG + " MESSAGE: + ${e.localizedMessage}",
+                    HttpStatus.INTERNAL_SERVER_ERROR
+                )
             )
         }
+        return CafeUtils.getStringResponseFor(CafeConstants.UPDATE_PRODUCT_WENT_WRONG, HttpStatus.INTERNAL_SERVER_ERROR)
     }
 
     override fun deleteProduct(id: Long): ResponseEntity<String> {
@@ -122,12 +128,14 @@ class ProductServiceImpl(
                 CafeUtils.getStringResponseFor(CafeConstants.UNAUTHORIZED_ACCESS, HttpStatus.UNAUTHORIZED)
             }
         } catch (e: Exception) {
-            logger.error(CafeConstants.DELETE_PRODUCT_WENT_WRONG + " MESSAGE: + ${e.localizedMessage}")
-            throw DeleteProductException(
-                CafeConstants.DELETE_PRODUCT_WENT_WRONG + " MESSAGE: + ${e.localizedMessage}",
-                HttpStatus.INTERNAL_SERVER_ERROR
+            logAndThrow(
+                logger, CafeConstants.DELETE_PRODUCT_WENT_WRONG, e, DeleteProductException(
+                    CafeConstants.DELETE_PRODUCT_WENT_WRONG + " MESSAGE: + ${e.localizedMessage}",
+                    HttpStatus.INTERNAL_SERVER_ERROR
+                )
             )
         }
+        return CafeUtils.getStringResponseFor(CafeConstants.DELETE_PRODUCT_WENT_WRONG, HttpStatus.INTERNAL_SERVER_ERROR)
     }
 
     override fun updateProductStatus(requestMap: Map<String, String>): ResponseEntity<String> {
@@ -153,12 +161,17 @@ class ProductServiceImpl(
                 CafeUtils.getStringResponseFor(CafeConstants.UNAUTHORIZED_ACCESS, HttpStatus.UNAUTHORIZED)
             }
         } catch (e: Exception) {
-            logger.error(CafeConstants.UPDATE_PRODUCT_STATUS_WENT_WRONG + " MESSAGE: + ${e.localizedMessage}")
-            throw UpdateProductStatusException(
-                CafeConstants.UPDATE_PRODUCT_STATUS_WENT_WRONG + " MESSAGE: + ${e.localizedMessage}",
-                HttpStatus.INTERNAL_SERVER_ERROR
+            logAndThrow(
+                logger, CafeConstants.UPDATE_PRODUCT_STATUS_WENT_WRONG, e, UpdateProductStatusException(
+                    CafeConstants.UPDATE_PRODUCT_STATUS_WENT_WRONG + " MESSAGE: + ${e.localizedMessage}",
+                    HttpStatus.INTERNAL_SERVER_ERROR
+                )
             )
         }
+        return CafeUtils.getStringResponseFor(
+            CafeConstants.UPDATE_PRODUCT_STATUS_WENT_WRONG,
+            HttpStatus.INTERNAL_SERVER_ERROR
+        )
     }
 
     override fun getProductsByCategory(categoryId: Long): ResponseEntity<List<ProductWrapper>> {
@@ -174,12 +187,17 @@ class ProductServiceImpl(
                 CafeUtils.getProductResponseFor(emptyList(), HttpStatus.BAD_REQUEST)
             }
         } catch (e: Exception) {
-            logger.error(CafeConstants.GET_ALL_PRODUCT_BY_CATEGORY_STATUS_WENT_WRONG + " MESSAGE: + ${e.localizedMessage}")
-            throw GetAllProductByCategoryException(
-                CafeConstants.GET_ALL_PRODUCT_BY_CATEGORY_STATUS_WENT_WRONG + " MESSAGE: + ${e.localizedMessage}",
-                HttpStatus.INTERNAL_SERVER_ERROR
+            logAndThrow(
+                logger,
+                CafeConstants.GET_ALL_PRODUCT_BY_CATEGORY_STATUS_WENT_WRONG,
+                e,
+                GetAllProductByCategoryException(
+                    CafeConstants.GET_ALL_PRODUCT_BY_CATEGORY_STATUS_WENT_WRONG + " MESSAGE: + ${e.localizedMessage}",
+                    HttpStatus.INTERNAL_SERVER_ERROR
+                )
             )
         }
+        return CafeUtils.getProductResponseFor(emptyList(), HttpStatus.INTERNAL_SERVER_ERROR)
     }
 
     override fun getProductById(id: Long): ResponseEntity<ProductWrapper> {
@@ -194,11 +212,13 @@ class ProductServiceImpl(
                 CafeUtils.getSingleProductResponseFor(null, HttpStatus.BAD_REQUEST)
             }
         } catch (e: Exception) {
-            logger.error(CafeConstants.GET_PRODUCT_BY_ID_WENT_WRONG + " MESSAGE: + ${e.localizedMessage}")
-            throw GetProductByIdException(
-                CafeConstants.GET_PRODUCT_BY_ID_WENT_WRONG + " MESSAGE: + ${e.localizedMessage}",
-                HttpStatus.INTERNAL_SERVER_ERROR
+            logAndThrow(
+                logger, CafeConstants.GET_PRODUCT_BY_ID_WENT_WRONG, e, GetProductByIdException(
+                    CafeConstants.GET_PRODUCT_BY_ID_WENT_WRONG + " MESSAGE: + ${e.localizedMessage}",
+                    HttpStatus.INTERNAL_SERVER_ERROR
+                )
             )
         }
+        return CafeUtils.getSingleProductResponseFor(null, HttpStatus.INTERNAL_SERVER_ERROR)
     }
 }

@@ -4,6 +4,7 @@ import com.google.common.base.Strings
 import de.dkh.cafemanagementbackend.constants.CafeConstants
 import de.dkh.cafemanagementbackend.entity.Category
 import de.dkh.cafemanagementbackend.exception.AddCategoryException
+import de.dkh.cafemanagementbackend.exception.GetAllCategoryException
 import de.dkh.cafemanagementbackend.exception.UpdateCategoryException
 import de.dkh.cafemanagementbackend.jsonwebtoken.JwtFilter
 import de.dkh.cafemanagementbackend.repository.CategoryRepository
@@ -19,7 +20,7 @@ import org.springframework.stereotype.Service
 
 @Service
 class CategoryServiceImpl(private val categoryRepository: CategoryRepository, private val jwtFilter: JwtFilter) :
-    CategoryService {
+    CategoryService, LoggerService {
 
     private val logger: Logger = LoggerFactory.getLogger(CategoryServiceImpl::class.java)
 
@@ -41,12 +42,14 @@ class CategoryServiceImpl(private val categoryRepository: CategoryRepository, pr
             }
 
         } catch (e: Exception) {
-            logger.error(CafeConstants.ADD_CATEGORY_WENT_WRONG + " MESSAGE: + ${e.localizedMessage}")
-            throw AddCategoryException(
-                CafeConstants.ADD_CATEGORY_WENT_WRONG + " MESSAGE: " + e.localizedMessage,
-                HttpStatus.INTERNAL_SERVER_ERROR
+            logAndThrow(
+                logger, CafeConstants.ADD_CATEGORY_WENT_WRONG, e, AddCategoryException(
+                    CafeConstants.ADD_CATEGORY_WENT_WRONG + " MESSAGE: " + e.localizedMessage,
+                    HttpStatus.INTERNAL_SERVER_ERROR
+                )
             )
         }
+        return CafeUtils.getStringResponseFor(CafeConstants.ADD_CATEGORY_WENT_WRONG, HttpStatus.INTERNAL_SERVER_ERROR)
     }
 
     override fun getAllCategory(filterValue: String?): ResponseEntity<List<CategoryWrapper>> {
@@ -64,11 +67,16 @@ class CategoryServiceImpl(private val categoryRepository: CategoryRepository, pr
             }
 
         } catch (e: Exception) {
-            logger.error(CafeConstants.GET_ALL_CATEGORIES_WENT_WRONG + " MESSAGE : ${e.localizedMessage}}")
-            return CafeUtils.getCategoryResponseFor(
-                emptyList(), HttpStatus.INTERNAL_SERVER_ERROR
+            logAndThrow(
+                logger, CafeConstants.GET_ALL_CATEGORIES_WENT_WRONG, e, GetAllCategoryException(
+                    CafeConstants.GET_ALL_CATEGORIES_WENT_WRONG + " MESSAGE : ${e.localizedMessage}",
+                    HttpStatus.INTERNAL_SERVER_ERROR
+                )
             )
         }
+        return CafeUtils.getCategoryResponseFor(
+            emptyList(), HttpStatus.INTERNAL_SERVER_ERROR
+        )
     }
 
     override fun updateCategory(requestMap: Map<String, String>): ResponseEntity<String> {
@@ -92,11 +100,16 @@ class CategoryServiceImpl(private val categoryRepository: CategoryRepository, pr
                 CafeUtils.getStringResponseFor(CafeConstants.UNAUTHORIZED_ACCESS, HttpStatus.UNAUTHORIZED)
             }
         } catch (e: Exception) {
-            logger.error(CafeConstants.GET_ALL_CATEGORIES_WENT_WRONG + " MESSAGE : ${e.localizedMessage}")
-            throw UpdateCategoryException(
-                CafeConstants.GET_ALL_CATEGORIES_WENT_WRONG + " MESSAGE : ${e.localizedMessage}",
-                HttpStatus.INTERNAL_SERVER_ERROR
+            logAndThrow(
+                logger, CafeConstants.GET_ALL_CATEGORIES_WENT_WRONG, e, UpdateCategoryException(
+                    CafeConstants.GET_ALL_CATEGORIES_WENT_WRONG + " MESSAGE : ${e.localizedMessage}",
+                    HttpStatus.INTERNAL_SERVER_ERROR
+                )
             )
         }
+        return CafeUtils.getStringResponseFor(
+            CafeConstants.GET_ALL_CATEGORIES_WENT_WRONG,
+            HttpStatus.INTERNAL_SERVER_ERROR
+        )
     }
 }
