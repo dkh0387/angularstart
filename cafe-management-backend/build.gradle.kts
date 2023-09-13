@@ -63,7 +63,7 @@ dependencies {
     implementation("com.google.guava:guava:32.1.2-jre")
 
     /* Converting JSON-POJO */
-    //implementation("com.google.code.gson:gson:2.10.1")
+    implementation("com.google.code.gson:gson:2.10.1")
     implementation("com.vaadin.external.google:android-json:0.0.20131108.vaadin1")
 
     // Needed for XML Serialization of JSON web tokens from credentials

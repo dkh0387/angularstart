@@ -29,7 +29,7 @@ class ProductServiceImpl(
         try {
             return if (jwtFilter.isAdmin()) {
                 val productMapper =
-                    ServiceUtils.getMapperFromRequestMap(requestMap, ProductMapper::class.java) as ProductMapper
+                    ServiceUtils.getMapperFromRequestStringMap(requestMap, ProductMapper::class.java) as ProductMapper
                 productMapper.categoryRepository = categoryRepository
 
                 val product = Product.createFromMapper(productMapper)
@@ -75,7 +75,7 @@ class ProductServiceImpl(
 
         try {
             val productMapper =
-                ServiceUtils.getMapperFromRequestMap(requestMap, ProductMapper::class.java) as ProductMapper
+                ServiceUtils.getMapperFromRequestStringMap(requestMap, ProductMapper::class.java) as ProductMapper
             productMapper.categoryRepository = categoryRepository
             val productOptional = productMapper.id?.let { productRepository.findById(it) }
 
@@ -143,7 +143,7 @@ class ProductServiceImpl(
 
         try {
             val productMapper =
-                ServiceUtils.getMapperFromRequestMap(requestMap, ProductMapper::class.java) as ProductMapper
+                ServiceUtils.getMapperFromRequestStringMap(requestMap, ProductMapper::class.java) as ProductMapper
             productMapper.categoryRepository = categoryRepository
             val productOptional = productMapper.id?.let { productRepository.findById(it) }
 

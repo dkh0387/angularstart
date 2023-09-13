@@ -33,7 +33,7 @@ class CategoryServiceImpl(private val categoryRepository: CategoryRepository, pr
         try {
             return if (jwtFilter.isAdmin()) {
                 val categoryMapper =
-                    ServiceUtils.getMapperFromRequestMap(requestMap, CategoryMapper::class.java) as CategoryMapper
+                    ServiceUtils.getMapperFromRequestStringMap(requestMap, CategoryMapper::class.java) as CategoryMapper
                 val category = Category.createFromMapper(categoryMapper)
                 categoryRepository.save(category)
                 CafeUtils.getStringResponseFor(CafeConstants.ADD_CATEGORY_SUCCESSFULLY, HttpStatus.OK)
@@ -84,7 +84,7 @@ class CategoryServiceImpl(private val categoryRepository: CategoryRepository, pr
 
         try {
             val categoryMapper =
-                ServiceUtils.getMapperFromRequestMap(requestMap, CategoryMapper::class.java) as CategoryMapper
+                ServiceUtils.getMapperFromRequestStringMap(requestMap, CategoryMapper::class.java) as CategoryMapper
             val categoryOptional = categoryMapper.id?.let { categoryRepository.findById(it) }
 
             return if (jwtFilter.isAdmin()) {

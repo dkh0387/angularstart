@@ -3,8 +3,11 @@ package de.dkh.cafemanagementbackend.utils
 import de.dkh.cafemanagementbackend.wrapper.CategoryWrapper
 import de.dkh.cafemanagementbackend.wrapper.ProductWrapper
 import de.dkh.cafemanagementbackend.wrapper.UserWrapper
+import org.json.JSONArray
+import org.json.JSONException
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
+import java.util.*
 
 class CafeUtils {
 
@@ -33,6 +36,11 @@ class CafeUtils {
             httpStatus: HttpStatus
         ): ResponseEntity<ProductWrapper> =
             ResponseEntity(body, httpStatus)
+
+        fun getUUID(): String = "Bill-${Date().time}"
+
+        @Throws(JSONException::class)
+        fun getJSONArrayFromString(data: String): JSONArray = JSONArray(data)
 
     }
 }

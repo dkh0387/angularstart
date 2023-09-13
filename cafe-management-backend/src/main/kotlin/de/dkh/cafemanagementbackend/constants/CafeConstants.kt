@@ -61,6 +61,13 @@ class CafeConstants {
         const val GET_PRODUCT_BY_ID_WENT_WRONG = "Get product by id went wrong!"
 
         const val GENERATE_REPORT_WENT_WRONG = "Generate report went wrong!"
+        const val STORE_LOCATION =
+            "/Users/deniskhaskin/IdeaProjects/angularstart/cafe-management-backend/src/main/resources/bills/"
+        const val PDF_FILE_EXTENSION = ".pdf"
+        const val BILL_TITLE = "Cafe Management System"
+        const val TITLE_TYPE = "Title"
+        const val HEADER_FOOTER_TYPE = "Header"
+        const val BILL_FOOTER_TEXT = "Thank you for using our service! Please visit again!"
 
     }
 }

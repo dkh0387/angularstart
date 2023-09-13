@@ -8,6 +8,6 @@ import org.springframework.web.bind.annotation.RequestMapping
 @RequestMapping("/bill")
 interface BillREST {
 
-    @PostMapping("/generateReport")
+    @PostMapping("/generate")
     fun generateReport(@RequestBody requestMap: Map<String, Any>): ResponseEntity<String>
 }

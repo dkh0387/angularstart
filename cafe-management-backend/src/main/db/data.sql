@@ -192,6 +192,45 @@ VALUES (1, 1, 'Small salat', 'different veggies, with dressing', 6.5, 'true');
 UNLOCK
     TABLES;
 
+DROP TABLE IF EXISTS `bill`;
+/*!40101 SET @saved_cs_client = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `bill`
+(
+    `id`              int(11)      NOT NULL AUTO_INCREMENT,
+    `uuid`            varchar(255) NOT NULL,
+    `name`            varchar(50)  NOT NULL,
+    `email`           varchar(45)  NOT NULL,
+    `contact_number`  varchar(45) DEFAULT NULL,
+    `payment_method`  varchar(45)  NOT NULL,
+    `total`           float        NOT NULL,
+    `product_details` text         NOT NULL,
+    `created_by`      varchar(45)  NOT NULL,
+    PRIMARY KEY (`id`)
+) ENGINE = InnoDB
+  AUTO_INCREMENT = 6
+  DEFAULT CHARSET = latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `bill`
+--
+
+LOCK
+    TABLES `bill` WRITE;
+/*!40000 ALTER TABLE `bill`
+    DISABLE KEYS */;
+
+INSERT INTO `bill`
+VALUES (1, 'filename - 2498240923', 'Testbill', 'deniskh87@gmail.com', '39284203810', 'cash', 234.56,
+        '"[{\"id\":18,\"name\":\"Doppio Coffee\",\"category\":\"Coffeeeeeee\",\"quantity\":\"1\",\"price\":120,\"total\":120},{\"id\":5,\"name\":\"Chocolate Frosted Doughnut\",\"category\":\"Doughnut\",\"quantity\":\"1\",\"price\":159,\"total\":159},{\"id\":18,\"name\":\"Doppio Coffee\",\"category\":\"Coffee\",\"quantity\":\"1\",\"price\":120,\"total\":120},{\"id\":5,\"name\":\"Chocolate Frosted Doughnut\",\"category\":\"Doughnut\",\"quantity\":\"1\",\"price\":159,\"total\":159}]"',
+        'deniskh87@gmail.com');
+
+/*!40000 ALTER TABLE `bill`
+    ENABLE KEYS */;
+UNLOCK
+    TABLES;
+
 
 
 

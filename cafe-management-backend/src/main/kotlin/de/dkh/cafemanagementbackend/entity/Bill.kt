@@ -1,14 +1,16 @@
 package de.dkh.cafemanagementbackend.entity
 
 import com.fasterxml.jackson.annotation.JsonAutoDetect
+import de.dkh.cafemanagementbackend.utils.mapper.BillMapper
 import jakarta.persistence.Column
 import jakarta.persistence.Entity
 import jakarta.persistence.Table
 import org.hibernate.annotations.DynamicInsert
 import org.hibernate.annotations.DynamicUpdate
+import org.springframework.security.core.userdetails.UserDetails
 
 @Entity
-@Table(name = "user")
+@Table(name = "bill")
 @DynamicInsert
 @DynamicUpdate
 //@JsonIgnoreProperties(ignoreUnknown = true)
@@ -21,10 +23,25 @@ data class Bill(
     @Column(name = "uuid") private val uuid: String,
     @Column(name = "name") private val name: String,
     @Column(name = "email") private val email: String,
-    @Column(name = "contactnumber") private val contactNumber: String,
-    @Column(name = "paymentmethod") private val paymentMethod: String,
+    @Column(name = "contact_number") private val contactNumber: String,
+    @Column(name = "payment_method") private val paymentMethod: String,
     @Column(name = "total") private val total: Double,
-    @Column(name = "productdetails", columnDefinition = "json") private val productDetails: String,
-    @Column(name = "createdby") private val createdBy: String
+    @Column(name = "product_details", columnDefinition = "json") private val productDetails: String,
+    @Column(name = "created_by") private val createdBy: String
 ) : PersistentObject() {
+
+    companion object {
+
+        fun createFromMapper(billMapper: BillMapper, currentUser: UserDetails?): Bill =
+            Bill(
+                billMapper.uuid,
+                billMapper.name,
+                billMapper.email,
+                billMapper.contactNumber,
+                billMapper.paymentMethod,
+                billMapper.total,
+                billMapper.productDetails,
+                currentUser!!.username
+            )
+    }
 }

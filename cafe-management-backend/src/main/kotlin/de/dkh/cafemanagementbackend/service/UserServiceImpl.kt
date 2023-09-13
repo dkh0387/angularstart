@@ -81,7 +81,7 @@ class UserServiceImpl(
 
         try {
             val userMapperSimple =
-                ServiceUtils.getMapperFromRequestMap(requestMap, UserMapperSimple::class.java) as UserMapperSimple
+                ServiceUtils.getMapperFromRequestStringMap(requestMap, UserMapperSimple::class.java) as UserMapperSimple
             val userFromMap = User.createFromSimple(userMapperSimple)
             // in order to set the userDetails for customerUserDetailsService
             customerUserDetailsService.loadUserByUsername(userFromMap.email)
@@ -156,7 +156,7 @@ class UserServiceImpl(
 
         try {
             val userMapperFull =
-                ServiceUtils.getMapperFromRequestMap(requestMap, UserMapperFull::class.java) as UserMapperFull
+                ServiceUtils.getMapperFromRequestStringMap(requestMap, UserMapperFull::class.java) as UserMapperFull
 
             if (userMapperFull.status == "") {
                 return CafeUtils.getStringResponseFor(
@@ -258,7 +258,7 @@ class UserServiceImpl(
     override fun changePassword(requestMap: Map<String, String>): ResponseEntity<String> {
         try {
             val passwordMapper =
-                ServiceUtils.getMapperFromRequestMap(
+                ServiceUtils.getMapperFromRequestStringMap(
                     requestMap,
                     ChangePasswordMapper::class.java
                 ) as ChangePasswordMapper
@@ -304,7 +304,7 @@ class UserServiceImpl(
         try {
             // first get the current user
             val forgotPasswortMapper =
-                ServiceUtils.getMapperFromRequestMap(
+                ServiceUtils.getMapperFromRequestStringMap(
                     requestMap,
                     ForgotPasswordMapper::class.java
                 ) as ForgotPasswordMapper
@@ -350,11 +350,14 @@ class UserServiceImpl(
         try {
             return if (!allProperties) {
                 val userMapperSimple =
-                    ServiceUtils.getMapperFromRequestMap(requestMap, UserMapperSimple::class.java) as UserMapperSimple
+                    ServiceUtils.getMapperFromRequestStringMap(
+                        requestMap,
+                        UserMapperSimple::class.java
+                    ) as UserMapperSimple
                 User.createFromSimple(userMapperSimple)
             } else {
                 val userMapperFull =
-                    ServiceUtils.getMapperFromRequestMap(requestMap, UserMapperFull::class.java) as UserMapperFull
+                    ServiceUtils.getMapperFromRequestStringMap(requestMap, UserMapperFull::class.java) as UserMapperFull
                 User.createFromSimple(userMapperFull)
             }
 
