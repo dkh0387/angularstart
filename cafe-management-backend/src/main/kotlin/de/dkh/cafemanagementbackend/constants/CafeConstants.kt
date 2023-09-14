@@ -68,6 +68,8 @@ class CafeConstants {
         const val TITLE_TYPE = "Title"
         const val HEADER_FOOTER_TYPE = "Header"
         const val BILL_FOOTER_TEXT = "Thank you for using our service! Please visit again!"
+        const val PARSE_JSON_ARRAY_FROM_PRODUCT_DETAILS_FOR_BILL_WENT_WRONG =
+            "Parse JSON array from product details for bill went wrong!"
 
     }
 }

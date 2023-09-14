@@ -207,7 +207,8 @@ CREATE TABLE `bill`
     `product_details` text         NOT NULL,
     `created_by`      varchar(45)  NOT NULL,
     `document`        text         NOT NULL,
-    PRIMARY KEY (`id`)
+    PRIMARY KEY (`id`),
+    CONSTRAINT bill_uuid UNIQUE (`uuid`)
 ) ENGINE = InnoDB
   AUTO_INCREMENT = 6
   DEFAULT CHARSET = latin1;

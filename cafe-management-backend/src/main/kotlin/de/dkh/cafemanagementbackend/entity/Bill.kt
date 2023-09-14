@@ -20,7 +20,7 @@ We have to instruct it to do otherwise by putting @JsonAutoDetect annotation.
  */
 @JsonAutoDetect(fieldVisibility = JsonAutoDetect.Visibility.ANY)
 data class Bill(
-    @Column(name = "uuid") private val uuid: String,
+    @Column(name = "uuid") val uuid: String,
     @Column(name = "name") private val name: String,
     @Column(name = "email") private val email: String,
     @Column(name = "contact_number") private val contactNumber: String,
@@ -29,6 +29,18 @@ data class Bill(
     @Column(name = "product_details", columnDefinition = "json") private val productDetails: String,
     @Column(name = "created_by") private val createdBy: String
 ) : PersistentObject() {
+    fun toBillMapper(): BillMapper {
+        val billMapper = BillMapper()
+        billMapper.uuid = this.uuid
+        billMapper.name = this.name
+        billMapper.contactNumber = this.contactNumber
+        billMapper.email = this.email
+        billMapper.paymentMethod = this.paymentMethod
+        billMapper.productDetails = this.productDetails
+        billMapper.total = this.total
+        billMapper.isGenerate = false
+        return billMapper
+    }
 
     @Column(name = "document")
     lateinit var document: ByteArray

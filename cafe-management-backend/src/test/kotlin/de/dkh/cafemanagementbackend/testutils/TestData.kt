@@ -1,9 +1,6 @@
 package de.dkh.cafemanagementbackend.testutils
 
-import de.dkh.cafemanagementbackend.entity.Authority
-import de.dkh.cafemanagementbackend.entity.Category
-import de.dkh.cafemanagementbackend.entity.Product
-import de.dkh.cafemanagementbackend.entity.User
+import de.dkh.cafemanagementbackend.entity.*
 import de.dkh.cafemanagementbackend.utils.ServiceUtils
 import de.dkh.cafemanagementbackend.wrapper.ProductWrapper
 
@@ -75,5 +72,16 @@ class TestData {
             )
             return ServiceUtils.objectMapper.writeValueAsString(product)
         }
+
+        fun getBill(): Bill = Bill(
+            "testUUID",
+            "Testname",
+            "testemail@gmail.com",
+            "34974596",
+            "VISA",
+            236.8,
+            "TestproductDetails",
+            "deniskh87@gmail.com"
+        )
     }
 }

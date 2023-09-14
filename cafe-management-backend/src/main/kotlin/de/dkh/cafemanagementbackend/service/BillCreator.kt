@@ -8,25 +8,29 @@ import de.dkh.cafemanagementbackend.constants.CafeConstants
 import de.dkh.cafemanagementbackend.utils.CafeUtils
 import de.dkh.cafemanagementbackend.utils.ServiceUtils
 import de.dkh.cafemanagementbackend.utils.mapper.BillMapper
+import org.json.JSONException
+import org.slf4j.Logger
+import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Component
 import java.io.ByteArrayOutputStream
 import java.util.stream.Stream
 
 /**
  * Creating a PDF bill as a document.
- * Either save it locally or persist byte array in the db.
- * @TODO: testing????
  */
 @Component
-class DocumentCreator {
+class BillCreator : LoggerService {
 
-    fun createAndSaveBill(billMapper: BillMapper, header: String, filePath: String): ByteArray {
+    private val logger: Logger = LoggerFactory.getLogger(BillCreator::class.java)
+
+    fun createAndPersist(billMapper: BillMapper, header: String): ByteArray {
         //if we want to store the document as bytearray in the db
         val baos = ByteArrayOutputStream()
 
-        val document = Document()/*        val pdfWriter = PdfWriter.getInstance(
-                    document, FileOutputStream(filePath)
-                )*/
+        val document = Document()
+        /*val pdfWriter = PdfWriter.getInstance(
+            document, FileOutputStream(filePath)
+        )*/
         val pdfWriter = PdfWriter.getInstance(document, baos)
         document.open()
         setRectangleInDocument(document)
@@ -42,10 +46,19 @@ class DocumentCreator {
         table.widthPercentage = 100.0F
         addTableHeader(table)
         //provide bill data
-        val jsonArray = CafeUtils.getJSONArrayFromString(billMapper.productDetails)
-        //fill table with data
-        for (i in 0 until jsonArray.length()) {
-            addRow(table, ServiceUtils.getMapFromJSON(jsonArray.getString(i)))
+        try {
+            val jsonArray = CafeUtils.getJSONArrayFromString(billMapper.productDetails)
+            //fill table with data
+            for (i in 0 until jsonArray.length()) {
+                addRow(table, ServiceUtils.getMapFromJSON(jsonArray.getString(i)))
+            }
+        } catch (e: Exception) {
+            logAndThrow(
+                logger,
+                CafeConstants.PARSE_JSON_ARRAY_FROM_PRODUCT_DETAILS_FOR_BILL_WENT_WRONG,
+                e,
+                JSONException(e.localizedMessage)
+            )
         }
         document.add(table)
         //create footer
