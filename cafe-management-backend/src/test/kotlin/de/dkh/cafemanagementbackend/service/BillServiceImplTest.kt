@@ -1,10 +1,12 @@
 package de.dkh.cafemanagementbackend.service
 
 import de.dkh.cafemanagementbackend.exception.GenerateBillException
+import de.dkh.cafemanagementbackend.exception.GetBillsException
 import de.dkh.cafemanagementbackend.jsonwebtoken.JwtFilter
 import de.dkh.cafemanagementbackend.repository.BillRepository
 import de.dkh.cafemanagementbackend.testutils.TestData
 import de.dkh.cafemanagementbackend.utils.ServiceUtils
+import de.dkh.cafemanagementbackend.wrapper.BillWrapper
 import io.mockk.clearAllMocks
 import io.mockk.every
 import io.mockk.junit5.MockKExtension
@@ -66,6 +68,59 @@ class BillServiceImplTest {
             assertThat(responseEntity).isEqualTo(
                 ResponseEntity<String>(
                     "{\"uuid:\":\" xyzzzxy \"}", HttpStatus.OK
+                )
+            )
+        }
+
+    }
+
+    @Nested
+    @DisplayName("Testing getting all bills")
+    @TestInstance(TestInstance.Lifecycle.PER_CLASS)
+    inner class GettingAllBillsTesting {
+
+        @Test
+        fun `should throw an exception if the bill repository does`() {
+            // given
+            every { billRepository.findAllAndOrderByIdDesc() } throws RuntimeException()
+
+            // when/then
+            assertThatThrownBy { objectUnderTest.getBills() }.isInstanceOf(GetBillsException::class.java)
+        }
+
+        @Test
+        fun `should return all bills if the current user is an admin`() {
+            // given
+            every { billRepository.findAllAndOrderByIdDesc() } returns listOf(TestData.getBill())
+            every { jwtFilter.isAdmin() } returns true
+
+            // when
+            val responseEntity = objectUnderTest.getBills()
+
+            // then
+            verify(exactly = 1) { billRepository.findAllAndOrderByIdDesc() }
+            assertThat(responseEntity).isEqualTo(
+                ResponseEntity<List<BillWrapper>>(
+                    listOf(TestData.getBill().toWrapper()), HttpStatus.OK
+                )
+            )
+        }
+
+        @Test
+        fun `should return all bills for the current user if the current user is not an admin`() {
+            // given
+            every { billRepository.findAllByNameOrderByNameDesc(any()) } returns listOf(TestData.getBill())
+            every { jwtFilter.getCurrentUser() } returns TestData.getSpringUserDetails()
+            every { jwtFilter.isAdmin() } returns false
+
+            // when
+            val responseEntity = objectUnderTest.getBills()
+
+            // then
+            verify(exactly = 1) { billRepository.findAllByNameOrderByNameDesc(any()) }
+            assertThat(responseEntity).isEqualTo(
+                ResponseEntity<List<BillWrapper>>(
+                    listOf(TestData.getBill().toWrapper()), HttpStatus.OK
                 )
             )
         }

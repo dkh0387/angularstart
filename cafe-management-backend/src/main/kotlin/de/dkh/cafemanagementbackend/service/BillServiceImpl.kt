@@ -3,11 +3,13 @@ package de.dkh.cafemanagementbackend.service
 import de.dkh.cafemanagementbackend.constants.CafeConstants
 import de.dkh.cafemanagementbackend.entity.Bill
 import de.dkh.cafemanagementbackend.exception.GenerateBillException
+import de.dkh.cafemanagementbackend.exception.GetBillsException
 import de.dkh.cafemanagementbackend.jsonwebtoken.JwtFilter
 import de.dkh.cafemanagementbackend.repository.BillRepository
 import de.dkh.cafemanagementbackend.utils.CafeUtils
 import de.dkh.cafemanagementbackend.utils.ServiceUtils
 import de.dkh.cafemanagementbackend.utils.mapper.BillMapper
+import de.dkh.cafemanagementbackend.wrapper.BillWrapper
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import org.springframework.http.HttpStatus
@@ -46,14 +48,38 @@ class BillServiceImpl(
         } catch (e: Exception) {
             logAndThrow(
                 logger,
-                CafeConstants.GENERATE_REPORT_WENT_WRONG,
+                CafeConstants.GENERATE_BILL_WENT_WRONG,
                 e,
-                GenerateBillException(CafeConstants.GENERATE_REPORT_WENT_WRONG, HttpStatus.INTERNAL_SERVER_ERROR)
+                GenerateBillException(CafeConstants.GENERATE_BILL_WENT_WRONG, HttpStatus.INTERNAL_SERVER_ERROR)
             )
         }
         return CafeUtils.getStringResponseFor(
-            CafeConstants.GENERATE_REPORT_WENT_WRONG, HttpStatus.INTERNAL_SERVER_ERROR
+            CafeConstants.GENERATE_BILL_WENT_WRONG, HttpStatus.INTERNAL_SERVER_ERROR
         )
+    }
+
+    /**
+     * @TODO: testing!
+     */
+    override fun getBills(): ResponseEntity<List<BillWrapper>> {
+        var bills = emptyList<BillWrapper>()
+        try {
+            bills = if (jwtFilter.isAdmin()) {
+                billRepository.findAllAndOrderByIdDesc().map { it.toWrapper() }
+            } else {
+                billRepository.findAllByNameOrderByNameDesc(jwtFilter.getCurrentUser()!!.username)
+                    .map { it.toWrapper() }
+            }
+            return CafeUtils.getBillResponseFor(bills, HttpStatus.OK)
+        } catch (e: Exception) {
+            logAndThrow(
+                logger,
+                CafeConstants.GET_BILLS_WENT_WRONG,
+                e,
+                GetBillsException(CafeConstants.GENERATE_BILL_WENT_WRONG, HttpStatus.INTERNAL_SERVER_ERROR)
+            )
+        }
+        return CafeUtils.getBillResponseFor(bills, HttpStatus.OK)
     }
 
 }

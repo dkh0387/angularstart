@@ -60,7 +60,7 @@ class CafeConstants {
         const val GET_ALL_PRODUCT_BY_CATEGORY_STATUS_WENT_WRONG = "Get all products by category went wrong!"
         const val GET_PRODUCT_BY_ID_WENT_WRONG = "Get product by id went wrong!"
 
-        const val GENERATE_REPORT_WENT_WRONG = "Generate report went wrong!"
+        const val GENERATE_BILL_WENT_WRONG = "Generate report went wrong!"
         const val STORE_LOCATION =
             "/Users/deniskhaskin/IdeaProjects/angularstart/cafe-management-backend/src/main/resources/bills/"
         const val PDF_FILE_EXTENSION = ".pdf"
@@ -70,6 +70,7 @@ class CafeConstants {
         const val BILL_FOOTER_TEXT = "Thank you for using our service! Please visit again!"
         const val PARSE_JSON_ARRAY_FROM_PRODUCT_DETAILS_FOR_BILL_WENT_WRONG =
             "Parse JSON array from product details for bill went wrong!"
+        const val GET_BILLS_WENT_WRONG = "Get all bills went wrong!"
 
     }
 }

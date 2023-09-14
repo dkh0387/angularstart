@@ -2,12 +2,20 @@ package de.dkh.cafemanagementbackend.entity
 
 import com.fasterxml.jackson.annotation.JsonAutoDetect
 import de.dkh.cafemanagementbackend.utils.mapper.BillMapper
+import de.dkh.cafemanagementbackend.wrapper.BillWrapper
 import jakarta.persistence.Column
 import jakarta.persistence.Entity
+import jakarta.persistence.NamedQuery
 import jakarta.persistence.Table
 import org.hibernate.annotations.DynamicInsert
 import org.hibernate.annotations.DynamicUpdate
 import org.springframework.security.core.userdetails.UserDetails
+
+@NamedQuery(name = "Bill.findAllAndOrderByIdDesc", query = "SELECT b FROM Bill b ORDER BY id DESC")
+@NamedQuery(
+    name = "Bill.findAllByNameOrderByNameDesc",
+    query = "SELECT b FROM Bill b WHERE b.createdBy =:createdBy ORDER BY id DESC"
+)
 
 @Entity
 @Table(name = "bill")
@@ -41,6 +49,18 @@ data class Bill(
         billMapper.isGenerate = false
         return billMapper
     }
+
+    fun toWrapper(): BillWrapper = BillWrapper(
+        this.id,
+        this.uuid,
+        this.name,
+        this.email,
+        this.contactNumber,
+        this.paymentMethod,
+        this.total,
+        this.productDetails,
+        this.createdBy
+    )
 
     @Column(name = "document")
     lateinit var document: ByteArray

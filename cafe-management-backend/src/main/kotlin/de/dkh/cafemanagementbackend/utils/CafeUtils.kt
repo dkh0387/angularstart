@@ -1,5 +1,6 @@
 package de.dkh.cafemanagementbackend.utils
 
+import de.dkh.cafemanagementbackend.wrapper.BillWrapper
 import de.dkh.cafemanagementbackend.wrapper.CategoryWrapper
 import de.dkh.cafemanagementbackend.wrapper.ProductWrapper
 import de.dkh.cafemanagementbackend.wrapper.UserWrapper
@@ -41,6 +42,12 @@ class CafeUtils {
 
         @Throws(JSONException::class)
         fun getJSONArrayFromString(data: String): JSONArray = JSONArray(data)
+
+        fun getBillResponseFor(
+            body: List<BillWrapper>,
+            httpStatus: HttpStatus
+        ): ResponseEntity<List<BillWrapper>> =
+            ResponseEntity(body, httpStatus)
 
     }
 }

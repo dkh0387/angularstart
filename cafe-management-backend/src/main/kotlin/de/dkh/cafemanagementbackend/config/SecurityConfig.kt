@@ -75,13 +75,10 @@ class SecurityConfig(
         http.authorizeHttpRequests { authorizeHttpRequests ->
             authorizeHttpRequests
                 //.requestMatchers("/**").hasAuthority("ROLE_USER")
-                .requestMatchers("user/login", "user/signup", "user/forgotPassword", "user/changePassword")
-                .permitAll()
+                .requestMatchers("user/login", "user/signup", "user/forgotPassword", "user/changePassword").permitAll()
                 .requestMatchers(
-                    "product/getByCategory/*", "product/getById/*"
-                )
-                .hasAuthority("ROLE_USER")
-                .requestMatchers(
+                    "product/getByCategory/*", "product/getById/*", "bill/generate"
+                ).hasAuthority("ROLE_USER").requestMatchers(
                     "user/get",
                     "user/update",
                     "category/add",
@@ -91,7 +88,9 @@ class SecurityConfig(
                     "product/get",
                     "product/update",
                     "product/delete/*"
-                ).hasAuthority("ROLE_ADMIN").anyRequest().authenticated()
+                ).hasAuthority("ROLE_ADMIN").requestMatchers(
+                    "bill/get"
+                ).hasAnyAuthority("ROLE_ADMIN", "ROLE_USER").anyRequest().authenticated()
         }.csrf { csrf -> csrf.disable() }.exceptionHandling { exceptionHandling ->
             exceptionHandling.accessDeniedPage("/errors/access-denied")
         }
