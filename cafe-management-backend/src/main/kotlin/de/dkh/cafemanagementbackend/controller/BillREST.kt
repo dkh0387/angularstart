@@ -15,4 +15,7 @@ interface BillREST {
 
     @GetMapping("/get")
     fun getBills(): ResponseEntity<List<BillWrapper>>
+
+    @PostMapping("/getBillDocument")
+    fun getBillDocument(@RequestBody requestMap: Map<String, String>): ResponseEntity<ByteArray>
 }

@@ -9,13 +9,12 @@ import lombok.NoArgsConstructor
 @AllArgsConstructor
 class BillMapper : KeyMapper() {
 
-    var uuid: String = ""
+    var uuid: String? = null
     var name: String = ""
     var contactNumber: String = ""
     var email: String = ""
     var paymentMethod: String = ""
     var productDetails: String = ""
     var total: Double = 0.0
-    var isGenerate: Boolean? = null
 
 }

@@ -49,5 +49,7 @@ class CafeUtils {
         ): ResponseEntity<List<BillWrapper>> =
             ResponseEntity(body, httpStatus)
 
+        fun getBillDocumentResponseFor(body: ByteArray, httpStatus: HttpStatus): ResponseEntity<ByteArray> =
+            ResponseEntity(body, httpStatus)
     }
 }

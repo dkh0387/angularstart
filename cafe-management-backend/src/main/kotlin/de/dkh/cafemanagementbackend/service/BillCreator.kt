@@ -141,8 +141,8 @@ class BillCreator : LoggerService {
         table.addCell(data["name"] as String)
         table.addCell(data["category"] as String)
         table.addCell(data["quantity"] as String)
-        table.addCell(Double.toString().plus(data["price"] as Double))
-        table.addCell(Double.toString().plus(data["total"] as Double))
+        table.addCell((data["price"] as Double).toBigDecimal().toPlainString())
+        table.addCell((data["total"] as Double).toBigDecimal().toPlainString())
     }
 
 }

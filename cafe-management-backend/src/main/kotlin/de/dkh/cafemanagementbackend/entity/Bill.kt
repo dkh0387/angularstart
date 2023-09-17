@@ -46,7 +46,6 @@ data class Bill(
         billMapper.paymentMethod = this.paymentMethod
         billMapper.productDetails = this.productDetails
         billMapper.total = this.total
-        billMapper.isGenerate = false
         return billMapper
     }
 
@@ -69,7 +68,7 @@ data class Bill(
 
         fun createFromMapper(billMapper: BillMapper, currentUser: UserDetails?): Bill =
             Bill(
-                billMapper.uuid,
+                billMapper.uuid!!,
                 billMapper.name,
                 billMapper.email,
                 billMapper.contactNumber,
