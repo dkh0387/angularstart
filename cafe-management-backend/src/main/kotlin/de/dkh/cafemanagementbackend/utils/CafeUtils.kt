@@ -51,5 +51,8 @@ class CafeUtils {
 
         fun getBillDocumentResponseFor(body: ByteArray, httpStatus: HttpStatus): ResponseEntity<ByteArray> =
             ResponseEntity(body, httpStatus)
+
+        fun getDashboardResponseFor(body: Map<String, Any>, httpStatus: HttpStatus): ResponseEntity<Map<String, Any>> =
+            ResponseEntity(body, httpStatus)
     }
 }
