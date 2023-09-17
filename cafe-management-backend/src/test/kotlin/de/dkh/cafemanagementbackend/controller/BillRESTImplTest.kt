@@ -1,5 +1,6 @@
 package de.dkh.cafemanagementbackend.controller
 
+import de.dkh.cafemanagementbackend.constants.CafeConstants
 import de.dkh.cafemanagementbackend.entity.User
 import de.dkh.cafemanagementbackend.jsonwebtoken.JwtFilter
 import de.dkh.cafemanagementbackend.jsonwebtoken.JwtService
@@ -235,6 +236,54 @@ class BillRESTImplTest {
 
             Assertions.assertThat(resultActionsDsl.andReturn().response.contentAsString)
                 .isEqualTo("lösfkjewofjeofjeqüojfqwüofjdowüq")
+        }
+
+    }
+
+    @Nested
+    @DisplayName("Testing web layer for deleting a bill")
+    @TestInstance(TestInstance.Lifecycle.PER_CLASS)
+    @DirtiesContext
+    inner class DeleteBillTesting {
+
+        @Test
+        fun `should return a BAD_REQUEST response if there is no bill for provided id in the db`() {
+            // given
+            val token = jwtService.generateToken("deniskh87@gmail.com", User.UserRoles.ROLE_USER.name)
+            jwtFilter.claims = jwtService.extractAllClaims(token)
+
+            // when
+            val resultActionsDsl = mockMvc.post("$BASE_URL/delete/-1") {}
+
+            // then
+            resultActionsDsl.andDo { print() }.andExpect {
+                status { isBadRequest() }
+                content { MediaType.APPLICATION_JSON }
+            }
+
+            Assertions.assertThat(resultActionsDsl.andReturn().response.contentAsString)
+                .isEqualTo(CafeConstants.DELETE_BILL_WENT_WRONG)
+        }
+
+        @Test
+        fun `should return an OK response if there is a bill for provided id in the db`() {
+            // given
+            val bill = TestData.getBill()
+            bill.document = ByteArray(100)
+            val billSaved = billRepository.save(bill)
+
+
+            // when
+            val resultActionsDsl = mockMvc.post("$BASE_URL/delete/${billSaved.id}") {}
+
+            // then
+            resultActionsDsl.andDo { print() }.andExpect {
+                status { isOk() }
+                content { MediaType.APPLICATION_JSON }
+            }
+
+            Assertions.assertThat(resultActionsDsl.andReturn().response.contentAsString)
+                .isEqualTo(CafeConstants.DELETE_BILL_SUCCESSFULLY)
         }
 
     }

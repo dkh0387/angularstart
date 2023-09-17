@@ -2,6 +2,7 @@ package de.dkh.cafemanagementbackend.service
 
 import de.dkh.cafemanagementbackend.constants.CafeConstants
 import de.dkh.cafemanagementbackend.entity.Bill
+import de.dkh.cafemanagementbackend.exception.DeleteBillException
 import de.dkh.cafemanagementbackend.exception.GenerateBillException
 import de.dkh.cafemanagementbackend.exception.GetBiilDocumentException
 import de.dkh.cafemanagementbackend.exception.GetBillsException
@@ -98,6 +99,29 @@ class BillServiceImpl(
             )
         }
         return CafeUtils.getBillDocumentResponseFor(ByteArray(0), HttpStatus.INTERNAL_SERVER_ERROR)
+    }
+
+    override fun deleteBill(id: Long): ResponseEntity<String> {
+        println("Inside deleteBill $id")
+
+        try {
+            val billOptional = billRepository.findById(id)
+
+            return if (billOptional.isPresent) {
+                billRepository.delete(billOptional.get())
+                CafeUtils.getStringResponseFor(CafeConstants.DELETE_BILL_SUCCESSFULLY, HttpStatus.OK)
+            } else {
+                CafeUtils.getStringResponseFor(CafeConstants.DELETE_BILL_WENT_WRONG, HttpStatus.BAD_REQUEST)
+            }
+        } catch (e: Exception) {
+            logAndThrow(
+                logger,
+                CafeConstants.DELETE_BILL_WENT_WRONG,
+                e,
+                DeleteBillException(CafeConstants.DELETE_BILL_WENT_WRONG, HttpStatus.INTERNAL_SERVER_ERROR)
+            )
+        }
+        return CafeUtils.getStringResponseFor(CafeConstants.DELETE_BILL_WENT_WRONG, HttpStatus.INTERNAL_SERVER_ERROR)
     }
 
     private fun createFromMapperAndSave(requestMap: Map<String, Any>): Bill {

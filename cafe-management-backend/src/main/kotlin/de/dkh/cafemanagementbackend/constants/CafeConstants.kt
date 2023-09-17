@@ -72,6 +72,8 @@ class CafeConstants {
             "Parse JSON array from product details for bill went wrong!"
         const val GET_BILLS_WENT_WRONG = "Get all bills went wrong!"
         const val GET_BILL_DOCUMENT_WENT_WRONG = "Get bill document went wrong!"
+        const val DELETE_BILL_WENT_WRONG = "Delete bill went wrong!"
+        const val DELETE_BILL_SUCCESSFULLY = "Successfully deleted the bill!"
 
     }
 }

@@ -1,6 +1,8 @@
 package de.dkh.cafemanagementbackend.service
 
 import com.itextpdf.text.DocumentException
+import de.dkh.cafemanagementbackend.constants.CafeConstants
+import de.dkh.cafemanagementbackend.exception.DeleteBillException
 import de.dkh.cafemanagementbackend.exception.GenerateBillException
 import de.dkh.cafemanagementbackend.exception.GetBiilDocumentException
 import de.dkh.cafemanagementbackend.exception.GetBillsException
@@ -9,11 +11,8 @@ import de.dkh.cafemanagementbackend.repository.BillRepository
 import de.dkh.cafemanagementbackend.testutils.TestData
 import de.dkh.cafemanagementbackend.utils.ServiceUtils
 import de.dkh.cafemanagementbackend.wrapper.BillWrapper
-import io.mockk.clearAllMocks
-import io.mockk.every
+import io.mockk.*
 import io.mockk.junit5.MockKExtension
-import io.mockk.mockk
-import io.mockk.verify
 import org.assertj.core.api.Assertions.assertThat
 import org.assertj.core.api.Assertions.assertThatThrownBy
 import org.junit.jupiter.api.*
@@ -241,6 +240,56 @@ class BillServiceImplTest {
             verify(exactly = 0) { billRepository.save(any()) }
             verify(exactly = 1) { billRepository.findByUuid(any()) }
             assertThat(responseEntity).isEqualTo(ResponseEntity<ByteArray>(bill.document, HttpStatus.OK))
+        }
+
+    }
+
+    @Nested
+    @DisplayName("Testing deleting a bill")
+    @TestInstance(TestInstance.Lifecycle.PER_CLASS)
+    inner class DeletingBillTesting {
+
+        @Test
+        fun `should throw an exception if the bill repository does`() {
+            // given
+            every { billRepository.findById(any()) } throws RuntimeException()
+
+            // when/then
+            assertThatThrownBy { objectUnderTest.deleteBill(1) }.isInstanceOf(DeleteBillException::class.java)
+        }
+
+        @Test
+        fun `should return an BAD_REQUEST response if there is no bill in the db for provided id`() {
+            // given
+            every { billRepository.findById(any()) } returns Optional.empty()
+
+            // when
+            val responseEntity = objectUnderTest.deleteBill(1)
+
+            // then
+            assertThat(responseEntity).isEqualTo(
+                ResponseEntity<String>(
+                    CafeConstants.DELETE_BILL_WENT_WRONG, HttpStatus.BAD_REQUEST
+                )
+            )
+        }
+
+        @Test
+        fun `should return an OK response if there is a bill in the db for provided id`() {
+            // given
+            every { billRepository.findById(any()) } returns Optional.of(TestData.getBill())
+            every { billRepository.delete(any()) } just runs
+
+            // when
+            val responseEntity = objectUnderTest.deleteBill(1)
+
+            // then
+            verify(exactly = 1) { billRepository.delete(any()) }
+            assertThat(responseEntity).isEqualTo(
+                ResponseEntity<String>(
+                    CafeConstants.DELETE_BILL_SUCCESSFULLY, HttpStatus.OK
+                )
+            )
         }
 
     }

@@ -89,8 +89,9 @@ class SecurityConfig(
                     "product/update",
                     "product/delete/*"
                 ).hasAuthority("ROLE_ADMIN").requestMatchers(
-                    "bill/get"
-                ).hasAnyAuthority("ROLE_ADMIN", "ROLE_USER").anyRequest().authenticated()
+                    "bill/get", "bill/getBillDocument", "bill/delete/*"
+                ).hasAnyAuthority("ROLE_ADMIN", "ROLE_USER")
+                .anyRequest().authenticated()
         }.csrf { csrf -> csrf.disable() }.exceptionHandling { exceptionHandling ->
             exceptionHandling.accessDeniedPage("/errors/access-denied")
         }

@@ -2,10 +2,7 @@ package de.dkh.cafemanagementbackend.controller
 
 import de.dkh.cafemanagementbackend.wrapper.BillWrapper
 import org.springframework.http.ResponseEntity
-import org.springframework.web.bind.annotation.GetMapping
-import org.springframework.web.bind.annotation.PostMapping
-import org.springframework.web.bind.annotation.RequestBody
-import org.springframework.web.bind.annotation.RequestMapping
+import org.springframework.web.bind.annotation.*
 
 @RequestMapping("/bill")
 interface BillREST {
@@ -18,4 +15,7 @@ interface BillREST {
 
     @PostMapping("/getBillDocument")
     fun getBillDocument(@RequestBody requestMap: Map<String, String>): ResponseEntity<ByteArray>
+
+    @PostMapping("/delete/{id}")
+    fun deleteBill(@PathVariable id: Long): ResponseEntity<String>
 }

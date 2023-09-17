@@ -32,4 +32,8 @@ class BillRESTImpl(private val billService: BillService) : BillREST {
         headers.cacheControl = "must-revalidate, post-check=0, pre-check=0"
         return ResponseEntity<ByteArray>(billDocument.body as ByteArray, headers, HttpStatus.OK)
     }
+
+    override fun deleteBill(id: Long): ResponseEntity<String> {
+        return billService.deleteBill(id)
+    }
 }
