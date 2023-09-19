@@ -20,6 +20,7 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 import org.springframework.web.cors.CorsConfiguration
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource
 import org.springframework.web.filter.CorsFilter
+import java.util.*
 
 
 /**
@@ -92,9 +93,11 @@ class SecurityConfig(
                     "bill/get", "bill/getBillDocument", "bill/delete/*", "dashboard/details"
                 ).hasAnyAuthority("ROLE_ADMIN", "ROLE_USER")
                 .anyRequest().authenticated()
-        }.csrf { csrf -> csrf.disable() }.exceptionHandling { exceptionHandling ->
-            exceptionHandling.accessDeniedPage("/errors/access-denied")
         }
+            .csrf { csrf -> csrf.disable() }
+            .exceptionHandling { exceptionHandling ->
+                exceptionHandling.accessDeniedPage("/errors/access-denied")
+            }
             .sessionManagement { sessionManagement -> sessionManagement.sessionCreationPolicy(SessionCreationPolicy.STATELESS) }
             .logout { lo -> lo.permitAll() }
         //.formLogin(withDefaults())
@@ -103,13 +106,17 @@ class SecurityConfig(
         return http.build()
     }
 
-    // Used by Spring Security if CORS is enabled.
+    /**
+     * Used by Spring Security if CORS is enabled.
+     * This one is required if we want to call endpoint from fronend (localhost:4200).
+     */
+
     @Bean
     fun corsFilter(): CorsFilter {
         val source = UrlBasedCorsConfigurationSource()
         val config = CorsConfiguration()
         config.allowCredentials = true
-        config.addAllowedOrigin("*")
+        config.addAllowedOriginPattern("*")
         config.addAllowedHeader("*")
         config.addAllowedMethod("*")
         source.registerCorsConfiguration("/**", config)

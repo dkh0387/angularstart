@@ -1,3 +1,5 @@
+$main-color: #7b1fa2;
+
 * {
   box-sizing: border-box;
 }
@@ -69,7 +71,7 @@ body {
   padding: 6px;
   text-align: center;
   color: white;
-  background: #7b1fa2;
+  background: $main-color;
 }
 
 /* Responsive layout - when the screen is less than 700px wide, make the two columns stack on top of each other instead of next to each other */
@@ -111,7 +113,7 @@ body {
   display: flex;
   align-items: center;
   justify-content:center;
-  background-color: #7b1fa2;
+  background-color: $main-color;
 }
 
 nav {

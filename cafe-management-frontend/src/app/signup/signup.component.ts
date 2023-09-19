@@ -43,10 +43,10 @@ export class SignupComponent implements OnInit {
   }
 
   /**
-   * Validation of password match. NOTE: the access on single fields inside the form!
+   * Validation of password match. NOTE: the access to single fields inside the form!
    */
-  validateSubmit() {
-    return this.signupForm.control.password == this.signupForm.control.confirmPassword
+  passwordConfirmed() {
+    return this.signupForm.controls.password.value == this.signupForm.controls.confirmPassword.value;
   }
 
   handleSubmit() {
@@ -67,14 +67,9 @@ export class SignupComponent implements OnInit {
       this.router.navigate(["/"]); // after sign up navigate to the same page
     }, (error) => {
       this.ngxService.stop();
-      // show the error message if there is one
-      if (error.error?.message) {
-        this.responseMessage = error.error?.message;
-      } else {
-        this.responseMessage = GlobalConstants.genericError;
-      }
+      // show the error message
+      this.responseMessage = (error.error?.message == null) ? (GlobalConstants.error) : error.error?.message;
       this.snackbarService.openSnackBar(this.responseMessage, GlobalConstants.error);
     })
   }
-
 }
