@@ -53,9 +53,9 @@ class UserServiceImpl(
             val existingUser = userRepository.findByEmail(userFromMap.email)
 
             return if (Objects.isNull(existingUser)) {
-                val registeredUser = register(userFromMap)
+                register(userFromMap)
                 CafeUtils.getStringResponseFor(
-                    CafeConstants.USER_SUCCESSFULLY_REGISTERED + ": $registeredUser", HttpStatus.CREATED
+                    "\"${CafeConstants.USER_SUCCESSFULLY_REGISTERED}\"", HttpStatus.CREATED
                 )
             } else {
                 CafeUtils.getStringResponseFor(CafeConstants.EMAIL_ALREADY_EXISTS, HttpStatus.BAD_REQUEST)
@@ -97,8 +97,9 @@ class UserServiceImpl(
                 return if (customerUserDetailsService.checkUserApproved()) {
                     val token = jwtService.generateToken(
                         customerUserDetailsService.getUserDetailWithoutPassword().email,
-                        customerUserDetailsService.getUserDetailWithoutPassword().authorities!!
-                            .sortedWith(authorityComparator).first().authority
+                        customerUserDetailsService.getUserDetailWithoutPassword().authorities!!.sortedWith(
+                                authorityComparator
+                            ).first().authority
                     )
                     CafeUtils.getStringResponseFor("{\"${CafeConstants.TOKEN_KEY_WORD}\":\"$token\"}", HttpStatus.OK)
                 } else {
@@ -114,22 +115,20 @@ class UserServiceImpl(
         } catch (e: Exception) {
             logAndThrow(
                 logger, CafeConstants.LOGIN_WENT_WRONG, e, SignUpException(
-                    CafeConstants.LOGIN_WENT_WRONG + " MESSAGE: " + e.localizedMessage,
-                    HttpStatus.INTERNAL_SERVER_ERROR
+                    CafeConstants.LOGIN_WENT_WRONG + " MESSAGE: " + e.localizedMessage, HttpStatus.INTERNAL_SERVER_ERROR
                 )
             )
         }
         return CafeUtils.getStringResponseFor(CafeConstants.LOGIN_WENT_WRONG, HttpStatus.INTERNAL_SERVER_ERROR)
     }
 
-    override fun
-            getAllUsers(): ResponseEntity<List<UserWrapper>> {
+    override fun getAllUsers(): ResponseEntity<List<UserWrapper>> {
         println("Inside getAllUsers")
 
         try {
             return if (jwtFilter.isAdmin()) {
-                ResponseEntity<List<UserWrapper>>(
-                    userRepository.findAll().filter { it.role.equals(User.DEFAULT_ROLE, true) }.map { it.toWrapper() },
+                ResponseEntity<List<UserWrapper>>(userRepository.findAll()
+                    .filter { it.role.equals(User.DEFAULT_ROLE, true) }.map { it.toWrapper() },
                     HttpStatus.OK
                 )
             } else {
@@ -138,8 +137,7 @@ class UserServiceImpl(
         } catch (e: Exception) {
             logAndThrow(
                 logger, CafeConstants.LOAD_USERS_WENT_WRONG, e, UsersLoadException(
-                    CafeConstants.LOAD_USERS_WENT_WRONG + " MESSAGE:  + ${e.localizedMessage}",
-                    HttpStatus.BAD_REQUEST
+                    CafeConstants.LOAD_USERS_WENT_WRONG + " MESSAGE:  + ${e.localizedMessage}", HttpStatus.BAD_REQUEST
                 )
             )
         }
@@ -160,8 +158,7 @@ class UserServiceImpl(
 
             if (userMapperFull.status == "") {
                 return CafeUtils.getStringResponseFor(
-                    CafeConstants.NO_STATUS_REQUESTED_FOR_UPDATE,
-                    HttpStatus.OK
+                    CafeConstants.NO_STATUS_REQUESTED_FOR_UPDATE, HttpStatus.OK
                 )
             }
             val userFromMap = User.createFromFull(userMapperFull)
@@ -174,16 +171,12 @@ class UserServiceImpl(
                     run {
                         userRepository.updateStatus(userOptional.get().id, userFromMap.status)
                         sendEmailToAllAdmin(
-                            userFromMap.status,
-                            userOptional.get().email,
-                            userRepository.getAllAdmins(
-                                User.UserRoles.ROLE_ADMIN.nameWithoutPrefix()
-                                    .lowercase(Locale.getDefault())
+                            userFromMap.status, userOptional.get().email, userRepository.getAllAdmins(
+                                User.UserRoles.ROLE_ADMIN.nameWithoutPrefix().lowercase(Locale.getDefault())
                             )
                         )
                         return CafeUtils.getStringResponseFor(
-                            CafeConstants.USER_STATUS_UPDATED,
-                            HttpStatus.OK
+                            CafeConstants.USER_STATUS_UPDATED, HttpStatus.OK
                         )
                     }
 
@@ -201,8 +194,7 @@ class UserServiceImpl(
             )
         }
         return CafeUtils.getStringResponseFor(
-            CafeConstants.USER_STATUS_UPDATE_WENT_WRONG,
-            HttpStatus.INTERNAL_SERVER_ERROR
+            CafeConstants.USER_STATUS_UPDATE_WENT_WRONG, HttpStatus.INTERNAL_SERVER_ERROR
         )
     }
 
@@ -211,32 +203,23 @@ class UserServiceImpl(
      * NOTE: the username of UserDetails is being used as email in this project, see: [de.dkh.cafemanagementbackend.service.CustomerUserDetailsService].
      */
     @Throws(
-        MailException::class,
-        MailAuthenticationException::class,
-        MailParseException::class,
-        MailSendException::class
+        MailException::class, MailAuthenticationException::class, MailParseException::class, MailSendException::class
     )
     override fun sendEmailToAllAdmin(
-        status: String?,
-        email: String,
-        allAdmins: List<UserWrapper>
+        status: String?, email: String, allAdmins: List<UserWrapper>
     ) {
 
         if (jwtFilter.getCurrentUser() != null && status != null) {
             if (status.equals(CafeConstants.TRUE, true)) {
-                emailUtils.sendSimpleMessage(
-                    to = jwtFilter.getCurrentUser()!!.username,
+                emailUtils.sendSimpleMessage(to = jwtFilter.getCurrentUser()!!.username,
                     subject = CafeConstants.SUBJECT_USER_SET_APPROVED,
                     text = CafeConstants.TEXT_USER_SET_APPROVED + " USER: $email" + " ADMIN: ${jwtFilter.getCurrentUser()}",
-                    allAdmins.map { it.email }
-                )
+                    allAdmins.map { it.email })
             } else if (status.equals(User.DEFAULT_STATUS, true)) {
-                emailUtils.sendSimpleMessage(
-                    to = jwtFilter.getCurrentUser()!!.username,
+                emailUtils.sendSimpleMessage(to = jwtFilter.getCurrentUser()!!.username,
                     subject = CafeConstants.SUBJECT_USER_SET_DISABLED,
                     text = CafeConstants.TEXT_USER_SET_DISABLED + " USER: $email" + " ADMIN: ${jwtFilter.getCurrentUser()}",
-                    allAdmins.map { it.email }
-                )
+                    allAdmins.map { it.email })
             }
         } else {
             logger.warn(if (jwtFilter.getCurrentUser() == null) CafeConstants.CURRENT_USER_IS_NULL else CafeConstants.NO_STATUS_FOR_UPDATE)
@@ -257,15 +240,12 @@ class UserServiceImpl(
      */
     override fun changePassword(requestMap: Map<String, String>): ResponseEntity<String> {
         try {
-            val passwordMapper =
-                ServiceUtils.getMapperFromRequestStringMap(
-                    requestMap,
-                    ChangePasswordMapper::class.java
-                ) as ChangePasswordMapper
+            val passwordMapper = ServiceUtils.getMapperFromRequestStringMap(
+                requestMap, ChangePasswordMapper::class.java
+            ) as ChangePasswordMapper
             val user = userRepository.findByEmail(jwtFilter.getCurrentUser()!!.username)
                 ?: return CafeUtils.getStringResponseFor(
-                    CafeConstants.NO_USER_FOR_EMAIL,
-                    HttpStatus.INTERNAL_SERVER_ERROR
+                    CafeConstants.NO_USER_FOR_EMAIL, HttpStatus.INTERNAL_SERVER_ERROR
                 )
             // Check if the old password in the request map and the existing one match...
             val oldVSExistingPassword = checkOldVSExistingPassword(passwordMapper.oldPassword, user.password)
@@ -273,8 +253,7 @@ class UserServiceImpl(
             // If so, update
             return if (!oldVSExistingPassword) {
                 CafeUtils.getStringResponseFor(
-                    CafeConstants.OLD_VS_EXISTING_PASSWORD_MISMATCH,
-                    HttpStatus.BAD_REQUEST
+                    CafeConstants.OLD_VS_EXISTING_PASSWORD_MISMATCH, HttpStatus.BAD_REQUEST
                 )
             } else {
                 user.password = passwordMapper.newPassword
@@ -291,8 +270,7 @@ class UserServiceImpl(
             )
         }
         return CafeUtils.getStringResponseFor(
-            CafeConstants.CHANGE_PASSWORD_WENT_WRONG,
-            HttpStatus.INTERNAL_SERVER_ERROR
+            CafeConstants.CHANGE_PASSWORD_WENT_WRONG, HttpStatus.INTERNAL_SERVER_ERROR
         )
     }
 
@@ -303,22 +281,16 @@ class UserServiceImpl(
     override fun forgotPassword(requestMap: Map<String, String>): ResponseEntity<String> {
         try {
             // first get the current user
-            val forgotPasswortMapper =
-                ServiceUtils.getMapperFromRequestStringMap(
-                    requestMap,
-                    ForgotPasswordMapper::class.java
-                ) as ForgotPasswordMapper
-            val user = userRepository.findByEmail(forgotPasswortMapper.email)
-                ?: return CafeUtils.getStringResponseFor(
-                    CafeConstants.NO_USER_FOR_EMAIL,
-                    HttpStatus.INTERNAL_SERVER_ERROR
-                )
+            val forgotPasswortMapper = ServiceUtils.getMapperFromRequestStringMap(
+                requestMap, ForgotPasswordMapper::class.java
+            ) as ForgotPasswordMapper
+            val user = userRepository.findByEmail(forgotPasswortMapper.email) ?: return CafeUtils.getStringResponseFor(
+                CafeConstants.NO_USER_FOR_EMAIL, HttpStatus.INTERNAL_SERVER_ERROR
+            )
             // if the user is there and have a valid email, send an email with a random password
             val randomPassword = generateRandomPassword()
             emailUtils.forgotEmail(
-                user.email,
-                CafeConstants.FORGOT_PASSWORD_SUBJECT,
-                randomPassword
+                user.email, CafeConstants.FORGOT_PASSWORD_SUBJECT, randomPassword
             )
             user.password = randomPassword
             userRepository.save(user)
@@ -333,27 +305,22 @@ class UserServiceImpl(
             )
         }
         return CafeUtils.getStringResponseFor(
-            CafeConstants.FORGOT_PASSWORD_WENT_WRONG,
-            HttpStatus.INTERNAL_SERVER_ERROR
+            CafeConstants.FORGOT_PASSWORD_WENT_WRONG, HttpStatus.INTERNAL_SERVER_ERROR
         )
     }
 
 
     private fun generateRandomPassword(): String {
         val allowedChars = ('A'..'Z') + ('a'..'z') + ('0'..'9')
-        return (1..CafeConstants.RANDOM_PASSWORD_LENGTH)
-            .map { allowedChars.random() }
-            .joinToString("")
+        return (1..CafeConstants.RANDOM_PASSWORD_LENGTH).map { allowedChars.random() }.joinToString("")
     }
 
     fun validateSignUpMap(requestMap: Map<String, String>, allProperties: Boolean): User {
         try {
             return if (!allProperties) {
-                val userMapperSimple =
-                    ServiceUtils.getMapperFromRequestStringMap(
-                        requestMap,
-                        UserMapperSimple::class.java
-                    ) as UserMapperSimple
+                val userMapperSimple = ServiceUtils.getMapperFromRequestStringMap(
+                    requestMap, UserMapperSimple::class.java
+                ) as UserMapperSimple
                 User.createFromSimple(userMapperSimple)
             } else {
                 val userMapperFull =
