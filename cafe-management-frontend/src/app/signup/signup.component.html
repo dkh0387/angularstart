@@ -1,1 +1,38 @@
-<p>signup works!</p>
+<!-- This one is just a standard angular pop up dialog with custom sign up form injected-->
+
+<!-- toolbar of the sign up dialog -->
+<mat-toolbar color="primary">
+  <mat-toolbar-row fxLayout="row">
+    <span>Signup</span>
+    <span class="spacer"></span>
+    <!-- cross button in the right upper corner of the sign up dialog coming from angular -->
+    <button class="mat-dialog-close" mat-icon-button mat-dialog-close>
+      <mat-icon>close</mat-icon>
+    </button>
+  </mat-toolbar-row>
+</mat-toolbar>
+
+<!-- content of the sign up dialog (name, email, contact number, password)
+NOTE: the binding of the sign up form here!
+-->
+<mat-dialog-content class="mat-typography">
+  <form [formGroup]="signupForm">
+    <!-- Begin name input field -->
+    <div fxFlex fxLayout="column">
+      <mat-form-field appearance="standard" fxFlex>
+        <mat-label>Name</mat-label>
+        <input matInput formControlName="name" required>
+        <!-- Validation: required, invalid -->
+        <mat-error *ngIf="signupForm.controls.name.touched && signupForm.controls.name.invalid">
+          <span *ngIf="signupForm.controls.name.errors.required">
+            This field is mandatory!
+          </span>
+          <span *ngIf="signupForm.controls.name.errors.pattern">
+            This field is invalid!
+          </span>
+        </mat-error>
+      </mat-form-field>
+    </div>
+    <!-- End name input field -->
+  </form>
+</mat-dialog-content>

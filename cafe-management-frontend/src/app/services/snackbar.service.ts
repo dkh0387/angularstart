@@ -9,7 +9,7 @@ export class SnackbarService {
   constructor(private snackBar: MatSnackBar) {
   }
 
-  openSnack(message: string, action: string) {
+  openSnackBar(message: string, action: string) {
     if (action == 'error') {
       this.snackBar.open(message, '', {
         horizontalPosition: 'center', verticalPosition: 'top', duration: 2000, panelClass: ['black-snackbar']
