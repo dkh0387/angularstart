@@ -59,7 +59,8 @@ export class SignupComponent implements OnInit {
             password: formData.password
         };
         // we send data to the service and receive a response from them using subscribe method
-        this.userService.signUp(data).subscribe((response: any) => {
+        const objectObservable = this.userService.signUp(data);
+        objectObservable.subscribe((response: any) => {
             this.ngxService.stop();
             this.dialogRef.close();
             this.responseMessage = response;
@@ -71,5 +72,9 @@ export class SignupComponent implements OnInit {
             this.responseMessage = (error.error?.message == null) ? (GlobalConstants.error) : error.error?.message;
             this.snackbarService.openSnackBar(this.responseMessage, GlobalConstants.error);
         })
+    }
+
+    setUserService(userService: UserService) {
+        this.userService = userService;
     }
 }
