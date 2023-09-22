@@ -11,7 +11,7 @@ import {SnackbarService} from '../services/snackbar.service';
 import {MatDialogRef} from '@angular/material/dialog';
 import {NgxUiLoaderService} from 'ngx-ui-loader';
 
-import {Observable, of, throwError} from 'rxjs';
+import {Observable} from 'rxjs';
 import {HttpClient} from '@angular/common/http';
 
 /**
@@ -172,12 +172,6 @@ describe('SignupComponent', () => {
             'email': 'denis@gmail.com',
             'password': '123',
             'confirmPassword': '12345'
-        };
-        const data = {
-            name: formData.name,
-            email: formData.email,
-            contactNumber: formData.contactNumber,
-            password: formData.password
         };
         component.signupForm.setValue(formData);
 
