@@ -33,3 +33,10 @@ In case of the error "error:0308010C:digital envelope routines::unsupported" (do
 `export NODE_OPTIONS=--openssl-legacy-provider`
 
 See https://stackoverflow.com/questions/69692842/error-message-error0308010cdigital-envelope-routinesunsupported for more details.
+
+## Testing
+
+For details see: https://medium.com/swlh/angular-unit-testing-jasmine-karma-step-by-step-e3376d110ab4
+
+* `jasmine-core` *(develop tests)* Jasmine is the framework we are going to use to create our tests. It has a bunch of functionalities to allow us the write different kinds of tests.
+* `karma` *(run tests)* Karma is a task runner for our tests. It uses a configuration file in order to set the startup file, the reporters, the testing framework, the browser among other things.
