@@ -2,21 +2,22 @@
 <app-best-seller></app-best-seller>
 
 <div class="wrapper sticky">
-  <nav class="navbar-fixed-top">
-    <a href="#" class="logo">
-      <mat-icon>storefront</mat-icon>
-      Cafe Management System
-    </a>
-    <ul>
-      <li>
-        <!-- Example of creating a menu button in the navigation bar on the home page
-         NOTE: we are not using a ng component <app-signup> here directly, but we inject it via method!
-         -->
-        <a (click)="handleSignUpAction()">Signup</a>
-      </li>
-    </ul>
-  </nav>
+    <nav class="navbar-fixed-top">
+        <a href="#" class="logo">
+            <mat-icon>storefront</mat-icon>
+            Cafe Management System
+        </a>
+        <ul>
+            <li>
+                <!-- Example of creating a menu button in the navigation bar on the home page
+                 NOTE: we are not using a ng component <app-signup> here directly, but we inject it via method!
+                 -->
+                <a (click)="handleSignUpAction()">Signup</a>
+                <a (click)="handleForgotPasswordAction()">Forgot Password</a>
+            </li>
+        </ul>
+    </nav>
 </div>
 <div class="footer" id="signup">
-  <h2>All right reserved @BTech Days</h2>
+    <h2>All right reserved @BTech Days</h2>
 </div>

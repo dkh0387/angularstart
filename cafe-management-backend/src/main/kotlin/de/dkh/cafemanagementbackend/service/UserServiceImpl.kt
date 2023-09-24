@@ -98,8 +98,8 @@ class UserServiceImpl(
                     val token = jwtService.generateToken(
                         customerUserDetailsService.getUserDetailWithoutPassword().email,
                         customerUserDetailsService.getUserDetailWithoutPassword().authorities!!.sortedWith(
-                                authorityComparator
-                            ).first().authority
+                            authorityComparator
+                        ).first().authority
                     )
                     CafeUtils.getStringResponseFor("{\"${CafeConstants.TOKEN_KEY_WORD}\":\"$token\"}", HttpStatus.OK)
                 } else {
@@ -294,7 +294,7 @@ class UserServiceImpl(
             )
             user.password = randomPassword
             userRepository.save(user)
-            return ResponseEntity(CafeConstants.FORGOT_PASSWORD_SUCCESSFULLY, HttpStatus.OK)
+            return ResponseEntity("\"${CafeConstants.FORGOT_PASSWORD_SUCCESSFULLY}\"", HttpStatus.OK)
 
         } catch (e: Exception) {
             logAndThrow(
@@ -305,7 +305,7 @@ class UserServiceImpl(
             )
         }
         return CafeUtils.getStringResponseFor(
-            CafeConstants.FORGOT_PASSWORD_WENT_WRONG, HttpStatus.INTERNAL_SERVER_ERROR
+            "\"${CafeConstants.FORGOT_PASSWORD_WENT_WRONG}\"", HttpStatus.INTERNAL_SERVER_ERROR
         )
     }
 

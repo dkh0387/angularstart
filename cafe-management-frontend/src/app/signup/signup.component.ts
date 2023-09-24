@@ -6,6 +6,9 @@ import {SnackbarService} from "../services/snackbar.service";
 import {MatDialogRef} from "@angular/material/dialog";
 import {NgxUiLoaderService} from "ngx-ui-loader";
 import {GlobalConstants} from "../shared/global-constants";
+import {Observable} from "rxjs";
+import {RestSubscriber} from "../interfaces/rest";
+
 
 /**
  * Component for sig up a form, consisting of name, email, contact number and password.
@@ -15,7 +18,7 @@ import {GlobalConstants} from "../shared/global-constants";
     templateUrl: './signup.component.html',
     styleUrls: ['./signup.component.scss']
 })
-export class SignupComponent implements OnInit {
+export class SignupComponent implements OnInit, RestSubscriber {
 
     password = true;
     confirmPassword = true;
@@ -29,6 +32,21 @@ export class SignupComponent implements OnInit {
         private snackbarService: SnackbarService,
         public dialogRef: MatDialogRef<SignupComponent>,
         private ngxService: NgxUiLoaderService) {
+    }
+
+    subscribe(observable: Observable<Object>): void {
+        observable.subscribe((response: any) => {
+            this.ngxService.stop();
+            this.dialogRef.close();
+            this.responseMessage = response;
+            this.snackbarService.openSnackBar(this.responseMessage, ""); // pop up a green or black message depending on success
+            this.router.navigate(["/"]); // after sign up navigate to the same page
+        }, (error) => {
+            this.ngxService.stop();
+            // show the error message
+            this.responseMessage = (error.error?.message == null) ? (GlobalConstants.error) : error.error?.message;
+            this.snackbarService.openSnackBar(this.responseMessage, GlobalConstants.error);
+        });
     }
 
     ngOnInit(): void {
@@ -59,19 +77,7 @@ export class SignupComponent implements OnInit {
             password: formData.password
         };
         // we send data to the service and receive a response from them using subscribe method
-        const objectObservable = this.userService.signUp(data);
-        objectObservable.subscribe((response: any) => {
-            this.ngxService.stop();
-            this.dialogRef.close();
-            this.responseMessage = response;
-            this.snackbarService.openSnackBar(this.responseMessage, ""); // pop up a green or black message depending on success
-            this.router.navigate(["/"]); // after sign up navigate to the same page
-        }, (error) => {
-            this.ngxService.stop();
-            // show the error message
-            this.responseMessage = (error.error?.message == null) ? (GlobalConstants.error) : error.error?.message;
-            this.snackbarService.openSnackBar(this.responseMessage, GlobalConstants.error);
-        })
+        this.subscribe(this.userService.signUp(data));
     }
 
     setUserService(userService: UserService) {
