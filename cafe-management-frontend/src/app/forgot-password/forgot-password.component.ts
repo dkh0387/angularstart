@@ -7,7 +7,8 @@ import {MatDialogRef} from "@angular/material/dialog";
 import {NgxUiLoaderService} from "ngx-ui-loader";
 import {GlobalConstants} from "../shared/global-constants";
 import {Observable} from "rxjs";
-import {RestSubscriber} from "../interfaces/rest";
+import {RestSubscriber} from "../interfaces/rest-subscriber";
+import {SubmitHandler} from "../interfaces/submit-handler";
 
 
 @Component({
@@ -15,7 +16,7 @@ import {RestSubscriber} from "../interfaces/rest";
     templateUrl: './forgot-password.component.html',
     styleUrls: ['./forgot-password.component.scss']
 })
-export class ForgotPasswordComponent implements OnInit, RestSubscriber {
+export class ForgotPasswordComponent implements OnInit, RestSubscriber, SubmitHandler {
     forgotPasswordForm: any = FormGroup;
     responseMessage: any;
 

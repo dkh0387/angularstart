@@ -17,6 +17,7 @@ import {HttpClientModule} from "@angular/common/http";
 import {SignupComponent} from './signup/signup.component';
 import {NgxUiLoaderConfig, NgxUiLoaderModule, SPINNER} from "ngx-ui-loader";
 import { ForgotPasswordComponent } from './forgot-password/forgot-password.component';
+import { LoginComponent } from './login/login.component';
 
 /**
  * Definition of ui loader:
@@ -43,7 +44,8 @@ const ngUiLoaderConfig: NgxUiLoaderConfig = {
     AppHeaderComponent,
     AppSidebarComponent,
     SignupComponent,
-    ForgotPasswordComponent
+    ForgotPasswordComponent,
+    LoginComponent
   ],
   imports: [
     BrowserModule,

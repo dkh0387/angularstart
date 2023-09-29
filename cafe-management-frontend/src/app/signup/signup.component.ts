@@ -7,7 +7,8 @@ import {MatDialogRef} from "@angular/material/dialog";
 import {NgxUiLoaderService} from "ngx-ui-loader";
 import {GlobalConstants} from "../shared/global-constants";
 import {Observable} from "rxjs";
-import {RestSubscriber} from "../interfaces/rest";
+import {RestSubscriber} from "../interfaces/rest-subscriber";
+import {SubmitHandler} from "../interfaces/submit-handler";
 
 
 /**
@@ -18,7 +19,7 @@ import {RestSubscriber} from "../interfaces/rest";
     templateUrl: './signup.component.html',
     styleUrls: ['./signup.component.scss']
 })
-export class SignupComponent implements OnInit, RestSubscriber {
+export class SignupComponent implements OnInit, RestSubscriber, SubmitHandler {
 
     password = true;
     confirmPassword = true;

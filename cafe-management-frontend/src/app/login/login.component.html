@@ -1,0 +1,65 @@
+<!-- This one is just a standard angular pop up dialog with custom login form injected-->
+
+<!-- toolbar of the log in dialog -->
+<mat-toolbar color="primary">
+  <mat-toolbar-row fxLayout="row">
+    <span>Login</span>
+    <span class="spacer"></span>
+    <!-- cross button in the right upper corner of the log in dialog coming from angular -->
+    <button class="mat-dialog-close" mat-icon-button mat-dialog-close>
+      <mat-icon>close</mat-icon>
+    </button>
+  </mat-toolbar-row>
+</mat-toolbar>
+
+<!-- content of the log in dialog (email, password)
+NOTE: the binding of the log in form here!
+-->
+<mat-dialog-content class="mat-typography">
+  <form [formGroup]="loginForm" id="loginForm">
+    <div fxFlex fxLayout="column">
+      <mat-form-field appearance="standard" fxFlex id="email">
+        <mat-label>Email</mat-label>
+        <input matInput formControlName="email" required>
+        <!-- Validation: required, invalid -->
+        <mat-error
+          *ngIf="loginForm.controls.email.touched && loginForm.controls.email.invalid">
+          <span *ngIf="loginForm.controls.email.errors.required">
+            This field is mandatory!
+          </span>
+          <span *ngIf="loginForm.controls.email.errors.pattern">
+            This field is invalid!
+          </span>
+        </mat-error>
+      </mat-form-field>
+      <mat-form-field appearance="standard" fxFlex id="password">
+        <mat-label>Password</mat-label>
+        <input matInput formControlName="password" type="password" required [type]="hide ? 'password':'text'">
+        <!-- This one is the eye button to show/hide the password -->
+        <button type="button" mat-icon-button matSuffix (click)="hide = !hide"
+                [attr.aria-label]="'Hide password'" [attr.aria-pressed]="'hide'">
+          <mat-icon>{{hide ? 'visibility_off' : 'visibility'}}</mat-icon>
+        </button>
+        <!-- Validation: required, invalid -->
+        <mat-error *ngIf="loginForm.controls.password.touched && loginForm.controls.password.invalid">
+          <span *ngIf="loginForm.controls.password.errors.required">
+            This field is mandatory!
+          </span>
+        </mat-error>
+      </mat-form-field>
+    </div>
+  </form>
+</mat-dialog-content>
+
+<!-- Dialog actions: log in and close -->
+<mat-dialog-actions align="end">
+  <button mat-raised-button color="primary" type="submit" (click)="handleSubmit()"
+          [disabled]="!(loginForm.valid && loginForm.dirty)">
+    <mat-icon>send</mat-icon>
+    Login
+  </button>
+  <button mat-raised-button color="warn" mat-dialog-close>
+    <mat-icon>cancel</mat-icon>
+    Close
+  </button>
+</mat-dialog-actions>

@@ -40,3 +40,13 @@ For details see: https://medium.com/swlh/angular-unit-testing-jasmine-karma-step
 
 * `jasmine-core` *(develop tests)* Jasmine is the framework we are going to use to create our tests. It has a bunch of functionalities to allow us the write different kinds of tests.
 * `karma` *(run tests)* Karma is a task runner for our tests. It uses a configuration file in order to set the startup file, the reporters, the testing framework, the browser among other things.
+
+## Login process (JWT saving)
+
+* JWT will be stored in the local storage after triggering a login endpoint from the back end
+* For details see `login.component.ts`
+* We can verify JWT by going to the browser: inspect->Application->Local storage
+
+## Global app routing
+
+Defined in `app-routing.module.ts`
