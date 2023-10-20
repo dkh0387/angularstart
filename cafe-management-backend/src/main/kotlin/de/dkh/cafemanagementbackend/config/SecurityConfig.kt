@@ -121,6 +121,7 @@ class SecurityConfig(
     }
 
     /**
+     * CORS configuration.
      * See https://medium.com/techpanel/guide-to-cors-in-spring-boot-e76d317b9b36 for details.
      */
     private fun urlBasedCorsConfigurationSource(): UrlBasedCorsConfigurationSource {
