@@ -1,7 +1,12 @@
 export class GlobalConstants {
 
+  //Roles
+  public static roleUser:string = "ROLE_USER"
+  public static roleAdmin:string = "ROLE_ADMIN"
+
   //Message
   public static genericError: string = "Something went wrong, please try again later!"
+  public static unauthorized: string = "You are not unauthorized to access this page!"
 
   //Regex
   public static nameRegex: string = "[a-zA-Z0-9 ]*"

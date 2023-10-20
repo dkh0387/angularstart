@@ -41,12 +41,28 @@ For details see: https://medium.com/swlh/angular-unit-testing-jasmine-karma-step
 * `jasmine-core` *(develop tests)* Jasmine is the framework we are going to use to create our tests. It has a bunch of functionalities to allow us the write different kinds of tests.
 * `karma` *(run tests)* Karma is a task runner for our tests. It uses a configuration file in order to set the startup file, the reporters, the testing framework, the browser among other things.
 
+## Debugging
+
+- Start the app locally bei running `Angular CLI Server` (`ng serve`)
+- Debug `Angular Application` (in Edit/Run Configurations under JavaScript Debug)
+
 ## Login process (JWT saving)
 
-* JWT will be stored in the local storage after triggering a login endpoint from the back end
-* For details see `login.component.ts`
+* JWT will be stored in the local storage after triggering a login endpoint from the back end (for details see `login.component.ts` `subscribe()`)
 * We can verify JWT by going to the browser: inspect->Application->Local storage
+* JWT is being encoded in `route-guard.service.ts`. This `canActivate()` method is a key method for access the app components
+* After JWT is encoded and role verified, we redirect to the dashboard component
+* Dashboard URL is only accessible, if `canActivate()` returned true. This logic is configured in `app-routing.module.ts`
+* Access to backend endpoints using JWT:
+  * After JWT is saved in the local storage, we clone a request to the according backend endpoint and add `Bearer <token>` (see `token.interceptor.ts`)
 
 ## Global app routing
 
 Defined in `app-routing.module.ts`
+
+## Providing JWT Authentication
+
+* We implement a JWT decoder (see `route-guard.service.ts`)
+* We implement a token HTTP interceptor (see `token.interceptor.ts`)
+* This interceptor provides a Bearer Authentication header to any HTTP request to the backend using JWT
+* We inject the `TokenInterceptor` to `app.module.ts`

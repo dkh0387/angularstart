@@ -76,8 +76,9 @@ class SecurityConfig(
         http.authorizeHttpRequests { authorizeHttpRequests ->
             authorizeHttpRequests
                 //.requestMatchers("/**").hasAuthority("ROLE_USER")
-                .requestMatchers("user/login", "user/signup", "user/forgotPassword", "user/changePassword").permitAll()
                 .requestMatchers(
+                    "user/login", "user/signup", "user/forgotPassword", "user/changePassword"
+                ).permitAll().requestMatchers(
                     "product/getByCategory/*", "product/getById/*", "bill/generate"
                 ).hasAuthority("ROLE_USER").requestMatchers(
                     "user/get",
@@ -91,10 +92,9 @@ class SecurityConfig(
                     "product/delete/*"
                 ).hasAuthority("ROLE_ADMIN").requestMatchers(
                     "bill/get", "bill/getBillDocument", "bill/delete/*", "dashboard/details"
-                ).hasAnyAuthority("ROLE_ADMIN", "ROLE_USER")
-                .anyRequest().authenticated()
-        }
-            .csrf { csrf -> csrf.disable() }
+                ).hasAnyAuthority("ROLE_ADMIN", "ROLE_USER").requestMatchers("user/checkToken")
+                .hasAnyAuthority("ROLE_ADMIN", "ROLE_USER").anyRequest().authenticated()
+        }.csrf { csrf -> csrf.disable() }.cors { cors -> cors.configurationSource(urlBasedCorsConfigurationSource()) }
             .exceptionHandling { exceptionHandling ->
                 exceptionHandling.accessDeniedPage("/errors/access-denied")
             }
@@ -108,11 +108,22 @@ class SecurityConfig(
 
     /**
      * Used by Spring Security if CORS is enabled.
-     * This one is required if we want to call endpoint from fronend (localhost:4200).
+     * This one is required if we want to call endpoint from frontend (localhost:4200).
      */
-
     @Bean
     fun corsFilter(): CorsFilter {
+        return CorsFilter(urlBasedCorsConfigurationSource())
+    }
+
+    @Bean
+    fun grantedAuthorityDefaults(): GrantedAuthorityDefaults {
+        return GrantedAuthorityDefaults("") // Remove the ROLE_ prefix
+    }
+
+    /**
+     * See https://medium.com/techpanel/guide-to-cors-in-spring-boot-e76d317b9b36 for details.
+     */
+    private fun urlBasedCorsConfigurationSource(): UrlBasedCorsConfigurationSource {
         val source = UrlBasedCorsConfigurationSource()
         val config = CorsConfiguration()
         config.allowCredentials = true
@@ -120,12 +131,7 @@ class SecurityConfig(
         config.addAllowedHeader("*")
         config.addAllowedMethod("*")
         source.registerCorsConfiguration("/**", config)
-        return CorsFilter(source)
-    }
-
-    @Bean
-    fun grantedAuthorityDefaults(): GrantedAuthorityDefaults {
-        return GrantedAuthorityDefaults("") // Remove the ROLE_ prefix
+        return source
     }
 
 }

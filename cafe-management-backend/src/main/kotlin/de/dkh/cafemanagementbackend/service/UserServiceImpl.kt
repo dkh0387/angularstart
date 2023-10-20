@@ -227,7 +227,7 @@ class UserServiceImpl(
     }
 
     /**
-     * We are using this method as a flag to check, whether the provided JWT corresponds to the admin role.
+     * We are using this method as a flag to check, whether the provided JWT corresponds to the admin/user role.
      * When a user goes through the app and access admin resources, the method returns 403, otherwise OK.
      */
     override fun checkToken(): ResponseEntity<String> {

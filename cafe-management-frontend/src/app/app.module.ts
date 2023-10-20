@@ -13,11 +13,14 @@ import {SharedModule} from './shared/shared.module';
 import {FullComponent} from './layouts/full/full.component';
 import {AppHeaderComponent} from './layouts/full/header/header.component';
 import {AppSidebarComponent} from './layouts/full/sidebar/sidebar.component';
-import {HttpClientModule} from "@angular/common/http";
+import {HTTP_INTERCEPTORS, HttpClientModule} from "@angular/common/http";
 import {SignupComponent} from './signup/signup.component';
 import {NgxUiLoaderConfig, NgxUiLoaderModule, SPINNER} from "ngx-ui-loader";
-import { ForgotPasswordComponent } from './forgot-password/forgot-password.component';
-import { LoginComponent } from './login/login.component';
+import {ForgotPasswordComponent} from './forgot-password/forgot-password.component';
+import {LoginComponent} from './login/login.component';
+import {Token} from "@angular/compiler";
+import {TokenInterceptor} from "./services/token.interceptor";
+import {DashboardComponent} from "./dashboard/dashboard.component";
 
 /**
  * Definition of ui loader:
@@ -59,7 +62,7 @@ const ngUiLoaderConfig: NgxUiLoaderConfig = {
     HttpClientModule,
     NgxUiLoaderModule.forRoot(ngUiLoaderConfig)
   ],
-  providers: [],
+  providers: [HttpClientModule, {provide: HTTP_INTERCEPTORS, useClass: TokenInterceptor, multi: true}],
   bootstrap: [AppComponent]
 })
 export class AppModule {
