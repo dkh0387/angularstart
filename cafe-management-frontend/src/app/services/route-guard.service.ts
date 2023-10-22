@@ -6,7 +6,6 @@ import jwt_decode from 'jwt-decode';
 import {GlobalConstants} from "../shared/global-constants";
 
 /**
- * @TODO: testing!
  * CanActivate() handler used to determine if the current user is allowed to activate the component,
  * where this handler is injected to check (see [app-routing-module.ts] for usage).
  * By default, any user can activate.
@@ -34,6 +33,7 @@ export class RouteGuardService {
     } catch (error) {
       localStorage.clear();
       this.router.navigate(['/']);
+      throw new Error('Invalid token specified')
     }
     let expectedRole = '';
 
@@ -41,8 +41,8 @@ export class RouteGuardService {
      * NOTE: JWTService in backend generates JWTs using authorities (see UserService.logIn()),
      * so the role in response is like ROLE_<ROLENAME>!
      */
-    for (let i = 0; i < expectedRoleArray.length; i++) {
-      if (expectedRoleArray[i] == tokenPayload.role) {
+    for (const element of expectedRoleArray) {
+      if (element == tokenPayload.role) {
         expectedRole = tokenPayload.role;
       }
     }
