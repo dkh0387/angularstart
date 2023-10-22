@@ -45,6 +45,15 @@ For details see: https://medium.com/swlh/angular-unit-testing-jasmine-karma-step
 
 * Testing a component: `login.component.spec.ts`
 * Testing a service: `dashboard.service.spec.ts`
+*
+
+### Teststatus:
+
+* Components:
+  * `login` OK
+* Services:
+  * `dashboard.service` OK
+  * `route-guard.service` OK
 
 ## Debugging
 
