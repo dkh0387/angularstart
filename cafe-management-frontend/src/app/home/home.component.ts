@@ -18,6 +18,11 @@ export class HomeComponent implements OnInit, RestSubscriber {
   constructor(private dialog: MatDialog, private userService: UserService, private router: Router) {
   }
 
+  /**
+   * Trick here: if we are logged in and a token is stored,
+   * we call a checkToken endpoint from backend, which is only reachable for a valid user role,
+   * so we are implicitly proving the token to exist.
+   */
   ngOnInit(): void {
     this.subscribe(this.userService.checkToken())
   }
