@@ -121,6 +121,7 @@ class SecurityConfig(
     }
 
     /**
+     * @TODO: change if full app is ready!
      * CORS configuration.
      * See https://medium.com/techpanel/guide-to-cors-in-spring-boot-e76d317b9b36 for details.
      */
