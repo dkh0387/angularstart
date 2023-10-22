@@ -9,7 +9,6 @@ import {HttpClientTestingModule, HttpTestingController} from '@angular/common/ht
 
 import {DashboardService} from './dashboard.service';
 import {environment} from "../../environments/environment";
-import {GlobalConstants} from "../shared/global-constants";
 
 describe('DashboardService', () => {
   let httpTestingController: HttpTestingController;
