@@ -29,7 +29,7 @@ export class RouteGuardService {
 
     // decode a JWT using jwt_decode
     try {
-      tokenPayload = jwt_decode(token);
+      tokenPayload = this.decodeToken();
     } catch (error) {
       localStorage.clear();
       this.router.navigate(['/']);
@@ -60,5 +60,10 @@ export class RouteGuardService {
     this.router.navigate(['/']);
     localStorage.clear();
     return false;
+  }
+
+  decodeToken() {
+    const token: any = this.authService.getToken();
+    return jwt_decode(token);
   }
 }

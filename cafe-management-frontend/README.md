@@ -72,7 +72,11 @@ For details see: https://medium.com/swlh/angular-unit-testing-jasmine-karma-step
 
 ## Global app routing
 
-Defined in `app-routing.module.ts`
+The whole concept of app routing is defined in `app-routing.module.ts`.
+We do have two main routes:
+
+* Before login (home page). Here we do render `home.component.html` (landing page)
+* After login (``/cafe/...) routes, for example dashboard). Here we do render `full.component.html` (with user change password icon and sidebar menu).
 
 ## Providing JWT Authentication
 
