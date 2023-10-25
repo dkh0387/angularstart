@@ -2,6 +2,10 @@
 
 This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 11.2.9.
 
+## CSS design stuff
+
+can be found here: `src/assets`
+
 ## Development server
 
 Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The app will automatically reload if you change any of the source files.
@@ -80,7 +84,16 @@ We do have two main routes:
 
 ## Providing JWT Authentication
 
+* We can check if a token is stored in local storage by right click-Application (toolbar on the top)-Local storage in the left sidebar
 * We implement a JWT decoder (see `route-guard.service.ts`)
 * We implement a token HTTP interceptor (see `token.interceptor.ts`)
 * This interceptor provides a Bearer Authentication header to any HTTP request to the backend using JWT
 * We inject the `TokenInterceptor` to `app.module.ts`
+
+## Concept of using modal dialogs incl. data binding (example)
+
+* We create a modal dialog instance in `header.component.ts`
+* We create a dialog content component in `confirmation.component.ts`
+* Detection of data changes by using `EventEmitter`
+* Data binding: Injection of dialog frame using `@Inject(MAT_DIALOG_DATA) public dialogData` in the content component
+* All data from dialog frame are bound to the `confirmation.component.html`
