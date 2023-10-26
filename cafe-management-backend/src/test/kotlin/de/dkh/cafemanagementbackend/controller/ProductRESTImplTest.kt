@@ -70,12 +70,19 @@ class ProductRESTImplTest {
             val token = jwtService.generateToken("deniskh87@gmail.com", User.UserRoles.ROLE_ADMIN.name)
             jwtFilter.claims = jwtService.extractAllClaims(token)
 
-            assertThatThrownBy {
-                mockMvc.post("$BASE_URL/add") {
-                    contentType = MediaType.APPLICATION_JSON
-                    content = objectMapper.writeValueAsString(productMapperMap)
-                }
-            }.isInstanceOf(ServletException::class.java)
+            // when
+            val resultActionsDsl = (mockMvc.post("$BASE_URL/add") {
+                contentType = MediaType.APPLICATION_JSON
+                content = objectMapper.writeValueAsString(productMapperMap)
+            })
+
+            // then
+            val mvcResult = resultActionsDsl.andDo { print() }.andExpect {
+                status { isInternalServerError() }
+                content { contentType(MediaType("text", "plain", StandardCharsets.UTF_8)) }
+            }.andReturn()
+
+            assertThat(mvcResult.response.contentAsString).isEqualTo(CafeConstants.ADD_PRODUCT_WENT_WRONG)
 
         }
 
@@ -91,12 +98,19 @@ class ProductRESTImplTest {
             val token = jwtService.generateToken("deniskh87@gmail.com", User.UserRoles.ROLE_ADMIN.name)
             jwtFilter.claims = jwtService.extractAllClaims(token)
 
-            assertThatThrownBy {
-                mockMvc.post("$BASE_URL/add") {
-                    contentType = MediaType.APPLICATION_JSON
-                    content = objectMapper.writeValueAsString(productMapperMap)
-                }
-            }.isInstanceOf(ServletException::class.java)
+            // when
+            val resultActionsDsl = (mockMvc.post("$BASE_URL/add") {
+                contentType = MediaType.APPLICATION_JSON
+                content = objectMapper.writeValueAsString(productMapperMap)
+            })
+
+            // then
+            val mvcResult = resultActionsDsl.andDo { print() }.andExpect {
+                status { isInternalServerError() }
+                content { contentType(MediaType("text", "plain", StandardCharsets.UTF_8)) }
+            }.andReturn()
+
+            assertThat(mvcResult.response.contentAsString).isEqualTo(CafeConstants.ADD_PRODUCT_WENT_WRONG)
 
         }
 

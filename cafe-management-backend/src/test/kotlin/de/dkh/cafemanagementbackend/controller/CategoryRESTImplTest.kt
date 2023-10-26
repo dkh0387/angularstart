@@ -58,20 +58,26 @@ class CategoryRESTImplTest {
     inner class AddCategoryTesting {
 
         @Test
-        fun `should throw an exception if the provided map contains wrong fields`() {
+        fun `should return an ADD_CATEGORY_WENT_WRONG and INTERNAL_SERVER_ERROR if the provided map contains wrong fields`() {
             // given
             val name = "dsfsfdsf"
             val categoryJson = "{\n" + "  \"name2\": \"${name}\" \n" + "}"
             val token = jwtService.generateToken("deniskh87@gmail.com", User.UserRoles.ROLE_ADMIN.name)
             jwtFilter.claims = jwtService.extractAllClaims(token)
+            
+            // when
+            val resultActionsDsl = (mockMvc.post("$BASE_URL/add") {
+                contentType = MediaType.APPLICATION_JSON
+                content = categoryJson
+            })
 
-            // when/then
-            assertThatThrownBy {
-                (mockMvc.post("$BASE_URL/add") {
-                    contentType = MediaType.APPLICATION_JSON
-                    content = categoryJson
-                })
-            }.isInstanceOf(ServletException::class.java)
+            // then
+            val mvcResult = resultActionsDsl.andDo { print() }.andExpect {
+                status { isInternalServerError() }
+                content { contentType(MediaType("text", "plain", StandardCharsets.UTF_8)) }
+            }.andReturn()
+
+            assertThat(mvcResult.response.contentAsString).isEqualTo(CafeConstants.ADD_CATEGORY_WENT_WRONG)
         }
 
         @Test

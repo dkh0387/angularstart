@@ -8,6 +8,7 @@ import de.dkh.cafemanagementbackend.jsonwebtoken.JwtService
 import de.dkh.cafemanagementbackend.repository.AuthorityRepository
 import de.dkh.cafemanagementbackend.repository.UserRepository
 import de.dkh.cafemanagementbackend.testutils.TestData
+import de.dkh.cafemanagementbackend.utils.CafeUtils
 import io.mockk.clearAllMocks
 import jakarta.servlet.ServletException
 import org.assertj.core.api.Assertions.assertThat
@@ -484,7 +485,7 @@ class UserRESTImplTest {
                 }
                 .andReturn()
 
-            assertThat(mvcResult.response.contentAsString).isEqualTo(CafeConstants.FORGOT_PASSWORD_SUCCESSFULLY)
+            assertThat(mvcResult.response.contentAsString).isEqualTo(CafeUtils.formatBodyAsJSON(CafeConstants.FORGOT_PASSWORD_SUCCESSFULLY))
 
             val userAfter = userRepository.findByEmail(email)
             assertNotEquals(userBefore!!.password, userAfter!!.password)

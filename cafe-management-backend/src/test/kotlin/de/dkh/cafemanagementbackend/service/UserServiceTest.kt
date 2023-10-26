@@ -615,7 +615,7 @@ class UserServiceTest {
             verify(exactly = 1) { userRepository.save(TestData.getInactiveUser().copy(password = "123456")) }
             assertThat(responseEntity).isEqualTo(
                 ResponseEntity<String>(
-                    CafeConstants.PASSWORD_SUCCESSFULLY_CHANGED,
+                    CafeUtils.formatBodyAsJSON(CafeConstants.PASSWORD_SUCCESSFULLY_CHANGED),
                     HttpStatus.OK
                 )
             )
@@ -692,7 +692,7 @@ class UserServiceTest {
 
             assertThat(responseEntity).isEqualTo(
                 ResponseEntity<String>(
-                    CafeConstants.FORGOT_PASSWORD_SUCCESSFULLY,
+                    CafeUtils.formatBodyAsJSON(CafeConstants.FORGOT_PASSWORD_SUCCESSFULLY),
                     HttpStatus.OK
                 )
             )
