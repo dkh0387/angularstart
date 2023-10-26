@@ -90,6 +90,10 @@ We do have two main routes:
 * This interceptor provides a Bearer Authentication header to any HTTP request to the backend using JWT
 * We inject the `TokenInterceptor` to `app.module.ts`
 
+## Example of a simple modal dialog with fields with sending data to a backend endpoint
+
+* see: `change-password.component.ts`
+
 ## Concept of using modal dialogs incl. data binding (example)
 
 * We create a modal dialog instance in `header.component.ts`

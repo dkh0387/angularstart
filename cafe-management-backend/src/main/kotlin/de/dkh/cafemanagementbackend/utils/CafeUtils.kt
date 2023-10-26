@@ -14,6 +14,8 @@ class CafeUtils {
 
     companion object {
 
+        fun formatBodyAsJSON(body: String) = "\"${body}\""
+
         fun getStringResponseFor(body: String, httpStatus: HttpStatus): ResponseEntity<String> =
             ResponseEntity(body, httpStatus)
 

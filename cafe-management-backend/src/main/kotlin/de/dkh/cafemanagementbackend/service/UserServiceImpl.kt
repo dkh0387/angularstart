@@ -258,7 +258,9 @@ class UserServiceImpl(
             } else {
                 user.password = passwordMapper.newPassword
                 userRepository.save(user)
-                return CafeUtils.getStringResponseFor(CafeConstants.PASSWORD_SUCCESSFULLY_CHANGED, HttpStatus.OK)
+                return CafeUtils.getStringResponseFor(
+                    CafeUtils.formatBodyAsJSON(CafeConstants.PASSWORD_SUCCESSFULLY_CHANGED), HttpStatus.OK
+                )
             }
 
         } catch (e: Exception) {
