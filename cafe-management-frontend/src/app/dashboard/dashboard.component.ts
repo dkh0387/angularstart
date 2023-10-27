@@ -15,6 +15,9 @@ import {GlobalConstants} from "../shared/global-constants";
 export class DashboardComponent implements AfterViewInit, RestSubscriber, SubmitHandler {
   responseMessage: any;
   data: any;
+  categoryPath = '/' + GlobalConstants.homePath + '/' + GlobalConstants.categoryPath
+  productPath = '/' + GlobalConstants.homePath + '/' + GlobalConstants.productPath
+  billPath = '/' + GlobalConstants.homePath + '/' + GlobalConstants.billPath
 
   ngAfterViewInit() {
   }

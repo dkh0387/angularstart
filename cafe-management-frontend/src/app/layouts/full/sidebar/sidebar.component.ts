@@ -17,6 +17,10 @@ export class AppSidebarComponent implements OnDestroy {
   mobileQuery: MediaQueryList;
   userRole: any;
   tokenPalyload: any;
+  homePath = '/' + GlobalConstants.homePath + '/';
+  roleUser = GlobalConstants.roleUser;
+  roleAdmin = GlobalConstants.roleAdmin;
+  roleAny = GlobalConstants.roleAny;
 
   private _mobileQueryListener: () => void;
 

@@ -82,6 +82,14 @@ We do have two main routes:
 * Before login (home page). Here we do render `home.component.html` (landing page)
 * After login (``/cafe/...) routes, for example dashboard). Here we do render `full.component.html` (with user change password icon and sidebar menu).
 
+## Component-based routing
+
+WE are able to define routing access per component. As example, we use `material.routing.ts`:
+
+* Basic path 'category/...'
+* For that, we define the corresponding component
+* Access restrictions: admin only, checked by `route-guard.service.ts`
+
 ## Providing JWT Authentication
 
 * We can check if a token is stored in local storage by right click-Application (toolbar on the top)-Local storage in the left sidebar
@@ -101,3 +109,9 @@ We do have two main routes:
 * Detection of data changes by using `EventEmitter`
 * Data binding: Injection of dialog frame using `@Inject(MAT_DIALOG_DATA) public dialogData` in the content component
 * All data from dialog frame are bound to the `confirmation.component.html`
+
+## Role management
+
+* Resources are bound to the according user role of a logged-in user
+* Which urls are allowed to be reached for which role is described via routing concept (see above)
+* Further, we can provide an expected role to any UI element (like sidebar icons): see `sidebar.component.ts` for example

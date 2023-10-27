@@ -1,8 +1,16 @@
 export class GlobalConstants {
 
+  //Paths
+  public static homePath: string = 'cafe';
+  public static dashboardPath: string = 'dashboard';
+  public static categoryPath: string = 'category';
+  public static productPath: string = 'product';
+  public static billPath: string = 'bill';
+
   //Roles
-  public static roleUser:string = "ROLE_USER"
-  public static roleAdmin:string = "ROLE_ADMIN"
+  public static roleUser: string = "ROLE_USER"
+  public static roleAdmin: string = "ROLE_ADMIN"
+  public static roleAny: string = '';
 
   //Message
   public static genericError: string = "Something went wrong, please try again later!"

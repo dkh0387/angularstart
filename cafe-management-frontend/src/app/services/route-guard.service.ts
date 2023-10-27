@@ -24,7 +24,6 @@ export class RouteGuardService {
   canActivate(activatedRouteSnapshot: ActivatedRouteSnapshot) {
     // variables declared with let have a block-scope
     let expectedRoleArray = activatedRouteSnapshot.data.expectedRole;
-    const token: any = this.authService.getToken();
     let tokenPayload: any;
 
     // decode a JWT using jwt_decode
@@ -54,7 +53,7 @@ export class RouteGuardService {
       }
       this.snackbarService.openSnackBar(GlobalConstants.unauthorized, GlobalConstants.error);
       // navigate to dashboard, since only user or admin are allowed
-      this.router.navigate(['/cafe/dashboard']);
+      this.router.navigate(['/' + GlobalConstants.homePath + '/' + GlobalConstants.dashboardPath]);
       return false;
     }
     this.router.navigate(['/']);

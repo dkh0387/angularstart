@@ -3,16 +3,18 @@ import {RouterModule, Routes} from '@angular/router';
 import {HomeComponent} from './home/home.component';
 import {FullComponent} from './layouts/full/full.component';
 import {RouteGuardService} from "./services/route-guard.service";
+import {GlobalConstants} from "./shared/global-constants";
+import {ManageCategoryComponent} from "./material-component/manage-category/manage-category.component";
 
 const routes: Routes = [
   {path: '', component: HomeComponent},
   {
-    path: 'cafe',
+    path: GlobalConstants.homePath,
     component: FullComponent,
     children: [
       {
         path: '',
-        redirectTo: '/cafe/dashboard',
+        redirectTo: `/${GlobalConstants.homePath}/${GlobalConstants.dashboardPath}`,
         pathMatch: 'full',
       },
       {
@@ -21,15 +23,15 @@ const routes: Routes = [
           () => import('./material-component/material.module').then(m => m.MaterialComponentsModule),
         canActivate: [RouteGuardService],
         data: {
-          expectedRole: ['ROLE_USER', 'ROLE_ADMIN']
+          expectedRole: [GlobalConstants.roleUser, GlobalConstants.roleAdmin]
         }
       },
       {
-        path: 'dashboard',
+        path: GlobalConstants.dashboardPath,
         loadChildren: () => import('./dashboard/dashboard.module').then(m => m.DashboardModule),
         canActivate: [RouteGuardService],
         data: {
-          expectedRole: ['ROLE_USER', 'ROLE_ADMIN']
+          expectedRole: [GlobalConstants.roleUser, GlobalConstants.roleAdmin]
         }
       }
     ]
