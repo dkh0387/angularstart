@@ -92,7 +92,7 @@ class SecurityConfig(
                     "product/delete/*"
                 ).hasAuthority("ROLE_ADMIN").requestMatchers(
                     "bill/get", "bill/getBillDocument", "bill/delete/*", "dashboard/details"
-                ).hasAnyAuthority("ROLE_ADMIN", "ROLE_USER").requestMatchers("user/checkToken")
+                ) //.hasAnyAuthority("ROLE_ADMIN", "ROLE_USER").requestMatchers("user/checkToken")
                 .hasAnyAuthority("ROLE_ADMIN", "ROLE_USER").anyRequest().authenticated()
         }.csrf { csrf -> csrf.disable() }.cors { cors -> cors.configurationSource(urlBasedCorsConfigurationSource()) }
             .exceptionHandling { exceptionHandling ->

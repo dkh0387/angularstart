@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 
 @Component({
   selector: 'app-manage-category',
@@ -7,7 +7,10 @@ import { Component, OnInit } from '@angular/core';
 })
 export class ManageCategoryComponent implements OnInit {
 
-  constructor() { }
+  displayedColumns: string[] = ['name', 'edit'];
+
+  constructor() {
+  }
 
   ngOnInit(): void {
   }

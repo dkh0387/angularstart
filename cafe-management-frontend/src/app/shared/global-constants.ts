@@ -1,11 +1,13 @@
 export class GlobalConstants {
 
   //Paths
-  public static homePath: string = 'cafe';
-  public static dashboardPath: string = 'dashboard';
-  public static categoryPath: string = 'category';
-  public static productPath: string = 'product';
-  public static billPath: string = 'bill';
+  public static homePath: string = "cafe";
+  public static userPath: string = "user";
+  public static dashboardPath: string = "dashboard";
+  public static dashboardDetailsPath: string = "details";
+  public static categoryPath: string = "category";
+  public static productPath: string = "product";
+  public static billPath: string = "bill";
 
   //Roles
   public static roleUser: string = "ROLE_USER"

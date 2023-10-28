@@ -1,15 +1,15 @@
 import {Injectable} from '@angular/core';
-import {environment} from "../../environments/environment";
-import {HttpClient, HttpHeaders} from "@angular/common/http";
+import {HttpClient} from "@angular/common/http";
+import {RequestService} from "./request.service";
+import {GlobalConstants} from "../shared/global-constants";
 
 @Injectable({
   providedIn: 'root'
 })
-export class UserService {
+export class UserService extends RequestService {
 
-  url = environment.apiUrl
-
-  constructor(private httpClient: HttpClient) {
+  constructor(httpClient: HttpClient) {
+    super(httpClient);
   }
 
   /**
@@ -17,30 +17,22 @@ export class UserService {
    * @param data
    */
   signUp(data: any) {
-    return this.httpClient.post(this.url + "/user/signup", data, {
-      headers: new HttpHeaders().set('Content-type', 'application/json')
-    });
+    return super.post(+"/" + GlobalConstants.userPath + "/" + "signup", data);
   }
 
   forgotPassword(data: any) {
-    return this.httpClient.post(this.url + "/user/forgotPassword", data, {
-      headers: new HttpHeaders().set('Content-type', 'application/json')
-    });
+    return super.post("/" + GlobalConstants.userPath + "/" + "forgotPassword", data);
   }
 
   login(data: any) {
-    return this.httpClient.post(this.url + "/user/login", data, {
-      headers: new HttpHeaders().set('Content-type', 'application/json')
-    });
+    return super.post("/" + GlobalConstants.userPath + "/" + "login", data);
   }
 
   checkToken() {
-    return this.httpClient.get(this.url + "/user/checkToken");
+    return super.get("/" + GlobalConstants.userPath + "/" + "checkToken");
   }
 
   changePassword(data: any) {
-    return this.httpClient.post(this.url + "/user/changePassword", data, {
-      headers: new HttpHeaders().set('Content-type', 'application/json')
-    });
+    return super.post("/" + GlobalConstants.userPath + "/" + "changePassword", data);
   }
 }

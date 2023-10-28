@@ -7,6 +7,7 @@ import {UserService} from "../services/user.service";
 import {Router} from "@angular/router";
 import {RestSubscriber} from "../interfaces/rest-subscriber";
 import {Observable} from "rxjs";
+import {GlobalConstants} from "../shared/global-constants";
 
 @Component({
   selector: 'app-home',
@@ -14,6 +15,8 @@ import {Observable} from "rxjs";
   styleUrls: ['./home.component.scss']
 })
 export class HomeComponent implements OnInit, RestSubscriber {
+
+  dashboardPath = '/' + GlobalConstants.homePath + '/' + GlobalConstants.dashboardPath;
 
   constructor(private dialog: MatDialog, private userService: UserService, private router: Router) {
   }
@@ -33,7 +36,7 @@ export class HomeComponent implements OnInit, RestSubscriber {
    */
   subscribe(observable: Observable<Object>): void {
     observable.subscribe((response: any) => {
-      this.router.navigate(["/cafe/dashboard"]); // after check token, navigate to the dashboard,
+      this.router.navigate([this.dashboardPath]); // after check token, navigate to the dashboard,
       // see [app-routing.module.ts]
     }, (error) => {
       // log error

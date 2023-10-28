@@ -1,38 +1,25 @@
 import {Injectable} from '@angular/core';
-import {environment} from "../../environments/environment";
-import {HttpClient, HttpHeaders} from "@angular/common/http";
+import {HttpClient} from "@angular/common/http";
 import {GlobalConstants} from "../shared/global-constants";
+import {RequestService} from "./request.service";
 
-@Injectable({
-  providedIn: 'root'
-})
-export class CategoryService {
+@Injectable({providedIn: 'root'})
+export class CategoryService extends RequestService {
 
-  private categoryPath = GlobalConstants.categoryPath;
-  url = environment.apiUrl;
-
-  constructor(private httpClient: HttpClient) {
+  constructor(httpClient: HttpClient) {
+    super(httpClient);
   }
 
   add(data: any) {
-    return this.post("/" + this.categoryPath + "/add", data);
+    return super.post("/" + GlobalConstants.categoryPath + "/add", data);
   }
 
   update(data: any) {
-    return this.post("/" + this.categoryPath + "/update", data);
+    return super.post("/" + GlobalConstants.categoryPath + "/update", data);
   }
 
   getCategories() {
-    return this.get("/" + this.categoryPath + "/get");
+    return super.get("/" + GlobalConstants.categoryPath + "/get");
   }
 
-  private post(endpointUrl: string, data: any) {
-    return this.httpClient.post(this.url + endpointUrl, data, {
-      headers: new HttpHeaders().set('content-Type', "application/json")
-    });
-  }
-
-  private get(endpointUrl: string) {
-    return this.httpClient.get(this.url + endpointUrl);
-  }
 }

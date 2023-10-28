@@ -34,21 +34,13 @@ export class RouteGuardService {
       this.router.navigate(['/']);
       throw new Error('Invalid token specified')
     }
-    let expectedRole = '';
 
-    /* Find and set the role
-     * NOTE: JWTService in backend generates JWTs using authorities (see UserService.logIn()),
-     * so the role in response is like ROLE_<ROLENAME>!
+    /* if user or admin, but unauthenticated or not allowed, navigate to the dashboard;
+    * if either user nor admin navigates to homepage
+    * is authenticated, enable activation
      */
-    for (const element of expectedRoleArray) {
-      if (element == tokenPayload.role) {
-        expectedRole = tokenPayload.role;
-      }
-    }
-
-    // if user or admin, but unauthenticated, navigate to the dashboard, if authenticated enable activation
-    if (expectedRole == GlobalConstants.roleUser || expectedRole == GlobalConstants.roleAdmin) {
-      if (this.authService.isAuthenticated() && expectedRole == tokenPayload.role) {
+    if (tokenPayload.role == GlobalConstants.roleUser || tokenPayload.role == GlobalConstants.roleAdmin) {
+      if (this.authService.isAuthenticated() && expectedRoleArray.includes(tokenPayload.role )) {
         return true;
       }
       this.snackbarService.openSnackBar(GlobalConstants.unauthorized, GlobalConstants.error);
@@ -59,6 +51,7 @@ export class RouteGuardService {
     this.router.navigate(['/']);
     localStorage.clear();
     return false;
+
   }
 
   decodeToken() {

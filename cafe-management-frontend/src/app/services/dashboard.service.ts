@@ -1,19 +1,19 @@
 import {Injectable} from '@angular/core';
 import {HttpClient} from "@angular/common/http";
 import {environment} from "../../environments/environment";
+import {RequestService} from "./request.service";
+import {GlobalConstants} from "../shared/global-constants";
 
-/**
- * @TODO: testing!
- */
-@Injectable({
-  providedIn: 'root'
-})
-export class DashboardService {
+@Injectable({providedIn: 'root'})
+export class DashboardService extends RequestService {
 
-  constructor(private httpClient: HttpClient) {
+  dashboardDetailsPath = "/" + GlobalConstants.dashboardPath + "/" + GlobalConstants.dashboardDetailsPath;
+
+  constructor(httpClient: HttpClient) {
+    super(httpClient);
   }
 
   getDetails() {
-    return this.httpClient.get(environment.apiUrl + "/dashboard/details")
+    return super.get(this.dashboardDetailsPath);
   }
 }

@@ -18,8 +18,6 @@ export class AppSidebarComponent implements OnDestroy {
   userRole: any;
   tokenPalyload: any;
   homePath = '/' + GlobalConstants.homePath + '/';
-  roleUser = GlobalConstants.roleUser;
-  roleAdmin = GlobalConstants.roleAdmin;
   roleAny = GlobalConstants.roleAny;
 
   private _mobileQueryListener: () => void;
@@ -33,8 +31,8 @@ export class AppSidebarComponent implements OnDestroy {
     this.mobileQuery = media.matchMedia('(min-width: 768px)');
     this._mobileQueryListener = () => changeDetectorRef.detectChanges();
     this.mobileQuery.addListener(this._mobileQueryListener);
-    this.tokenPalyload = routeGuardService.decodeToken();
-    this.userRole = this.tokenPalyload.userRole;
+    this.tokenPalyload = this.routeGuardService.decodeToken();
+    this.userRole = this.tokenPalyload.role;
   }
 
   ngOnDestroy(): void {
