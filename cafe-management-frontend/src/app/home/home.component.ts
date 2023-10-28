@@ -16,7 +16,7 @@ import {GlobalConstants} from "../shared/global-constants";
 })
 export class HomeComponent implements OnInit, RestSubscriber {
 
-  dashboardPath = '/' + GlobalConstants.homePath + '/' + GlobalConstants.dashboardPath;
+  dashboardPath = "/" + GlobalConstants.homePath + "/" + GlobalConstants.dashboardPath;
 
   constructor(private dialog: MatDialog, private userService: UserService, private router: Router) {
   }
@@ -35,7 +35,7 @@ export class HomeComponent implements OnInit, RestSubscriber {
    * @param observable
    */
   subscribe(observable: Observable<Object>): void {
-    observable.subscribe((response: any) => {
+    observable.subscribe(() => {
       this.router.navigate([this.dashboardPath]); // after check token, navigate to the dashboard,
       // see [app-routing.module.ts]
     }, (error) => {
