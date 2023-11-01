@@ -48,7 +48,7 @@ export class DashboardComponent extends ResponseHadler implements AfterViewInit,
       // show the error message
       super.buildResponseMessageFrom(error);
       console.log(error);
-      this.snackBarService.openSnackBar(super.responseMessage, GlobalConstants.error);
+      this.snackBarService.openSnackBar(this.responseMessage, GlobalConstants.error);
     });
   }
 

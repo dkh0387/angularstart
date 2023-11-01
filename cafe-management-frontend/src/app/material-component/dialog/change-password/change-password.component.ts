@@ -55,8 +55,8 @@ export class ChangePasswordComponent extends ResponseHadler implements OnInit, R
     observable.subscribe((response: any) => {
       this.ngxService.stop();
       this.dialogRef.close();
-      super.responseMessage = response;
-      this.snackbarService.openSnackBar(super.responseMessage, ""); // pop up a green or black message depending on success
+      this.responseMessage = response;
+      this.snackbarService.openSnackBar(this.responseMessage, ""); // pop up a green or black message depending on success
       localStorage.clear();
       this.router.navigate(['/']);
     }, (error) => {
@@ -64,7 +64,7 @@ export class ChangePasswordComponent extends ResponseHadler implements OnInit, R
       this.ngxService.stop();
       // show the error message
       super.buildResponseMessageFrom(error);
-      this.snackbarService.openSnackBar(super.responseMessage, GlobalConstants.error);
+      this.snackbarService.openSnackBar(this.responseMessage, GlobalConstants.error);
     });
   }
 

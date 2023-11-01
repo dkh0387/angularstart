@@ -36,9 +36,15 @@ class CategoryServiceImpl(private val categoryRepository: CategoryRepository, pr
                     ServiceUtils.getMapperFromRequestStringMap(requestMap, CategoryMapper::class.java) as CategoryMapper
                 val category = Category.createFromMapper(categoryMapper)
                 categoryRepository.save(category)
-                CafeUtils.getStringResponseFor(CafeConstants.ADD_CATEGORY_SUCCESSFULLY, HttpStatus.OK)
+                CafeUtils.getStringResponseFor(
+                    CafeUtils.formatBodyAsJSON(CafeConstants.ADD_CATEGORY_SUCCESSFULLY),
+                    HttpStatus.OK
+                )
             } else {
-                CafeUtils.getStringResponseFor(CafeConstants.UNAUTHORIZED_ACCESS, HttpStatus.UNAUTHORIZED)
+                CafeUtils.getStringResponseFor(
+                    CafeUtils.formatBodyAsJSON(CafeConstants.UNAUTHORIZED_ACCESS),
+                    HttpStatus.UNAUTHORIZED
+                )
             }
 
         } catch (e: Exception) {
@@ -49,7 +55,10 @@ class CategoryServiceImpl(private val categoryRepository: CategoryRepository, pr
                 )
             )
         }
-        return CafeUtils.getStringResponseFor(CafeConstants.ADD_CATEGORY_WENT_WRONG, HttpStatus.INTERNAL_SERVER_ERROR)
+        return CafeUtils.getStringResponseFor(
+            CafeUtils.formatBodyAsJSON(CafeConstants.ADD_CATEGORY_WENT_WRONG),
+            HttpStatus.INTERNAL_SERVER_ERROR
+        )
     }
 
     override fun getAllCategory(filterValue: String?): ResponseEntity<List<CategoryWrapper>> {
@@ -92,12 +101,21 @@ class CategoryServiceImpl(private val categoryRepository: CategoryRepository, pr
                     val category = categoryOptional.get()
                     category.name = categoryMapper.name
                     categoryRepository.save(category)
-                    CafeUtils.getStringResponseFor(CafeConstants.UPDATE_CATEGORY_SUCCESSFULLY, HttpStatus.OK)
+                    CafeUtils.getStringResponseFor(
+                        CafeUtils.formatBodyAsJSON(CafeConstants.UPDATE_CATEGORY_SUCCESSFULLY),
+                        HttpStatus.OK
+                    )
                 } else {
-                    CafeUtils.getStringResponseFor(CafeConstants.UPDATE_CATEGORY_WENT_WRONG, HttpStatus.BAD_REQUEST)
+                    CafeUtils.getStringResponseFor(
+                        CafeUtils.formatBodyAsJSON(CafeConstants.UPDATE_CATEGORY_WENT_WRONG),
+                        HttpStatus.BAD_REQUEST
+                    )
                 }
             } else {
-                CafeUtils.getStringResponseFor(CafeConstants.UNAUTHORIZED_ACCESS, HttpStatus.UNAUTHORIZED)
+                CafeUtils.getStringResponseFor(
+                    CafeUtils.formatBodyAsJSON(CafeConstants.UNAUTHORIZED_ACCESS),
+                    HttpStatus.UNAUTHORIZED
+                )
             }
         } catch (e: Exception) {
             logAndThrow(
@@ -108,7 +126,7 @@ class CategoryServiceImpl(private val categoryRepository: CategoryRepository, pr
             )
         }
         return CafeUtils.getStringResponseFor(
-            CafeConstants.GET_ALL_CATEGORIES_WENT_WRONG,
+            CafeUtils.formatBodyAsJSON(CafeConstants.GET_ALL_CATEGORIES_WENT_WRONG),
             HttpStatus.INTERNAL_SERVER_ERROR
         )
     }

@@ -4,6 +4,7 @@ import {Router} from "@angular/router";
 import {ConfirmationComponent} from "../../../material-component/dialog/confirmation/confirmation.component";
 import {resolve} from "@angular/compiler-cli/src/ngtsc/file_system";
 import {ChangePasswordComponent} from "../../../material-component/dialog/change-password/change-password.component";
+import {GlobalConstants} from "../../../shared/global-constants";
 
 @Component({
   selector: 'app-header',
@@ -28,18 +29,18 @@ export class AppHeaderComponent {
    */
   logout() {
     const dialogConfig = new MatDialogConfig();
-    dialogConfig.data = {message: 'logout', confirmation: true};
+    dialogConfig.data = {message: "logout", confirmation: true};
     const dialogRef = this.dialog.open(ConfirmationComponent, dialogConfig);
     const sub = dialogRef.componentInstance.onEmitStatusChange.subscribe((response) => {
       dialogRef.close();
       localStorage.clear();
-      this.router.navigate(['/']);
+      this.router.navigate(["/"]);
     })
   }
 
   changePassword() {
     const dialogConfig = new MatDialogConfig();
-    dialogConfig.width = "550px";
+    dialogConfig.width = GlobalConstants.dialogWidth;
     this.dialog.open(ChangePasswordComponent, dialogConfig);
   }
 }

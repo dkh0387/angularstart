@@ -27,4 +27,11 @@ export class GlobalConstants {
   public static error: string = "error"
   public static success: string = "success"
 
+  //Dialog
+  public static dialogWidth: string = "550px";
+
+  //Actions
+  public static dialogActionEdit: string = "Edit";
+  public static dialogActionAdd: string = "Add";
+
 }

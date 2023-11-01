@@ -41,14 +41,14 @@ export class LoginComponent extends ResponseHadler implements OnInit, RestSubscr
       this.ngxService.stop();
       this.dialogRef.close();
       localStorage.setItem('token', response.token)
-      super.responseMessage = GlobalConstants.success;
-      this.snackbarService.openSnackBar(super.responseMessage, ""); // pop up a green or black message depending on success
+      this.responseMessage = GlobalConstants.success;
+      this.snackbarService.openSnackBar(this.responseMessage, ""); // pop up a green or black message depending on success
       this.router.navigate(["/cafe/dashboard"]); // after log in, navigate to the dashboard, see [app-routing.module.ts]
     }, (error) => {
       this.ngxService.stop();
       // show the error message
       super.buildResponseMessageFrom(error);
-      this.snackbarService.openSnackBar(super.responseMessage, GlobalConstants.error);
+      this.snackbarService.openSnackBar(this.responseMessage, GlobalConstants.error);
     });
   }
 
