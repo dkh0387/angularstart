@@ -110,6 +110,10 @@ WE are able to define routing access per component. As example, we use `material
 * Data binding: Injection of dialog frame using `@Inject(MAT_DIALOG_DATA) public dialogData` in the content component
 * All data from dialog frame are bound to the `confirmation.component.html`
 
+## Example of using data tables
+
+* see `manage-category.component.html`
+
 ## Role management
 
 * Resources are bound to the according user role of a logged-in user

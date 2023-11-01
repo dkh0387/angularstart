@@ -6,14 +6,15 @@ import {RestSubscriber} from "../interfaces/rest-subscriber";
 import {SubmitHandler} from "../interfaces/submit-handler";
 import {Observable} from "rxjs";
 import {GlobalConstants} from "../shared/global-constants";
+import {ResponseHadler} from "../extended/response-handler";
 
 @Component({
   selector: 'app-dashboard',
   templateUrl: './dashboard.component.html',
   styleUrls: ['./dashboard.component.scss']
 })
-export class DashboardComponent implements AfterViewInit, RestSubscriber, SubmitHandler {
-  responseMessage: any;
+export class DashboardComponent extends ResponseHadler implements AfterViewInit, RestSubscriber, SubmitHandler {
+
   data: any;
   categoryPath = "/" + GlobalConstants.homePath + "/" + GlobalConstants.categoryPath
   productPath = "/" + GlobalConstants.homePath + "/" + GlobalConstants.productPath
@@ -22,7 +23,10 @@ export class DashboardComponent implements AfterViewInit, RestSubscriber, Submit
   ngAfterViewInit() {
   }
 
-  constructor(private dashboardService: DashboardService, private ngxService: NgxUiLoaderService, private snackBarService: SnackbarService) {
+  constructor(private dashboardService: DashboardService,
+              private ngxService: NgxUiLoaderService,
+              private snackBarService: SnackbarService) {
+    super();
     this.ngxService.start();
     this.getDashboardData();
   }
@@ -42,9 +46,9 @@ export class DashboardComponent implements AfterViewInit, RestSubscriber, Submit
     }, (error: any) => {
       this.ngxService.stop();
       // show the error message
-      this.responseMessage = (error.error?.message == null) ? (GlobalConstants.error) : error.error?.message;
+      super.buildResponseMessageFrom(error);
       console.log(error);
-      this.snackBarService.openSnackBar(this.responseMessage, GlobalConstants.error);
+      this.snackBarService.openSnackBar(super.responseMessage, GlobalConstants.error);
     });
   }
 

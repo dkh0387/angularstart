@@ -1,6 +1,6 @@
 import {Injectable} from '@angular/core';
 import {HttpClient} from "@angular/common/http";
-import {RequestService} from "./request.service";
+import {RequestService} from "./extended/request.service";
 import {GlobalConstants} from "../shared/global-constants";
 
 @Injectable({

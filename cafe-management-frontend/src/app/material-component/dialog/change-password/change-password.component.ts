@@ -9,19 +9,19 @@ import {SubmitHandler} from "../../../interfaces/submit-handler";
 import {Observable} from 'rxjs';
 import {GlobalConstants} from "../../../shared/global-constants";
 import {Router} from "@angular/router";
+import {ResponseHadler} from "../../../extended/response-handler";
 
 @Component({
   selector: 'app-change-password',
   templateUrl: './change-password.component.html',
   styleUrls: ['./change-password.component.scss']
 })
-export class ChangePasswordComponent implements OnInit, RestSubscriber, SubmitHandler {
+export class ChangePasswordComponent extends ResponseHadler implements OnInit, RestSubscriber, SubmitHandler {
 
   oldPassword = true;
   newPassword = true;
   confirmPassword = true;
   changePasswordForm: any = FormGroup;
-  responseMessage: any;
 
   constructor(
     private formBuilder: FormBuilder,
@@ -31,6 +31,7 @@ export class ChangePasswordComponent implements OnInit, RestSubscriber, SubmitHa
     private snackbarService: SnackbarService,
     private router: Router
   ) {
+    super();
   }
 
   ngOnInit(): void {
@@ -54,16 +55,16 @@ export class ChangePasswordComponent implements OnInit, RestSubscriber, SubmitHa
     observable.subscribe((response: any) => {
       this.ngxService.stop();
       this.dialogRef.close();
-      this.responseMessage = response;
-      this.snackbarService.openSnackBar(this.responseMessage, ""); // pop up a green or black message depending on success
+      super.responseMessage = response;
+      this.snackbarService.openSnackBar(super.responseMessage, ""); // pop up a green or black message depending on success
       localStorage.clear();
       this.router.navigate(['/']);
     }, (error) => {
       console.log(error)
       this.ngxService.stop();
       // show the error message
-      this.responseMessage = (error.error?.message == null) ? (GlobalConstants.error) : error.error?.message;
-      this.snackbarService.openSnackBar(this.responseMessage, GlobalConstants.error);
+      super.buildResponseMessageFrom(error);
+      this.snackbarService.openSnackBar(super.responseMessage, GlobalConstants.error);
     });
   }
 
