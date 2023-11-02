@@ -73,14 +73,18 @@ export class CategoryComponent extends ResponseHadler implements OnInit, SubmitH
     }
   }
 
+  setCategoryService(categoryService: CategoryService) {
+    this.categoryService = categoryService;
+  }
 
   private edit() {
     const data = {id: this.dialogData.data.id, name: this.categoryForm.value.name};
-    this.subscribe(this.categoryService.update(data));
+    this.subscribe(this.categoryService.updateCategory(data));
   }
 
   private add() {
     const data = {name: this.categoryForm.value.name};
-    this.subscribe(this.categoryService.add(data));
+    this.subscribe(this.categoryService.addCategory(data));
   }
+
 }

@@ -1,6 +1,6 @@
 <mat-toolbar color="primary">
   <mat-toolbar-row fixLayout="row">
-    <span>{{dialogData.action}}</span>
+    <span id="title">{{dialogData.action}}</span>
     <span class="spacer"></span>
     <button class="mat-dialog-close" mat-icon-button mat-dialog-close>
       <mat-icon>close</mat-icon>
@@ -9,10 +9,10 @@
 </mat-toolbar>
 
 <mat-dialog-content class="mat-typography">
-  <form [formGroup]="categoryForm">
+  <form [formGroup]="categoryForm" id="categoryForm">
     <div fxFlex fxLayout="column">
       <div fxLayout="row wrap">
-        <mat-form-field appearance="standard" fxFlex>
+        <mat-form-field appearance="standard" fxFlex id="name">
           <mat-label>Name</mat-label>
           <input matInput formControlName="name" required>
           <mat-error *ngIf="categoryForm.controls.name.touched && categoryForm.controls.name.invalid">

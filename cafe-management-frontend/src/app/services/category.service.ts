@@ -10,11 +10,11 @@ export class CategoryService extends RequestService {
     super(httpClient);
   }
 
-  add(data: any) {
+  addCategory(data: any) {
     return super.post("/" + GlobalConstants.categoryPath + "/add", data);
   }
 
-  update(data: any) {
+  updateCategory(data: any) {
     return super.post("/" + GlobalConstants.categoryPath + "/update", data);
   }
 
