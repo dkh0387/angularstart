@@ -86,6 +86,7 @@ class SecurityConfig(
                     "category/add",
                     "category/get",
                     "category/update",
+                    "category/delete/*",
                     "product/add",
                     "product/get",
                     "product/update",

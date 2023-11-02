@@ -16,4 +16,6 @@ interface CategoryREST {
     @PostMapping("/update")
     fun updateCategory(@RequestBody(required = true) requestMap: Map<String, String>): ResponseEntity<String>
 
+    @PostMapping("/delete/{id}")
+    fun deleteCategory(@PathVariable id: Long): ResponseEntity<String>
 }

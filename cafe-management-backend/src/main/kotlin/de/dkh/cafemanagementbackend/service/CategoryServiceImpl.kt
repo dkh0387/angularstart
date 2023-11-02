@@ -4,6 +4,7 @@ import com.google.common.base.Strings
 import de.dkh.cafemanagementbackend.constants.CafeConstants
 import de.dkh.cafemanagementbackend.entity.Category
 import de.dkh.cafemanagementbackend.exception.AddCategoryException
+import de.dkh.cafemanagementbackend.exception.DeleteProductException
 import de.dkh.cafemanagementbackend.exception.GetAllCategoryException
 import de.dkh.cafemanagementbackend.exception.UpdateCategoryException
 import de.dkh.cafemanagementbackend.jsonwebtoken.JwtFilter
@@ -119,14 +120,53 @@ class CategoryServiceImpl(private val categoryRepository: CategoryRepository, pr
             }
         } catch (e: Exception) {
             logAndThrow(
-                logger, CafeConstants.GET_ALL_CATEGORIES_WENT_WRONG, e, UpdateCategoryException(
-                    CafeConstants.GET_ALL_CATEGORIES_WENT_WRONG + " MESSAGE : ${e.localizedMessage}",
+                logger, CafeConstants.UPDATE_CATEGORY_WENT_WRONG, e, UpdateCategoryException(
+                    CafeConstants.UPDATE_CATEGORY_WENT_WRONG + " MESSAGE : ${e.localizedMessage}",
                     HttpStatus.INTERNAL_SERVER_ERROR
                 )
             )
         }
         return CafeUtils.getStringResponseFor(
-            CafeUtils.formatBodyAsJSON(CafeConstants.GET_ALL_CATEGORIES_WENT_WRONG),
+            CafeUtils.formatBodyAsJSON(CafeConstants.UPDATE_CATEGORY_WENT_WRONG),
+            HttpStatus.INTERNAL_SERVER_ERROR
+        )
+    }
+
+    override fun deleteCategory(id: Long): ResponseEntity<String> {
+        println("Inside deleteProduct $id")
+
+        try {
+            return if (jwtFilter.isAdmin()) {
+                val categoryOptional = categoryRepository.findById(id)
+
+                if (categoryOptional.isPresent) {
+                    categoryRepository.deleteById(categoryOptional.get().id)
+                    CafeUtils.getStringResponseFor(
+                        CafeUtils.formatBodyAsJSON(CafeConstants.DELETE_CATEGORY_SUCCESSFULLY),
+                        HttpStatus.OK
+                    )
+                } else {
+                    CafeUtils.getStringResponseFor(
+                        CafeUtils.formatBodyAsJSON(CafeConstants.DELETE_CATEGORY_WENT_WRONG),
+                        HttpStatus.BAD_REQUEST
+                    )
+                }
+            } else {
+                CafeUtils.getStringResponseFor(
+                    CafeUtils.formatBodyAsJSON(CafeConstants.UNAUTHORIZED_ACCESS),
+                    HttpStatus.UNAUTHORIZED
+                )
+            }
+        } catch (e: Exception) {
+            logAndThrow(
+                logger, CafeConstants.DELETE_CATEGORY_WENT_WRONG, e, DeleteProductException(
+                    CafeConstants.DELETE_CATEGORY_WENT_WRONG + " MESSAGE: + ${e.localizedMessage}",
+                    HttpStatus.INTERNAL_SERVER_ERROR
+                )
+            )
+        }
+        return CafeUtils.getStringResponseFor(
+            CafeConstants.DELETE_CATEGORY_WENT_WRONG,
             HttpStatus.INTERNAL_SERVER_ERROR
         )
     }

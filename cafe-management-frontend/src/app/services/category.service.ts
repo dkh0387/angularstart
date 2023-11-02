@@ -22,4 +22,7 @@ export class CategoryService extends RequestService {
     return super.get("/" + GlobalConstants.categoryPath + "/get");
   }
 
+  deleteCategory(data: any) {
+    return super.post("/" + GlobalConstants.categoryPath + `/delete/${data.id}`, {});
+  }
 }

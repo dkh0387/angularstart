@@ -19,7 +19,7 @@ import {CategoryComponent} from "../dialog/category/category.component";
 })
 export class ManageCategoryComponent extends ResponseHadler implements OnInit, RestSubscriber {
 
-  displayedColumns: string[] = ['name', 'edit'];
+  displayedColumns: string[] = ["name", "edit", "delete"];
   dataSource: any;
 
   constructor(private categoryService: CategoryService,
@@ -82,4 +82,24 @@ export class ManageCategoryComponent extends ResponseHadler implements OnInit, R
       this.tableData();
     })
   }
+
+  handleDeleteAction(data: any) {
+    const dialogConfig = new MatDialogConfig();
+    dialogConfig.data = {data: data, message: "delete the category?", confirmation: "Delete"};
+    const dialogRef = this.dialog.open(ConfirmationComponent, dialogConfig);
+    const sub = dialogRef.componentInstance.onEmitStatusChange.subscribe((response) => {
+      dialogRef.close();
+      this.categoryService.deleteCategory(data).subscribe((response: any) => {
+        this.ngxService.stop();
+        this.snackBarService.openSnackBar(response, GlobalConstants.success);
+        this.tableData();
+      }, (error: any) => {
+        this.ngxService.stop();
+        console.log(error.error?.message);
+        super.buildResponseMessageFrom(error);
+        this.snackBarService.openSnackBar(this.responseMessage, GlobalConstants.error);
+      });
+    })
+  }
+
 }

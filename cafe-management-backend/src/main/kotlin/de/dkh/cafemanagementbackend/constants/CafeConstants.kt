@@ -45,7 +45,8 @@ class CafeConstants {
         const val GET_ALL_CATEGORIES_WENT_WRONG = "Get all categories went wrong!"
         const val UPDATE_CATEGORY_SUCCESSFULLY = "Successfully updated the category!"
         const val UPDATE_CATEGORY_WENT_WRONG = "Update category went wrong!"
-
+        const val DELETE_CATEGORY_SUCCESSFULLY = "Successfully deleted the category!"
+        const val DELETE_CATEGORY_WENT_WRONG = "Delete category went wrong!"
 
         const val GET_DETAILS_WENT_WRONG = "Get dashboard details went wrong!"
 

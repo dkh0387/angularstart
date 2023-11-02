@@ -1,11 +1,13 @@
 package de.dkh.cafemanagementbackend.controller
 
 import de.dkh.cafemanagementbackend.exception.AddCategoryException
+import de.dkh.cafemanagementbackend.exception.DeleteCategoryException
 import de.dkh.cafemanagementbackend.exception.GetAllCategoryException
 import de.dkh.cafemanagementbackend.exception.UpdateCategoryException
 import de.dkh.cafemanagementbackend.service.CategoryService
 import de.dkh.cafemanagementbackend.wrapper.CategoryWrapper
 import org.springframework.http.ResponseEntity
+import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.RestController
 
 @RestController
@@ -23,5 +25,10 @@ class CategoryRESTImpl(private val categoryService: CategoryService) : CategoryR
     @Throws(UpdateCategoryException::class)
     override fun updateCategory(requestMap: Map<String, String>): ResponseEntity<String> {
         return categoryService.updateCategory(requestMap)
+    }
+
+    @Throws(DeleteCategoryException::class)
+    override fun deleteCategory(@PathVariable id: Long): ResponseEntity<String> {
+        return categoryService.deleteCategory(id)
     }
 }

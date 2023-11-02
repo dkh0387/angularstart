@@ -2,6 +2,9 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { ManageCategoryComponent } from './manage-category.component';
 
+/**
+ * TODO
+ */
 describe('ManageCategoryComponent', () => {
   let component: ManageCategoryComponent;
   let fixture: ComponentFixture<ManageCategoryComponent>;

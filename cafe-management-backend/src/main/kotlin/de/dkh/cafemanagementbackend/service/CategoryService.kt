@@ -7,4 +7,5 @@ interface CategoryService {
     fun addCategory(requestMap: Map<String, String>): ResponseEntity<String>
     fun getAllCategory(filterValue: String?): ResponseEntity<List<CategoryWrapper>>
     fun updateCategory(requestMap: Map<String, String>): ResponseEntity<String>
+    fun deleteCategory(id: Long): ResponseEntity<String>
 }
