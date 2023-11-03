@@ -9,6 +9,7 @@ import {HttpClientTestingModule, HttpTestingController} from '@angular/common/ht
 
 import {DashboardService} from './dashboard.service';
 import {environment} from "../../environments/environment";
+import {GlobalConstants} from "../shared/global-constants";
 
 describe('DashboardService', () => {
   let httpTestingController: HttpTestingController;
@@ -47,7 +48,7 @@ describe('DashboardService', () => {
       done();
     });
 
-    const testRequest = httpTestingController.expectOne(environment.apiUrl + "/dashboard/details");
+    const testRequest = httpTestingController.expectOne(environment.apiUrl + environment.apiUrl + "/" + GlobalConstants.dashboardPath + "/details");
 
     testRequest.flush(expectedData);
   });
@@ -55,8 +56,8 @@ describe('DashboardService', () => {
   it('#getDetails should use GET to retrieve data', () => {
     service.getDetails().subscribe();
 
-    const testRequest = httpTestingController.expectOne(environment.apiUrl + "/dashboard/details");
+    const testRequest = httpTestingController.expectOne(environment.apiUrl + "/" + GlobalConstants.dashboardPath + "/details");
 
-    expect(testRequest.request.method).toEqual('GET');
+    expect(testRequest.request.method).toEqual("GET");
   });
 });

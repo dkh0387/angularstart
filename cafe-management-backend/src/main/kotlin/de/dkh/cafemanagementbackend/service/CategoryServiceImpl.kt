@@ -132,9 +132,6 @@ class CategoryServiceImpl(private val categoryRepository: CategoryRepository, pr
         )
     }
 
-    /**
-     * TODO: testing
-     */
     override fun deleteCategory(id: Long): ResponseEntity<String> {
         println("Inside deleteProduct $id")
 
