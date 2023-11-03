@@ -318,7 +318,7 @@ class CategoryRESTImplTest {
             val savedCategory = categoryRepository.save(category)
             val product = TestData.getProduct("Testproduct")
             product.category = savedCategory
-            val savedProduct = productRepository.save(product)
+            productRepository.save(product)
             // given
             val token = jwtService.generateToken("deniskh87@gmail.com", User.UserRoles.ROLE_ADMIN.name)
             jwtFilter.claims = jwtService.extractAllClaims(token)
