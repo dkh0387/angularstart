@@ -6,8 +6,10 @@ import de.dkh.cafemanagementbackend.entity.User
 import de.dkh.cafemanagementbackend.jsonwebtoken.JwtFilter
 import de.dkh.cafemanagementbackend.jsonwebtoken.JwtService
 import de.dkh.cafemanagementbackend.repository.CategoryRepository
+import de.dkh.cafemanagementbackend.repository.ProductRepository
 import de.dkh.cafemanagementbackend.repository.UserRepository
 import de.dkh.cafemanagementbackend.testutils.TestData
+import de.dkh.cafemanagementbackend.utils.CafeUtils
 import io.mockk.clearAllMocks
 import jakarta.servlet.ServletException
 import org.assertj.core.api.Assertions.assertThat
@@ -38,6 +40,9 @@ class CategoryRESTImplTest {
     lateinit var categoryRepository: CategoryRepository
 
     @Autowired
+    lateinit var productRepository: ProductRepository
+
+    @Autowired
     lateinit var jwtService: JwtService
 
     @Autowired
@@ -64,7 +69,7 @@ class CategoryRESTImplTest {
             val categoryJson = "{\n" + "  \"name2\": \"${name}\" \n" + "}"
             val token = jwtService.generateToken("deniskh87@gmail.com", User.UserRoles.ROLE_ADMIN.name)
             jwtFilter.claims = jwtService.extractAllClaims(token)
-            
+
             // when
             val resultActionsDsl = (mockMvc.post("$BASE_URL/add") {
                 contentType = MediaType.APPLICATION_JSON
@@ -100,7 +105,7 @@ class CategoryRESTImplTest {
                 content { contentType(MediaType("text", "plain", StandardCharsets.UTF_8)) }
             }.andReturn()
 
-            assertThat(mvcResult.response.contentAsString).isEqualTo(CafeConstants.UNAUTHORIZED_ACCESS)
+            assertThat(mvcResult.response.contentAsString).isEqualTo(CafeUtils.formatBodyAsJSON(CafeConstants.UNAUTHORIZED_ACCESS))
         }
 
         @Test
@@ -126,7 +131,7 @@ class CategoryRESTImplTest {
                 content { contentType(MediaType("text", "plain", StandardCharsets.UTF_8)) }
             }.andReturn()
 
-            assertThat(mvcResult.response.contentAsString).isEqualTo(CafeConstants.ADD_CATEGORY_SUCCESSFULLY)
+            assertThat(mvcResult.response.contentAsString).isEqualTo(CafeUtils.formatBodyAsJSON(CafeConstants.ADD_CATEGORY_SUCCESSFULLY))
 
             categoryRepository.deleteByName(name)
         }
@@ -176,8 +181,7 @@ class CategoryRESTImplTest {
                 content { contentType(MediaType("text", "plain", StandardCharsets.UTF_8)) }
             }.andReturn()
 
-            assertThat(mvcResult.response.contentAsString)
-                .isEqualTo(CafeConstants.UPDATE_CATEGORY_WENT_WRONG)
+            assertThat(mvcResult.response.contentAsString).isEqualTo(CafeUtils.formatBodyAsJSON(CafeConstants.UPDATE_CATEGORY_WENT_WRONG))
         }
 
         @Test
@@ -201,7 +205,7 @@ class CategoryRESTImplTest {
                 content { contentType(MediaType("text", "plain", StandardCharsets.UTF_8)) }
             }.andReturn()
 
-            assertThat(mvcResult.response.contentAsString).isEqualTo(CafeConstants.UNAUTHORIZED_ACCESS)
+            assertThat(mvcResult.response.contentAsString).isEqualTo(CafeUtils.formatBodyAsJSON(CafeConstants.UNAUTHORIZED_ACCESS))
         }
 
         @Test
@@ -225,8 +229,7 @@ class CategoryRESTImplTest {
                 content { contentType(MediaType("text", "plain", StandardCharsets.UTF_8)) }
             }.andReturn()
 
-            assertThat(mvcResult.response.contentAsString)
-                .isEqualTo(CafeConstants.UPDATE_CATEGORY_WENT_WRONG)
+            assertThat(mvcResult.response.contentAsString).isEqualTo(CafeUtils.formatBodyAsJSON(CafeConstants.UPDATE_CATEGORY_WENT_WRONG))
         }
 
         @Test
@@ -254,10 +257,82 @@ class CategoryRESTImplTest {
             }.andReturn()
 
             assertThat(categoryRepository.findById(category.id).get().name).isEqualTo(name)
-            assertThat(mvcResult.response.contentAsString).isEqualTo(CafeConstants.UPDATE_CATEGORY_SUCCESSFULLY)
+            assertThat(mvcResult.response.contentAsString).isEqualTo(CafeUtils.formatBodyAsJSON(CafeConstants.UPDATE_CATEGORY_SUCCESSFULLY))
 
             categoryRepository.deleteByName("Testcategory")
             categoryRepository.deleteByName("Testcategory2")
         }
+    }
+
+    @Nested
+    @DisplayName("Testing web layer for deleting a category")
+    @TestInstance(TestInstance.Lifecycle.PER_CLASS)
+    @DirtiesContext
+    inner class DeletingCategory {
+
+        @Test
+        fun `should return a DELETE_CATEGORY_WENT_WRONG response while trying to delete a category with non existing id`() {
+            // given
+            val id = -1
+            val token = jwtService.generateToken("deniskh87@gmail.com", User.UserRoles.ROLE_ADMIN.name)
+            jwtFilter.claims = jwtService.extractAllClaims(token)
+
+            val resultActionsDsl = mockMvc.post("$BASE_URL/delete/$id") {}
+
+            resultActionsDsl.andDo { print() }.andExpect {
+                status { isBadRequest() }
+                content { contentType(MediaType("text", "plain", StandardCharsets.UTF_8)) }
+            }
+
+            assertThat(resultActionsDsl.andReturn().response.contentAsString).isEqualTo(
+                CafeUtils.formatBodyAsJSON(
+                    CafeConstants.DELETE_CATEGORY_WENT_WRONG
+                )
+            )
+        }
+
+        @Test
+        fun `should return a UNAUTHORIZED response while trying to delete a category as non admin`() {
+            // given
+            val id = 1
+            val token = jwtService.generateToken("david@luv2code.com", User.UserRoles.ROLE_USER.name)
+            jwtFilter.claims = jwtService.extractAllClaims(token)
+
+            val resultActionsDsl = mockMvc.post("$BASE_URL/delete/$id") {}
+
+            resultActionsDsl.andDo { print() }.andExpect {
+                status { isUnauthorized() }
+                content { contentType(MediaType("text", "plain", StandardCharsets.UTF_8)) }
+            }
+
+            assertThat(resultActionsDsl.andReturn().response.contentAsString).isEqualTo(
+                CafeUtils.formatBodyAsJSON(
+                    CafeConstants.UNAUTHORIZED_ACCESS
+                )
+            )
+        }
+
+        @Test
+        fun `should delete a category and the corresponded product if the path variable is correctly provided`() {
+            val category = TestData.getCategory("Testcategory")
+            val savedCategory = categoryRepository.save(category)
+            val product = TestData.getProduct("Testproduct")
+            product.category = savedCategory
+            val savedProduct = productRepository.save(product)
+            // given
+            val token = jwtService.generateToken("deniskh87@gmail.com", User.UserRoles.ROLE_ADMIN.name)
+            jwtFilter.claims = jwtService.extractAllClaims(token)
+
+            val resultActionsDsl = mockMvc.post("$BASE_URL/delete/${savedCategory.id}") {}
+
+            resultActionsDsl.andDo { print() }.andExpect {
+                status { isOk() }
+                content { contentType(MediaType("text", "plain", StandardCharsets.UTF_8)) }
+            }
+
+            val productOptional = productRepository.findByName("Testproduct")
+            assertThat(productOptional).isNotPresent
+        }
+
     }
 }

@@ -4,7 +4,7 @@ import com.google.common.base.Strings
 import de.dkh.cafemanagementbackend.constants.CafeConstants
 import de.dkh.cafemanagementbackend.entity.Category
 import de.dkh.cafemanagementbackend.exception.AddCategoryException
-import de.dkh.cafemanagementbackend.exception.DeleteProductException
+import de.dkh.cafemanagementbackend.exception.DeleteCategoryException
 import de.dkh.cafemanagementbackend.exception.GetAllCategoryException
 import de.dkh.cafemanagementbackend.exception.UpdateCategoryException
 import de.dkh.cafemanagementbackend.jsonwebtoken.JwtFilter
@@ -132,6 +132,9 @@ class CategoryServiceImpl(private val categoryRepository: CategoryRepository, pr
         )
     }
 
+    /**
+     * TODO: testing
+     */
     override fun deleteCategory(id: Long): ResponseEntity<String> {
         println("Inside deleteProduct $id")
 
@@ -159,7 +162,7 @@ class CategoryServiceImpl(private val categoryRepository: CategoryRepository, pr
             }
         } catch (e: Exception) {
             logAndThrow(
-                logger, CafeConstants.DELETE_CATEGORY_WENT_WRONG, e, DeleteProductException(
+                logger, CafeConstants.DELETE_CATEGORY_WENT_WRONG, e, DeleteCategoryException(
                     CafeConstants.DELETE_CATEGORY_WENT_WRONG + " MESSAGE: + ${e.localizedMessage}",
                     HttpStatus.INTERNAL_SERVER_ERROR
                 )

@@ -2,15 +2,14 @@ package de.dkh.cafemanagementbackend.service
 
 import de.dkh.cafemanagementbackend.constants.CafeConstants
 import de.dkh.cafemanagementbackend.exception.AddCategoryException
+import de.dkh.cafemanagementbackend.exception.DeleteCategoryException
 import de.dkh.cafemanagementbackend.exception.UpdateCategoryException
 import de.dkh.cafemanagementbackend.jsonwebtoken.JwtFilter
 import de.dkh.cafemanagementbackend.repository.CategoryRepository
 import de.dkh.cafemanagementbackend.testutils.TestData
-import io.mockk.clearAllMocks
-import io.mockk.every
+import de.dkh.cafemanagementbackend.utils.CafeUtils
+import io.mockk.*
 import io.mockk.junit5.MockKExtension
-import io.mockk.mockk
-import io.mockk.verify
 import org.assertj.core.api.Assertions.assertThat
 import org.assertj.core.api.Assertions.assertThatThrownBy
 import org.junit.jupiter.api.*
@@ -71,7 +70,7 @@ class CategoryServiceImplTest {
             verify(exactly = 0) { categoryRepository.save(category) }
             assertThat(responseEntity).isEqualTo(
                 ResponseEntity<String>(
-                    CafeConstants.UNAUTHORIZED_ACCESS, HttpStatus.UNAUTHORIZED
+                    CafeUtils.formatBodyAsJSON(CafeConstants.UNAUTHORIZED_ACCESS), HttpStatus.UNAUTHORIZED
                 )
             )
         }
@@ -91,7 +90,7 @@ class CategoryServiceImplTest {
             verify(exactly = 1) { categoryRepository.save(category) }
             assertThat(responseEntity).isEqualTo(
                 ResponseEntity<String>(
-                    CafeConstants.ADD_CATEGORY_SUCCESSFULLY, HttpStatus.OK
+                    CafeUtils.formatBodyAsJSON(CafeConstants.ADD_CATEGORY_SUCCESSFULLY), HttpStatus.OK
                 )
             )
         }
@@ -165,7 +164,7 @@ class CategoryServiceImplTest {
             // then
             assertThat(responseEntity).isEqualTo(
                 ResponseEntity<String>(
-                    CafeConstants.UPDATE_CATEGORY_WENT_WRONG, HttpStatus.BAD_REQUEST
+                    CafeUtils.formatBodyAsJSON(CafeConstants.UPDATE_CATEGORY_WENT_WRONG), HttpStatus.BAD_REQUEST
                 )
             )
         }
@@ -185,7 +184,7 @@ class CategoryServiceImplTest {
             // then
             assertThat(responseEntity).isEqualTo(
                 ResponseEntity<String>(
-                    CafeConstants.UNAUTHORIZED_ACCESS, HttpStatus.UNAUTHORIZED
+                    CafeUtils.formatBodyAsJSON(CafeConstants.UNAUTHORIZED_ACCESS), HttpStatus.UNAUTHORIZED
                 )
             )
         }
@@ -205,7 +204,7 @@ class CategoryServiceImplTest {
             // then
             assertThat(responseEntity).isEqualTo(
                 ResponseEntity<String>(
-                    CafeConstants.UPDATE_CATEGORY_WENT_WRONG, HttpStatus.BAD_REQUEST
+                    CafeUtils.formatBodyAsJSON(CafeConstants.UPDATE_CATEGORY_WENT_WRONG), HttpStatus.BAD_REQUEST
                 )
             )
         }
@@ -227,9 +226,65 @@ class CategoryServiceImplTest {
             verify(exactly = 1) { categoryRepository.save(any()) }
             assertThat(responseEntity).isEqualTo(
                 ResponseEntity<String>(
-                    CafeConstants.UPDATE_CATEGORY_SUCCESSFULLY, HttpStatus.OK
+                    CafeUtils.formatBodyAsJSON(CafeConstants.UPDATE_CATEGORY_SUCCESSFULLY), HttpStatus.OK
                 )
             )
         }
+    }
+
+    @Nested
+    @DisplayName("Testing deleting categories")
+    @TestInstance(TestInstance.Lifecycle.PER_CLASS)
+    inner class DeleteCategoryTesting {
+
+        @Test
+        fun `should throw an exception if the categoryRepository does`() {
+            // given
+            val category = TestData.getCategory("Testcategory")
+            every { categoryRepository.findById(any()) } throws RuntimeException()
+
+            // when/then
+            assertThatThrownBy { objectUnderTest.deleteCategory(category.id) }.isInstanceOf(DeleteCategoryException::class.java)
+        }
+
+        @Test
+        fun `should return an UNAUTHORIZED response if the current user is not an admin`() {
+            // given
+            val category = TestData.getCategory("Testcategory")
+            every { jwtFilter.isAdmin() } returns false
+            every { categoryRepository.findById(category.id) } returns Optional.of(category)
+
+            // when
+            val responseEntity = objectUnderTest.deleteCategory(category.id)
+
+            // then
+            verify(exactly = 0) { categoryRepository.findById(any()) }
+            assertThat(responseEntity).isEqualTo(
+                ResponseEntity<String>(
+                    CafeUtils.formatBodyAsJSON(CafeConstants.UNAUTHORIZED_ACCESS), HttpStatus.UNAUTHORIZED
+                )
+            )
+        }
+
+        @Test
+        fun `should return an OK response if the current user is an admin`() {
+            // given
+            val category = TestData.getCategory("Testcategory")
+            every { jwtFilter.isAdmin() } returns true
+            every { categoryRepository.findById(category.id) } returns Optional.of(category)
+            every { categoryRepository.deleteById(category.id) } just runs
+
+            // when
+            val responseEntity = objectUnderTest.deleteCategory(category.id)
+
+            // then
+            verify(exactly = 1) { categoryRepository.deleteById(category.id) }
+            assertThat(responseEntity).isEqualTo(
+                ResponseEntity<String>(
+                    CafeUtils.formatBodyAsJSON(CafeConstants.DELETE_CATEGORY_SUCCESSFULLY), HttpStatus.OK
+                )
+            )
+        }
+
     }
 }

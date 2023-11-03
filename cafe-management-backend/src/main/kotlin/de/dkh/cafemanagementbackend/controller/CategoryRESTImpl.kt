@@ -27,6 +27,9 @@ class CategoryRESTImpl(private val categoryService: CategoryService) : CategoryR
         return categoryService.updateCategory(requestMap)
     }
 
+    /**
+     * TODO: testing
+     */
     @Throws(DeleteCategoryException::class)
     override fun deleteCategory(@PathVariable id: Long): ResponseEntity<String> {
         return categoryService.deleteCategory(id)
