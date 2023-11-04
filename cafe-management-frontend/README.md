@@ -54,10 +54,13 @@ For details see: https://medium.com/swlh/angular-unit-testing-jasmine-karma-step
 ### Teststatus:
 
 * Components:
-  * `login` OK
+  * `login.component.ts` OK
+  * `category.component.ts` OK
+  
 * Services:
   * `dashboard.service` OK
   * `route-guard.service` OK
+  * `category.service.ts` OK
 
 ## Debugging
 

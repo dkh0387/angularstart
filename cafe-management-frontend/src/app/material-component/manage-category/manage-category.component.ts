@@ -102,4 +102,11 @@ export class ManageCategoryComponent extends ResponseHadler implements OnInit, R
     })
   }
 
+  setCategoryService(categoryService: CategoryService) {
+    this.categoryService = categoryService;
+  }
+
+  setDialog(matDialog: any) {
+    this.dialog = matDialog;
+  }
 }
