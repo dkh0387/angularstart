@@ -11,7 +11,6 @@ import {NgxUiLoaderService} from "ngx-ui-loader";
 import {BehaviorSubject, Observable} from "rxjs";
 import {MatTableModule} from "@angular/material/table";
 import {CategoryComponent} from "../dialog/category/category.component";
-import any = jasmine.any;
 import {EventEmitter} from "@angular/core";
 import {GlobalConstants} from "../../shared/global-constants";
 import {ConfirmationComponent} from "../dialog/confirmation/confirmation.component";
@@ -30,7 +29,6 @@ describe('ManageCategoryComponent', () => {
 
   let getCategorySubject = new BehaviorSubject([{id: 1, name: "Testcategory"}]);
   let spyGetCategories: jasmine.Spy;
-  let spyGetCategoriesError = false;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
