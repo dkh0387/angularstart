@@ -1,15 +1,9 @@
-import {Component, OnInit} from '@angular/core';
-import {CategoryService} from "../../services/category.service";
+import {Component} from '@angular/core';
 import {NgxUiLoaderService} from "ngx-ui-loader";
 import {MatDialog} from "@angular/material/dialog";
 import {SnackbarService} from "../../services/snackbar.service";
 import {Router} from "@angular/router";
-import {ResponseHadler} from "../../extended/response-handler";
-import {RestSubscriber} from "../../interfaces/rest-subscriber";
-import {Observable} from "rxjs";
 import {ProductService} from "../../services/product.service";
-import {MatTableDataSource} from "@angular/material/table";
-import {GlobalConstants} from "../../shared/global-constants";
 import {ItemManager} from "../../extended/item-manager";
 
 @Component({

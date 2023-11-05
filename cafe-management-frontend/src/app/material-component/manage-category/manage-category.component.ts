@@ -1,13 +1,9 @@
-import {Component, OnInit} from '@angular/core';
+import {Component} from '@angular/core';
 import {CategoryService} from "../../services/category.service";
 import {NgxUiLoaderService} from "ngx-ui-loader";
 import {MatDialog, MatDialogConfig} from "@angular/material/dialog";
 import {SnackbarService} from "../../services/snackbar.service";
 import {Router} from "@angular/router";
-import {RestSubscriber} from "../../interfaces/rest-subscriber";
-import {Observable} from 'rxjs';
-import {MatTableDataSource} from "@angular/material/table";
-import {ResponseHadler} from "../../extended/response-handler";
 import {GlobalConstants} from "../../shared/global-constants";
 import {ConfirmationComponent} from "../dialog/confirmation/confirmation.component";
 import {CategoryComponent} from "../dialog/category/category.component";
