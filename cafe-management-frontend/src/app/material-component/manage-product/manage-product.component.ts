@@ -27,4 +27,7 @@ export class ManageProductComponent extends ItemManager {
     this.subscribe(this.productService.getProducts());
   }
 
+  onChange(checked: boolean, id: bigint) {
+
+  }
 }

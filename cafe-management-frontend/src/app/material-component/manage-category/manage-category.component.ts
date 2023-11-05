@@ -16,7 +16,7 @@ import {ItemManager} from "../../extended/item-manager";
 })
 export class ManageCategoryComponent extends ItemManager {
 
-  displayedColumns: string[] = ["name", "edit", "delete"];
+  displayedColumns: string[] = ["name", "edit"];
 
   constructor(private categoryService: CategoryService,
               ngxService: NgxUiLoaderService,
