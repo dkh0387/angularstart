@@ -5,11 +5,9 @@ import {Observable} from "rxjs";
 import {MatTableDataSource} from "@angular/material/table";
 import {GlobalConstants} from "../shared/global-constants";
 import {NgxUiLoaderService} from "ngx-ui-loader";
-import {MatDialog, MatDialogConfig} from "@angular/material/dialog";
+import {MatDialog} from "@angular/material/dialog";
 import {SnackbarService} from "../services/snackbar.service";
 import {Router} from "@angular/router";
-import {CategoryComponent} from "../material-component/dialog/category/category.component";
-import {ConfirmationComponent} from "../material-component/dialog/confirmation/confirmation.component";
 
 /**
  * Base class for managing pages of all items like categories, products, etc.
