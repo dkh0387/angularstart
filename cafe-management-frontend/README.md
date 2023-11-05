@@ -56,7 +56,8 @@ For details see: https://medium.com/swlh/angular-unit-testing-jasmine-karma-step
 * Components:
   * `login.component.ts` OK
   * `category.component.ts` OK
-  
+  * `manage-category.component.ts` OK
+
 * Services:
   * `dashboard.service` OK
   * `route-guard.service` OK
@@ -116,6 +117,14 @@ WE are able to define routing access per component. As example, we use `material
 ## Example of using data tables
 
 * see `manage-category.component.html`
+
+## Adding a new sidebar menu element (on category management example)
+
+* Create a new service for endpoint calls: `category.service.ts`
+* Create a new component to execute the calls from service (CRUD). This one is a dialog content: `category.component.ts`
+* Create a new component for the page itself (by clicking on the sidebar menu item this one appears): `manage-category.component.ts`.
+  Here we create buttons to calls dialogs with the component inside
+* Add the new menu item to the list: `menu-items.ts`
 
 ## Role management
 

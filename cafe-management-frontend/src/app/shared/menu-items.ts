@@ -23,6 +23,13 @@ const MENUITEMS = [
     type: 'link',
     icon: GlobalConstants.categoryPath,
     role: GlobalConstants.roleAdmin
+  },
+  {
+    state: GlobalConstants.productPath,
+    name: 'Manage Product',
+    type: 'link',
+    icon: GlobalConstants.productIcon,
+    role: GlobalConstants.roleAdmin
   }
 ];
 

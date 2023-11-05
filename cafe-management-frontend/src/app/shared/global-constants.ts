@@ -9,6 +9,9 @@ export class GlobalConstants {
   public static productPath: string = "product";
   public static billPath: string = "bill";
 
+  //Sidebar
+  public static productIcon: string = "inventory_2";
+
   //Roles
   public static roleUser: string = "ROLE_USER"
   public static roleAdmin: string = "ROLE_ADMIN"

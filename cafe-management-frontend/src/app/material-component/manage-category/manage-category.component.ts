@@ -11,41 +11,23 @@ import {ResponseHadler} from "../../extended/response-handler";
 import {GlobalConstants} from "../../shared/global-constants";
 import {ConfirmationComponent} from "../dialog/confirmation/confirmation.component";
 import {CategoryComponent} from "../dialog/category/category.component";
+import {ItemManager} from "../../extended/item-manager";
 
 @Component({
   selector: 'app-manage-category',
   templateUrl: './manage-category.component.html',
   styleUrls: ['./manage-category.component.scss']
 })
-export class ManageCategoryComponent extends ResponseHadler implements OnInit, RestSubscriber {
+export class ManageCategoryComponent extends ItemManager {
 
   displayedColumns: string[] = ["name", "edit", "delete"];
-  dataSource: any;
 
   constructor(private categoryService: CategoryService,
-              private ngxService: NgxUiLoaderService,
-              private dialog: MatDialog,
-              private snackBarService: SnackbarService,
-              private router: Router) {
-    super();
-  }
-
-  ngOnInit(): void {
-    this.ngxService.start();
-    this.tableData();
-  }
-
-  subscribe(observable: Observable<Object>): void {
-    observable.subscribe((response: any) => {
-        this.ngxService.stop();
-        this.dataSource = new MatTableDataSource(response);
-      }, (error: any) => {
-        this.ngxService.stop();
-        console.log(error.error?.message);
-        super.buildResponseMessageFrom(error);
-        this.snackBarService.openSnackBar(this.responseMessage, GlobalConstants.error);
-      }
-    )
+              ngxService: NgxUiLoaderService,
+              dialog: MatDialog,
+              snackBarService: SnackbarService,
+              router: Router) {
+    super(ngxService, dialog, snackBarService, router);
   }
 
   tableData() {
