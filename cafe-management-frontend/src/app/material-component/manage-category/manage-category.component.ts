@@ -30,11 +30,6 @@ export class ManageCategoryComponent extends ItemManager {
     this.subscribe(this.categoryService.getCategories());
   }
 
-  applyFilter(event: Event) {
-    const filterValue = (event.target as HTMLInputElement).value;
-    this.dataSource.filter = filterValue.trim().toLowerCase();
-  }
-
   /**
    * Binding the `CategoryComponent` by calling a new `MatDialog` instance.
    * Because of Injection, all data from the dialog will be transmitted to the component.
