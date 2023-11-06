@@ -1,7 +1,7 @@
-import {Component} from '@angular/core';
+import {Component, EventEmitter} from '@angular/core';
 import {CategoryService} from "../../services/category.service";
 import {NgxUiLoaderService} from "ngx-ui-loader";
-import {MatDialog, MatDialogConfig} from "@angular/material/dialog";
+import {MatDialog, MatDialogConfig, MatDialogRef} from "@angular/material/dialog";
 import {SnackbarService} from "../../services/snackbar.service";
 import {Router} from "@angular/router";
 import {GlobalConstants} from "../../shared/global-constants";
@@ -60,7 +60,19 @@ export class ManageCategoryComponent extends ItemManager {
     const dialogConfig = new MatDialogConfig();
     dialogConfig.data = {data: data, message: "delete the category?", confirmation: "Delete"};
     const dialogRef = this.dialog.open(ConfirmationComponent, dialogConfig);
-    const sub = dialogRef.componentInstance.onEmitStatusChange.subscribe((response) => {
+    const sub = this.subscribeForDelete(dialogRef, data);
+  }
+
+  setCategoryService(categoryService: CategoryService) {
+    this.categoryService = categoryService;
+  }
+
+  setDialog(matDialog: any) {
+    this.dialog = matDialog;
+  }
+
+  private subscribeForDelete(dialogRef: MatDialogRef<ConfirmationComponent>, data: any) {
+    return dialogRef.componentInstance.onEmitStatusChange.subscribe((response) => {
       dialogRef.close();
       this.categoryService.deleteCategory(data).subscribe((response: any) => {
         this.ngxService.stop();
@@ -72,14 +84,6 @@ export class ManageCategoryComponent extends ItemManager {
         super.buildResponseMessageFrom(error);
         this.snackBarService.openSnackBar(this.responseMessage, GlobalConstants.error);
       });
-    })
-  }
-
-  setCategoryService(categoryService: CategoryService) {
-    this.categoryService = categoryService;
-  }
-
-  setDialog(matDialog: any) {
-    this.dialog = matDialog;
+    });
   }
 }

@@ -34,9 +34,15 @@ class ProductServiceImpl(
 
                 val product = Product.createFromMapper(productMapper)
                 productRepository.save(product)
-                CafeUtils.getStringResponseFor(CafeConstants.ADD_PRODUCT_SUCCESSFULLY, HttpStatus.OK)
+                CafeUtils.getStringResponseFor(
+                    CafeUtils.formatBodyAsJSON(CafeConstants.ADD_PRODUCT_SUCCESSFULLY),
+                    HttpStatus.OK
+                )
             } else {
-                CafeUtils.getStringResponseFor(CafeConstants.UNAUTHORIZED_ACCESS, HttpStatus.UNAUTHORIZED)
+                CafeUtils.getStringResponseFor(
+                    CafeUtils.formatBodyAsJSON(CafeConstants.UNAUTHORIZED_ACCESS),
+                    HttpStatus.UNAUTHORIZED
+                )
             }
 
         } catch (e: Exception) {
@@ -47,7 +53,10 @@ class ProductServiceImpl(
                 )
             )
         }
-        return CafeUtils.getStringResponseFor(CafeConstants.ADD_PRODUCT_WENT_WRONG, HttpStatus.INTERNAL_SERVER_ERROR)
+        return CafeUtils.getStringResponseFor(
+            CafeUtils.formatBodyAsJSON(CafeConstants.ADD_PRODUCT_WENT_WRONG),
+            HttpStatus.INTERNAL_SERVER_ERROR
+        )
     }
 
     override fun getAllProduct(): ResponseEntity<List<ProductWrapper>> {

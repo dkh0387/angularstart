@@ -4,7 +4,8 @@ This project was generated with [Angular CLI](https://github.com/angular/angular
 
 ## CSS design stuff
 
-can be found here: `src/assets`
+* Can be found here: `src/assets`
+* Themes etc.: `src/assets/styles/variable.scss`
 
 ## Development server
 
@@ -117,6 +118,10 @@ WE are able to define routing access per component. As example, we use `material
 ## Example of using data tables
 
 * see `manage-category.component.html`
+
+## Example of using multi selection options:
+
+* see `product.component.html`
 
 ## Adding a new sidebar menu element (on category management example)
 

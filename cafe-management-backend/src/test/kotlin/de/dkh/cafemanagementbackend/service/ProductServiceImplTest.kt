@@ -6,6 +6,7 @@ import de.dkh.cafemanagementbackend.jsonwebtoken.JwtFilter
 import de.dkh.cafemanagementbackend.repository.CategoryRepository
 import de.dkh.cafemanagementbackend.repository.ProductRepository
 import de.dkh.cafemanagementbackend.testutils.TestData
+import de.dkh.cafemanagementbackend.utils.CafeUtils
 import de.dkh.cafemanagementbackend.utils.ServiceUtils
 import de.dkh.cafemanagementbackend.wrapper.ProductWrapper
 import io.mockk.*
@@ -65,7 +66,7 @@ class ProductServiceImplTest {
             // then
             assertThat(responseEntity).isEqualTo(
                 ResponseEntity<String>(
-                    CafeConstants.UNAUTHORIZED_ACCESS, HttpStatus.UNAUTHORIZED
+                    CafeUtils.formatBodyAsJSON(CafeConstants.UNAUTHORIZED_ACCESS), HttpStatus.UNAUTHORIZED
                 )
             )
         }
@@ -94,7 +95,7 @@ class ProductServiceImplTest {
             verify(exactly = 1) { productRepository.save(product) }
             assertThat(responseEntity).isEqualTo(
                 ResponseEntity<String>(
-                    CafeConstants.ADD_PRODUCT_SUCCESSFULLY, HttpStatus.OK
+                    CafeUtils.formatBodyAsJSON(CafeConstants.ADD_PRODUCT_SUCCESSFULLY), HttpStatus.OK
                 )
             )
         }
