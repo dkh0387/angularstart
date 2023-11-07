@@ -301,7 +301,11 @@ class ProductRESTImplTest {
                 content { contentType(MediaType("text", "plain", StandardCharsets.UTF_8)) }
             }
 
-            assertThat(resultActionsDsl.andReturn().response.contentAsString).isEqualTo(CafeConstants.DELETE_PRODUCT_WENT_WRONG)
+            assertThat(resultActionsDsl.andReturn().response.contentAsString).isEqualTo(
+                CafeUtils.formatBodyAsJSON(
+                    CafeConstants.DELETE_PRODUCT_WENT_WRONG
+                )
+            )
         }
 
         @Test
@@ -318,7 +322,11 @@ class ProductRESTImplTest {
                 content { contentType(MediaType("text", "plain", StandardCharsets.UTF_8)) }
             }
 
-            assertThat(resultActionsDsl.andReturn().response.contentAsString).isEqualTo(CafeConstants.UNAUTHORIZED_ACCESS)
+            assertThat(resultActionsDsl.andReturn().response.contentAsString).isEqualTo(
+                CafeUtils.formatBodyAsJSON(
+                    CafeConstants.UNAUTHORIZED_ACCESS
+                )
+            )
         }
 
         @Test

@@ -129,14 +129,20 @@ class ProductServiceImpl(
 
                 if (productOptional.isPresent) {
                     productRepository.deleteById(productOptional.get().id)
-                    CafeUtils.getStringResponseFor(CafeConstants.DELETE_PRODUCT_SUCCESSFULLY, HttpStatus.OK)
+                    CafeUtils.getStringResponseFor(
+                        CafeUtils.formatBodyAsJSON(CafeConstants.DELETE_PRODUCT_SUCCESSFULLY),
+                        HttpStatus.OK
+                    )
                 } else {
                     CafeUtils.getStringResponseFor(
-                        CafeConstants.DELETE_PRODUCT_WENT_WRONG, HttpStatus.BAD_REQUEST
+                        CafeUtils.formatBodyAsJSON(CafeConstants.DELETE_PRODUCT_WENT_WRONG), HttpStatus.BAD_REQUEST
                     )
                 }
             } else {
-                CafeUtils.getStringResponseFor(CafeConstants.UNAUTHORIZED_ACCESS, HttpStatus.UNAUTHORIZED)
+                CafeUtils.getStringResponseFor(
+                    CafeUtils.formatBodyAsJSON(CafeConstants.UNAUTHORIZED_ACCESS),
+                    HttpStatus.UNAUTHORIZED
+                )
             }
         } catch (e: Exception) {
             logAndThrow(
@@ -146,7 +152,10 @@ class ProductServiceImpl(
                 )
             )
         }
-        return CafeUtils.getStringResponseFor(CafeConstants.DELETE_PRODUCT_WENT_WRONG, HttpStatus.INTERNAL_SERVER_ERROR)
+        return CafeUtils.getStringResponseFor(
+            CafeUtils.formatBodyAsJSON(CafeConstants.DELETE_PRODUCT_WENT_WRONG),
+            HttpStatus.INTERNAL_SERVER_ERROR
+        )
     }
 
     override fun updateProductStatus(requestMap: Map<String, String>): ResponseEntity<String> {

@@ -1,12 +1,13 @@
 import {Component} from '@angular/core';
 import {NgxUiLoaderService} from "ngx-ui-loader";
-import {MatDialog, MatDialogConfig} from "@angular/material/dialog";
+import {MatDialog, MatDialogConfig, MatDialogRef} from "@angular/material/dialog";
 import {SnackbarService} from "../../services/snackbar.service";
 import {Router} from "@angular/router";
 import {ProductService} from "../../services/product.service";
 import {ItemManager} from "../../extended/item-manager";
 import {GlobalConstants} from "../../shared/global-constants";
 import {ProductComponent} from "../dialog/product/product.component";
+import {ConfirmationComponent} from "../dialog/confirmation/confirmation.component";
 
 @Component({
   selector: 'app-manage-product',
@@ -50,26 +51,15 @@ export class ManageProductComponent extends ItemManager {
     })
   }
 
-  /*  handleDeleteAction(data: any) {
-      const dialogConfig = new MatDialogConfig();
-      dialogConfig.data = {data: data, message: "delete the category?", confirmation: "Delete"};
-      const dialogRef = this.dialog.open(ConfirmationComponent, dialogConfig);
-      const sub = dialogRef.componentInstance.onEmitStatusChange.subscribe((response) => {
-        dialogRef.close();
-        this.productService.deleteProduct(data).subscribe((response: any) => {
-          this.ngxService.stop();
-          this.snackBarService.openSnackBar(response, GlobalConstants.success);
-          this.tableData();
-        }, (error: any) => {
-          this.ngxService.stop();
-          console.log(error.error?.message);
-          super.buildResponseMessageFrom(error);
-          this.snackBarService.openSnackBar(this.responseMessage, GlobalConstants.error);
-        });
-      })
-    }*/
+  handleDeleteAction(data: any) {
+    const dialogConfig = new MatDialogConfig();
+    dialogConfig.data = {data: data, message: `delete the product ${data.name}?`, confirmation: true};
+    const dialogRef = this.dialog.open(ConfirmationComponent, dialogConfig);
+    const sub = this.subscribeForDelete(dialogRef, data, this.productService.deleteProduct(data));
+  }
 
   handleStatusChangeAction(checked: boolean, id: bigint) {
 
   }
+
 }

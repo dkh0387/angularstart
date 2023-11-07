@@ -5,9 +5,11 @@ import {Observable} from "rxjs";
 import {MatTableDataSource} from "@angular/material/table";
 import {GlobalConstants} from "../shared/global-constants";
 import {NgxUiLoaderService} from "ngx-ui-loader";
-import {MatDialog} from "@angular/material/dialog";
+import {MatDialog, MatDialogRef} from "@angular/material/dialog";
 import {SnackbarService} from "../services/snackbar.service";
 import {Router} from "@angular/router";
+import {ConfirmationComponent} from "../material-component/dialog/confirmation/confirmation.component";
+import {RequestService} from "../services/extended/request.service";
 
 /**
  * Base class for managing pages of all items like categories, products, etc.
@@ -41,6 +43,23 @@ export class ItemManager extends ResponseHadler implements OnInit, RestSubscribe
         this.snackBarService.openSnackBar(this.responseMessage, GlobalConstants.error);
       }
     )
+  }
+
+  subscribeForDelete(dialogRef: MatDialogRef<ConfirmationComponent>, data: any, observable: Observable<Object>) {
+    return dialogRef.componentInstance.onEmitStatusChange.subscribe((response) => {
+      this.ngxService.start();
+      observable.subscribe((response: any) => {
+        this.ngxService.stop();
+        this.snackBarService.openSnackBar(response, GlobalConstants.success);
+        this.tableData();
+      }, (error: any) => {
+        this.ngxService.stop();
+        console.log(error.error?.message);
+        super.buildResponseMessageFrom(error);
+        this.snackBarService.openSnackBar(this.responseMessage, GlobalConstants.error);
+      });
+      dialogRef.close();
+    });
   }
 
   tableData() {

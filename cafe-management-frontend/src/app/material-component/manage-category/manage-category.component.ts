@@ -58,9 +58,9 @@ export class ManageCategoryComponent extends ItemManager {
 
   handleDeleteAction(data: any) {
     const dialogConfig = new MatDialogConfig();
-    dialogConfig.data = {data: data, message: "delete the category?", confirmation: "Delete"};
+    dialogConfig.data = {data: data, message: `delete the category ${data.name}?`, confirmation: true};
     const dialogRef = this.dialog.open(ConfirmationComponent, dialogConfig);
-    const sub = this.subscribeForDelete(dialogRef, data);
+    const sub = this.subscribeForDelete(dialogRef, data, this.categoryService.deleteCategory(data));
   }
 
   setCategoryService(categoryService: CategoryService) {
@@ -71,19 +71,4 @@ export class ManageCategoryComponent extends ItemManager {
     this.dialog = matDialog;
   }
 
-  private subscribeForDelete(dialogRef: MatDialogRef<ConfirmationComponent>, data: any) {
-    return dialogRef.componentInstance.onEmitStatusChange.subscribe((response) => {
-      dialogRef.close();
-      this.categoryService.deleteCategory(data).subscribe((response: any) => {
-        this.ngxService.stop();
-        this.snackBarService.openSnackBar(response, GlobalConstants.success);
-        this.tableData();
-      }, (error: any) => {
-        this.ngxService.stop();
-        console.log(error.error?.message);
-        super.buildResponseMessageFrom(error);
-        this.snackBarService.openSnackBar(this.responseMessage, GlobalConstants.error);
-      });
-    });
-  }
 }
