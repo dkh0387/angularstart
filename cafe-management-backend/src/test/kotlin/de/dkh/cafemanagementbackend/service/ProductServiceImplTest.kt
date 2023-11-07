@@ -408,7 +408,9 @@ class ProductServiceImplTest {
             // then
             verify(exactly = 0) { productRepository.updateStatus(product.status, product.id) }
             assertThat(responseEntity).isEqualTo(
-                ResponseEntity<String>(CafeConstants.UNAUTHORIZED_ACCESS, HttpStatus.UNAUTHORIZED)
+                ResponseEntity<String>(
+                    CafeUtils.formatBodyAsJSON(CafeConstants.UNAUTHORIZED_ACCESS), HttpStatus.UNAUTHORIZED
+                )
             )
         }
 
@@ -429,7 +431,9 @@ class ProductServiceImplTest {
             // then
             verify(exactly = 1) { productRepository.updateStatus(product.status, product.id) }
             assertThat(responseEntity).isEqualTo(
-                ResponseEntity<String>(CafeConstants.UPDATE_PRODUCT_STATUS_SUCCESSFULLY, HttpStatus.OK)
+                ResponseEntity<String>(
+                    CafeUtils.formatBodyAsJSON(CafeConstants.UPDATE_PRODUCT_STATUS_SUCCESSFULLY), HttpStatus.OK
+                )
             )
         }
 

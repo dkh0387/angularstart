@@ -59,7 +59,23 @@ export class ManageProductComponent extends ItemManager {
   }
 
   handleStatusChangeAction(checked: boolean, id: bigint) {
+    this.ngxService.start();
+    const data = {id: id, status: checked};
+    this.subscribeForUpdateStatus(data);
+  }
 
+  private subscribeForUpdateStatus(data: any) {
+    this.ngxService.start();
+    return this.productService.updateProductStatus(data).subscribe((response: any) => {
+      this.ngxService.stop();
+      this.snackBarService.openSnackBar(response, GlobalConstants.success);
+      this.tableData();
+    }, (error: any) => {
+      this.ngxService.stop();
+      console.log(error.error?.message);
+      super.buildResponseMessageFrom(error);
+      this.snackBarService.openSnackBar(this.responseMessage, GlobalConstants.error);
+    });
   }
 
 }

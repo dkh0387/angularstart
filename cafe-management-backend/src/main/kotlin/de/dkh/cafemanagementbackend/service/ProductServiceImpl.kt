@@ -171,14 +171,21 @@ class ProductServiceImpl(
                 if (productOptional != null && productOptional.isPresent) {
                     val product = productOptional.get()
                     productRepository.updateStatus(productMapper.status!!, product.id)
-                    CafeUtils.getStringResponseFor(CafeConstants.UPDATE_PRODUCT_STATUS_SUCCESSFULLY, HttpStatus.OK)
+                    CafeUtils.getStringResponseFor(
+                        CafeUtils.formatBodyAsJSON(CafeConstants.UPDATE_PRODUCT_STATUS_SUCCESSFULLY),
+                        HttpStatus.OK
+                    )
                 } else {
                     CafeUtils.getStringResponseFor(
-                        CafeConstants.UPDATE_PRODUCT_STATUS_WENT_WRONG, HttpStatus.BAD_REQUEST
+                        CafeUtils.formatBodyAsJSON(CafeConstants.UPDATE_PRODUCT_STATUS_WENT_WRONG),
+                        HttpStatus.BAD_REQUEST
                     )
                 }
             } else {
-                CafeUtils.getStringResponseFor(CafeConstants.UNAUTHORIZED_ACCESS, HttpStatus.UNAUTHORIZED)
+                CafeUtils.getStringResponseFor(
+                    CafeUtils.formatBodyAsJSON(CafeConstants.UNAUTHORIZED_ACCESS),
+                    HttpStatus.UNAUTHORIZED
+                )
             }
         } catch (e: Exception) {
             logAndThrow(
@@ -189,7 +196,7 @@ class ProductServiceImpl(
             )
         }
         return CafeUtils.getStringResponseFor(
-            CafeConstants.UPDATE_PRODUCT_STATUS_WENT_WRONG, HttpStatus.INTERNAL_SERVER_ERROR
+            CafeUtils.formatBodyAsJSON(CafeConstants.UPDATE_PRODUCT_STATUS_WENT_WRONG), HttpStatus.INTERNAL_SERVER_ERROR
         )
     }
 

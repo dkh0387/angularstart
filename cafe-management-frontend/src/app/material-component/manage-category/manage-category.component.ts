@@ -8,6 +8,7 @@ import {GlobalConstants} from "../../shared/global-constants";
 import {ConfirmationComponent} from "../dialog/confirmation/confirmation.component";
 import {CategoryComponent} from "../dialog/category/category.component";
 import {ItemManager} from "../../extended/item-manager";
+import {Observable} from "rxjs";
 
 @Component({
   selector: 'app-manage-category',
