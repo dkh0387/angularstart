@@ -2,6 +2,7 @@ package de.dkh.cafemanagementbackend.controller
 
 import de.dkh.cafemanagementbackend.entity.Authority
 import de.dkh.cafemanagementbackend.entity.User
+import de.dkh.cafemanagementbackend.repository.BillRepository
 import de.dkh.cafemanagementbackend.repository.CategoryRepository
 import de.dkh.cafemanagementbackend.repository.ProductRepository
 import de.dkh.cafemanagementbackend.utils.ServiceUtils
@@ -33,7 +34,7 @@ class DashboardRESTImplTest {
     lateinit var productRepository: ProductRepository
 
     @Autowired
-    lateinit var billRepository: ProductRepository
+    lateinit var billRepository: BillRepository
 
     @BeforeEach
     fun setUp() {

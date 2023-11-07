@@ -8,6 +8,7 @@ import de.dkh.cafemanagementbackend.jsonwebtoken.JwtService
 import de.dkh.cafemanagementbackend.repository.CategoryRepository
 import de.dkh.cafemanagementbackend.repository.ProductRepository
 import de.dkh.cafemanagementbackend.testutils.TestData
+import de.dkh.cafemanagementbackend.utils.CafeUtils
 import de.dkh.cafemanagementbackend.utils.ServiceUtils
 import io.mockk.clearAllMocks
 import jakarta.servlet.ServletException
@@ -224,7 +225,11 @@ class ProductRESTImplTest {
                 content { contentType(MediaType("text", "plain", StandardCharsets.UTF_8)) }
             }
 
-            assertThat(resultActionsDsl.andReturn().response.contentAsString).isEqualTo(CafeConstants.UNAUTHORIZED_ACCESS)
+            assertThat(resultActionsDsl.andReturn().response.contentAsString).isEqualTo(
+                CafeUtils.formatBodyAsJSON(
+                    CafeConstants.UNAUTHORIZED_ACCESS
+                )
+            )
         }
 
         @Test

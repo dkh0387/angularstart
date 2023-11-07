@@ -40,17 +40,17 @@ export class ManageProductComponent extends ItemManager {
     })
   }
 
-  /*  handleEditAction(data: any) {
-      const dialogConfig = new MatDialogConfig();
-      dialogConfig.data = {action: GlobalConstants.dialogActionEdit, data: data};
-      const dialogRef = this.dialog.open(CategoryComponent, dialogConfig);
-      const sub = dialogRef.componentInstance.onEditCategory.subscribe((response) => {
-        dialogRef.close();
-        this.tableData();
-      })
-    }
+  handleEditAction(data: any) {
+    const dialogConfig = new MatDialogConfig();
+    dialogConfig.data = {action: GlobalConstants.dialogActionEdit, data: data};
+    const dialogRef = this.dialog.open(ProductComponent, dialogConfig);
+    const sub = dialogRef.componentInstance.onEditProduct.subscribe((response) => {
+      dialogRef.close();
+      this.tableData();
+    })
+  }
 
-    handleDeleteAction(data: any) {
+  /*  handleDeleteAction(data: any) {
       const dialogConfig = new MatDialogConfig();
       dialogConfig.data = {data: data, message: "delete the category?", confirmation: "Delete"};
       const dialogRef = this.dialog.open(ConfirmationComponent, dialogConfig);

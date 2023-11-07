@@ -35,13 +35,11 @@ class ProductServiceImpl(
                 val product = Product.createFromMapper(productMapper)
                 productRepository.save(product)
                 CafeUtils.getStringResponseFor(
-                    CafeUtils.formatBodyAsJSON(CafeConstants.ADD_PRODUCT_SUCCESSFULLY),
-                    HttpStatus.OK
+                    CafeUtils.formatBodyAsJSON(CafeConstants.ADD_PRODUCT_SUCCESSFULLY), HttpStatus.OK
                 )
             } else {
                 CafeUtils.getStringResponseFor(
-                    CafeUtils.formatBodyAsJSON(CafeConstants.UNAUTHORIZED_ACCESS),
-                    HttpStatus.UNAUTHORIZED
+                    CafeUtils.formatBodyAsJSON(CafeConstants.UNAUTHORIZED_ACCESS), HttpStatus.UNAUTHORIZED
                 )
             }
 
@@ -54,8 +52,7 @@ class ProductServiceImpl(
             )
         }
         return CafeUtils.getStringResponseFor(
-            CafeUtils.formatBodyAsJSON(CafeConstants.ADD_PRODUCT_WENT_WRONG),
-            HttpStatus.INTERNAL_SERVER_ERROR
+            CafeUtils.formatBodyAsJSON(CafeConstants.ADD_PRODUCT_WENT_WRONG), HttpStatus.INTERNAL_SERVER_ERROR
         )
     }
 
@@ -97,14 +94,18 @@ class ProductServiceImpl(
                     product.category = productMapper.getCategory().get()
                     product.status = productMapper.status!!
                     productRepository.save(product)
-                    CafeUtils.getStringResponseFor(CafeConstants.UPDATE_PRODUCT_SUCCESSFULLY, HttpStatus.OK)
+                    CafeUtils.getStringResponseFor(
+                        CafeUtils.formatBodyAsJSON(CafeConstants.UPDATE_PRODUCT_SUCCESSFULLY), HttpStatus.OK
+                    )
                 } else {
                     CafeUtils.getStringResponseFor(
-                        CafeConstants.UPDATE_PRODUCT_WENT_WRONG, HttpStatus.BAD_REQUEST
+                        CafeUtils.formatBodyAsJSON(CafeConstants.UPDATE_PRODUCT_WENT_WRONG), HttpStatus.BAD_REQUEST
                     )
                 }
             } else {
-                CafeUtils.getStringResponseFor(CafeConstants.UNAUTHORIZED_ACCESS, HttpStatus.UNAUTHORIZED)
+                CafeUtils.getStringResponseFor(
+                    CafeUtils.formatBodyAsJSON(CafeConstants.UNAUTHORIZED_ACCESS), HttpStatus.UNAUTHORIZED
+                )
             }
         } catch (e: Exception) {
             logAndThrow(
@@ -114,7 +115,9 @@ class ProductServiceImpl(
                 )
             )
         }
-        return CafeUtils.getStringResponseFor(CafeConstants.UPDATE_PRODUCT_WENT_WRONG, HttpStatus.INTERNAL_SERVER_ERROR)
+        return CafeUtils.getStringResponseFor(
+            CafeUtils.formatBodyAsJSON(CafeConstants.UPDATE_PRODUCT_WENT_WRONG), HttpStatus.INTERNAL_SERVER_ERROR
+        )
     }
 
     override fun deleteProduct(id: Long): ResponseEntity<String> {
@@ -129,8 +132,7 @@ class ProductServiceImpl(
                     CafeUtils.getStringResponseFor(CafeConstants.DELETE_PRODUCT_SUCCESSFULLY, HttpStatus.OK)
                 } else {
                     CafeUtils.getStringResponseFor(
-                        CafeConstants.DELETE_PRODUCT_WENT_WRONG,
-                        HttpStatus.BAD_REQUEST
+                        CafeConstants.DELETE_PRODUCT_WENT_WRONG, HttpStatus.BAD_REQUEST
                     )
                 }
             } else {
@@ -178,8 +180,7 @@ class ProductServiceImpl(
             )
         }
         return CafeUtils.getStringResponseFor(
-            CafeConstants.UPDATE_PRODUCT_STATUS_WENT_WRONG,
-            HttpStatus.INTERNAL_SERVER_ERROR
+            CafeConstants.UPDATE_PRODUCT_STATUS_WENT_WRONG, HttpStatus.INTERNAL_SERVER_ERROR
         )
     }
 

@@ -195,7 +195,9 @@ class ProductServiceImplTest {
                 // then
                 verify(exactly = 0) { productRepository.save(any()) }
                 assertThat(responseEntity).isEqualTo(
-                    ResponseEntity<String>(CafeConstants.UNAUTHORIZED_ACCESS, HttpStatus.UNAUTHORIZED)
+                    ResponseEntity<String>(
+                        CafeUtils.formatBodyAsJSON(CafeConstants.UNAUTHORIZED_ACCESS), HttpStatus.UNAUTHORIZED
+                    )
                 )
             }
 
@@ -223,7 +225,9 @@ class ProductServiceImplTest {
                 // then
                 verify(exactly = 1) { productRepository.save(any()) }
                 assertThat(responseEntity).isEqualTo(
-                    ResponseEntity<String>(CafeConstants.UPDATE_PRODUCT_SUCCESSFULLY, HttpStatus.OK)
+                    ResponseEntity<String>(
+                        CafeUtils.formatBodyAsJSON(CafeConstants.UPDATE_PRODUCT_SUCCESSFULLY), HttpStatus.OK
+                    )
                 )
             }
 
@@ -274,7 +278,9 @@ class ProductServiceImplTest {
             // then
             verify(exactly = 0) { productRepository.save(any()) }
             assertThat(responseEntity).isEqualTo(
-                ResponseEntity<String>(CafeConstants.UNAUTHORIZED_ACCESS, HttpStatus.UNAUTHORIZED)
+                ResponseEntity<String>(
+                    CafeUtils.formatBodyAsJSON(CafeConstants.UNAUTHORIZED_ACCESS), HttpStatus.UNAUTHORIZED
+                )
             )
         }
 
@@ -302,7 +308,9 @@ class ProductServiceImplTest {
             // then
             verify(exactly = 1) { productRepository.save(any()) }
             assertThat(responseEntity).isEqualTo(
-                ResponseEntity<String>(CafeConstants.UPDATE_PRODUCT_SUCCESSFULLY, HttpStatus.OK)
+                ResponseEntity<String>(
+                    CafeUtils.formatBodyAsJSON(CafeConstants.UPDATE_PRODUCT_SUCCESSFULLY), HttpStatus.OK
+                )
             )
         }
 

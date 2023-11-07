@@ -97,7 +97,7 @@ export class ProductComponent extends ResponseHadler implements OnInit, SubmitHa
     const data = {
       id: this.dialogData.data.id,
       name: formData.name,
-      categoryId: formData.category.id,
+      categoryId: formData.categoryId,
       price: formData.price,
       description: formData.description,
       status: formData.status
