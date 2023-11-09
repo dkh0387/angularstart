@@ -31,4 +31,12 @@ export class ProductService extends RequestService {
   deleteProduct(data: any) {
     return super.post("/" + GlobalConstants.productPath + `/delete/${data.id}`, {});
   }
+
+  getProductsByCategory(data: any) {
+    return super.get("/" + GlobalConstants.productPath + `/getByCategory/${data.categoryId}`);
+  }
+
+  getProductsById(data: any) {
+    return super.get("/" + GlobalConstants.productPath + `/getById/${data.id}`);
+  }
 }

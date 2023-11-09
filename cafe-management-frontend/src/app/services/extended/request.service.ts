@@ -1,8 +1,8 @@
-import {Injectable} from '@angular/core';
+import {Injectable} from "@angular/core";
 import {environment} from "../../../environments/environment";
 import {HttpClient, HttpHeaders} from "@angular/common/http";
 
-@Injectable({providedIn: 'root'})
+@Injectable({providedIn: "root"})
 export class RequestService {
 
   url = environment.apiUrl;
@@ -12,8 +12,12 @@ export class RequestService {
 
   protected post(endpointUrl: string, data: any) {
     return this.httpClient.post(this.url + endpointUrl, data, {
-      headers: new HttpHeaders().set('content-Type', "application/json")
+      headers: new HttpHeaders().set("content-Type", "application/json")
     });
+  }
+
+  protected postForFile(endpointUrl: string, data: any) {
+    return this.httpClient.post(this.url + endpointUrl, data, {responseType: "blob"});
   }
 
   protected get(endpointUrl: string) {
