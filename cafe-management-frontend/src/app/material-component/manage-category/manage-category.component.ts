@@ -1,14 +1,13 @@
 import {Component} from '@angular/core';
 import {CategoryService} from "../../services/category.service";
 import {NgxUiLoaderService} from "ngx-ui-loader";
-import {MatDialog, MatDialogConfig, MatDialogRef} from "@angular/material/dialog";
+import {MatDialog, MatDialogConfig} from "@angular/material/dialog";
 import {SnackbarService} from "../../services/snackbar.service";
 import {Router} from "@angular/router";
 import {GlobalConstants} from "../../shared/global-constants";
 import {ConfirmationComponent} from "../dialog/confirmation/confirmation.component";
 import {CategoryComponent} from "../dialog/category/category.component";
 import {ItemManager} from "../../extended/item-manager";
-import {Observable} from "rxjs";
 
 @Component({
   selector: 'app-manage-category',

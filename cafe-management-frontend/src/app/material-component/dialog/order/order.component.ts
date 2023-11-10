@@ -6,10 +6,6 @@ import {Observable} from "rxjs";
 import {FormBuilder, FormGroup, Validators} from "@angular/forms";
 import {GlobalConstants} from "../../../shared/global-constants";
 import {MAT_DIALOG_DATA, MatDialogRef} from "@angular/material/dialog";
-import {ProductService} from "../../../services/product.service";
-import {CategoryService} from "../../../services/category.service";
-import {SnackbarService} from "../../../services/snackbar.service";
-import {BillService} from "../../../services/bill.service";
 
 @Component({
   selector: 'app-order',

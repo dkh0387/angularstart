@@ -3,7 +3,6 @@ import {ProductService} from "./product.service";
 import {CategoryService} from "./category.service";
 import {BillService} from "./bill.service";
 import {SnackbarService} from "./snackbar.service";
-import {Observable} from "rxjs";
 
 @Injectable({
   providedIn: 'root'
@@ -12,8 +11,7 @@ export class OrderService {
 
   constructor(private productService: ProductService,
               private categoryService: CategoryService,
-              private billService: BillService,
-              private snackBarService: SnackbarService) {
+              private billService: BillService) {
   }
 
   getFilteredCategories() {
