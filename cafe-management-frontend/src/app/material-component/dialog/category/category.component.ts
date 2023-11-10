@@ -30,7 +30,7 @@ export class CategoryComponent extends ResponseHadler implements OnInit, SubmitH
               private formBuilder: FormBuilder,
               private categoryService: CategoryService,
               public dialogRef: MatDialogRef<CategoryComponent>,
-              private snackBarService: SnackbarService) {
+              private snackbarService: SnackbarService) {
     super();
   }
 
@@ -56,12 +56,10 @@ export class CategoryComponent extends ResponseHadler implements OnInit, SubmitH
         this.onEditCategory.emit();
       }
       this.responseMessage = response;
-      this.snackBarService.openSnackBar(this.responseMessage, GlobalConstants.success);
+      this.snackbarService.openSnackBar(this.responseMessage, GlobalConstants.success);
     }, (error) => {
       this.dialogRef.close();
-      console.log(error);
-      super.buildResponseMessageFrom(error);
-      this.snackBarService.openSnackBar(this.responseMessage, GlobalConstants.error);
+      super.logAndShowError(error, this.snackbarService);
     })
   }
 

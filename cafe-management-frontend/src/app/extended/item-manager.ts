@@ -22,7 +22,7 @@ export class ItemManager extends ResponseHadler implements OnInit, RestSubscribe
 
   constructor(protected ngxService: NgxUiLoaderService,
               protected dialog: MatDialog,
-              protected snackBarService: SnackbarService,
+              protected snackbarService: SnackbarService,
               private router: Router) {
     super();
   }
@@ -38,9 +38,7 @@ export class ItemManager extends ResponseHadler implements OnInit, RestSubscribe
         this.dataSource = new MatTableDataSource(response);
       }, (error: any) => {
         this.ngxService.stop();
-        console.log(error.error?.message);
-        super.buildResponseMessageFrom(error);
-        this.snackBarService.openSnackBar(this.responseMessage, GlobalConstants.error);
+        super.logAndShowError(error, this.snackbarService);
       }
     )
   }
@@ -50,13 +48,11 @@ export class ItemManager extends ResponseHadler implements OnInit, RestSubscribe
       this.ngxService.start();
       observable.subscribe((response: any) => {
         this.ngxService.stop();
-        this.snackBarService.openSnackBar(response, GlobalConstants.success);
+        this.snackbarService.openSnackBar(response, GlobalConstants.success);
         this.tableData();
       }, (error: any) => {
         this.ngxService.stop();
-        console.log(error.error?.message);
-        super.buildResponseMessageFrom(error);
-        this.snackBarService.openSnackBar(this.responseMessage, GlobalConstants.error);
+        super.logAndShowError(error, this.snackbarService);
       });
       dialogRef.close();
     });

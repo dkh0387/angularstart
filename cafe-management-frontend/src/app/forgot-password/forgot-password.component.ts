@@ -38,9 +38,7 @@ export class ForgotPasswordComponent extends ResponseHadler implements OnInit, R
       this.router.navigate(["/"]); // after sign up navigate to the same page
     }, (error) => {
       this.ngxService.stop();
-      // show the error message
-      super.buildResponseMessageFrom(error);
-      this.snackbarService.openSnackBar(this.responseMessage, GlobalConstants.error);
+      super.logAndShowError(error, this.snackbarService);
     });
   }
 

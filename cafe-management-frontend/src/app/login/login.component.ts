@@ -46,9 +46,7 @@ export class LoginComponent extends ResponseHadler implements OnInit, RestSubscr
       this.router.navigate(["/cafe/dashboard"]); // after log in, navigate to the dashboard, see [app-routing.module.ts]
     }, (error) => {
       this.ngxService.stop();
-      // show the error message
-      super.buildResponseMessageFrom(error);
-      this.snackbarService.openSnackBar(this.responseMessage, GlobalConstants.error);
+      super.logAndShowError(error, this.snackbarService);
     });
   }
 

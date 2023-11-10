@@ -134,6 +134,7 @@ WE are able to define routing access per component. As example, we use `material
 * Create a new component for the page itself (by clicking on the sidebar menu item this one appears): `manage-category.component.ts`.
   Here we create buttons to calls dialogs with the component inside
 * Add the new menu item to the list: `menu-items.ts`
+* NOTE: the connection between URL path and according component being rendered has to be implemented in the according routing module: `material.routing.ts`
 
 ## Role management
 

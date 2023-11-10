@@ -62,9 +62,7 @@ export class ChangePasswordComponent extends ResponseHadler implements OnInit, R
     }, (error) => {
       console.log(error)
       this.ngxService.stop();
-      // show the error message
-      super.buildResponseMessageFrom(error);
-      this.snackbarService.openSnackBar(this.responseMessage, GlobalConstants.error);
+      super.logAndShowError(error, this.snackbarService);
     });
   }
 

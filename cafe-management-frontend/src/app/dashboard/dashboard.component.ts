@@ -45,10 +45,7 @@ export class DashboardComponent extends ResponseHadler implements AfterViewInit,
       this.data = response;
     }, (error: any) => {
       this.ngxService.stop();
-      // show the error message
-      super.buildResponseMessageFrom(error);
-      console.log(error);
-      this.snackBarService.openSnackBar(this.responseMessage, GlobalConstants.error);
+      super.logAndShowError(error, this.snackBarService);
     });
   }
 

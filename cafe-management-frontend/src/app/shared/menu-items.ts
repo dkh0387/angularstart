@@ -30,6 +30,13 @@ const MENUITEMS = [
     type: 'link',
     icon: GlobalConstants.productIcon,
     role: GlobalConstants.roleAdmin
+  },
+  {
+    state: GlobalConstants.orderPath,
+    name: 'Manage Order',
+    type: 'link',
+    icon: GlobalConstants.orderIcon,
+    role: GlobalConstants.roleAny
   }
 ];
 

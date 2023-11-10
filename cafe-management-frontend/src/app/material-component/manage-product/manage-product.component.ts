@@ -68,13 +68,11 @@ export class ManageProductComponent extends ItemManager {
     this.ngxService.start();
     return this.productService.updateProductStatus(data).subscribe((response: any) => {
       this.ngxService.stop();
-      this.snackBarService.openSnackBar(response, GlobalConstants.success);
+      this.snackbarService.openSnackBar(response, GlobalConstants.success);
       this.tableData();
     }, (error: any) => {
       this.ngxService.stop();
-      console.log(error.error?.message);
-      super.buildResponseMessageFrom(error);
-      this.snackBarService.openSnackBar(this.responseMessage, GlobalConstants.error);
+      super.logAndShowError(error, this.snackbarService);
     });
   }
 

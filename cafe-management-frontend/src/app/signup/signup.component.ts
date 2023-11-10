@@ -16,73 +16,71 @@ import {ResponseHadler} from "../extended/response-handler";
  * Component for sig up a form, consisting of name, email, contact number and password.
  */
 @Component({
-    selector: 'app-signup',
-    templateUrl: './signup.component.html',
-    styleUrls: ['./signup.component.scss']
+  selector: 'app-signup',
+  templateUrl: './signup.component.html',
+  styleUrls: ['./signup.component.scss']
 })
 export class SignupComponent extends ResponseHadler implements OnInit, RestSubscriber, SubmitHandler {
 
-    password = true;
-    confirmPassword = true;
-    signupForm: any = FormGroup;
+  password = true;
+  confirmPassword = true;
+  signupForm: any = FormGroup;
 
-    constructor(
-        private formBuilder: FormBuilder,
-        private router: Router,
-        private userService: UserService,
-        private snackbarService: SnackbarService,
-        public dialogRef: MatDialogRef<SignupComponent>,
-        private ngxService: NgxUiLoaderService) {
-      super();
-    }
+  constructor(
+    private formBuilder: FormBuilder,
+    private router: Router,
+    private userService: UserService,
+    private snackbarService: SnackbarService,
+    public dialogRef: MatDialogRef<SignupComponent>,
+    private ngxService: NgxUiLoaderService) {
+    super();
+  }
 
-    subscribe(observable: Observable<Object>): void {
-        observable.subscribe((response: any) => {
-            this.ngxService.stop();
-            this.dialogRef.close();
-            this.responseMessage = response;
-            this.snackbarService.openSnackBar(this.responseMessage, ""); // pop up a green or black message depending on success
-            this.router.navigate(["/"]); // after sign up navigate to the same page
-        }, (error) => {
-            this.ngxService.stop();
-            // show the error message
-            super.buildResponseMessageFrom(error);
-            this.snackbarService.openSnackBar(this.responseMessage, GlobalConstants.error);
-        });
-    }
+  subscribe(observable: Observable<Object>): void {
+    observable.subscribe((response: any) => {
+      this.ngxService.stop();
+      this.dialogRef.close();
+      this.responseMessage = response;
+      this.snackbarService.openSnackBar(this.responseMessage, ""); // pop up a green or black message depending on success
+      this.router.navigate(["/"]); // after sign up navigate to the same page
+    }, (error) => {
+      this.ngxService.stop();
+      super.logAndShowError(error, this.snackbarService);
+    });
+  }
 
-    ngOnInit(): void {
-        this.signupForm = this.formBuilder
-            .group({
-                name: [null, [Validators.required, Validators.pattern(GlobalConstants.nameRegex)]],
-                email: [null, [Validators.required, Validators.pattern(GlobalConstants.emailRegex)]],
-                contactNumber: [null, [Validators.required, Validators.pattern(GlobalConstants.contactNumberRegex)]],
-                password: [null, [Validators.required]],
-                confirmPassword: [null, [Validators.required]]
-            })
-    }
+  ngOnInit(): void {
+    this.signupForm = this.formBuilder
+      .group({
+        name: [null, [Validators.required, Validators.pattern(GlobalConstants.nameRegex)]],
+        email: [null, [Validators.required, Validators.pattern(GlobalConstants.emailRegex)]],
+        contactNumber: [null, [Validators.required, Validators.pattern(GlobalConstants.contactNumberRegex)]],
+        password: [null, [Validators.required]],
+        confirmPassword: [null, [Validators.required]]
+      })
+  }
 
-    /**
-     * Validation of password match. NOTE: the access to single fields inside the form!
-     */
-    passwordConfirmed() {
-        return this.signupForm.controls.password.value == this.signupForm.controls.confirmPassword.value;
-    }
+  /**
+   * Validation of password match. NOTE: the access to single fields inside the form!
+   */
+  passwordConfirmed() {
+    return this.signupForm.controls.password.value == this.signupForm.controls.confirmPassword.value;
+  }
 
-    handleSubmit() {
-        this.ngxService.start();
-        const formData = this.signupForm.value;
-        const data = {
-            name: formData.name,
-            email: formData.email,
-            contactNumber: formData.contactNumber,
-            password: formData.password
-        };
-        // we send data to the service and receive a response from them using subscribe method
-        this.subscribe(this.userService.signUp(data));
-    }
+  handleSubmit() {
+    this.ngxService.start();
+    const formData = this.signupForm.value;
+    const data = {
+      name: formData.name,
+      email: formData.email,
+      contactNumber: formData.contactNumber,
+      password: formData.password
+    };
+    // we send data to the service and receive a response from them using subscribe method
+    this.subscribe(this.userService.signUp(data));
+  }
 
-    setUserService(userService: UserService) {
-        this.userService = userService;
-    }
+  setUserService(userService: UserService) {
+    this.userService = userService;
+  }
 }

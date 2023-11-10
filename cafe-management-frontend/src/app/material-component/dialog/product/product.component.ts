@@ -6,7 +6,7 @@ import {SnackbarService} from "../../../services/snackbar.service";
 import {ResponseHadler} from "../../../extended/response-handler";
 import {SubmitHandler} from "../../../interfaces/submit-handler";
 import {RestSubscriber} from "../../../interfaces/rest-subscriber";
-import {observable, Observable} from "rxjs";
+import {Observable} from "rxjs";
 import {ProductService} from "../../../services/product.service";
 import {CategoryService} from "../../../services/category.service";
 
@@ -30,7 +30,7 @@ export class ProductComponent extends ResponseHadler implements OnInit, SubmitHa
               private productService: ProductService,
               private categoryService: CategoryService,
               public dialogRef: MatDialogRef<ProductComponent>,
-              private snackBarService: SnackbarService) {
+              private snackbarService: SnackbarService) {
     super();
   }
 
@@ -69,27 +69,23 @@ export class ProductComponent extends ResponseHadler implements OnInit, SubmitHa
         this.onEditProduct.emit();
       }
       this.responseMessage = response;
-      this.snackBarService.openSnackBar(this.responseMessage, GlobalConstants.success);
+      this.snackbarService.openSnackBar(this.responseMessage, GlobalConstants.success);
     }, (error) => {
       this.dialogRef.close();
-      console.log(error);
-      super.buildResponseMessageFrom(error);
-      this.snackBarService.openSnackBar(this.responseMessage, GlobalConstants.error);
-    })
-  }
-
-  subscribeForCategories(observable: Observable<Object>): void {
-    observable.subscribe((response: any) => {
-      this.categories = response;
-    }, (error: any) => {
-      console.log(error);
-      super.buildResponseMessageFrom(error);
-      this.snackBarService.openSnackBar(this.responseMessage, GlobalConstants.error);
+      super.logAndShowError(error, this.snackbarService);
     })
   }
 
   private getCategories() {
     return this.subscribeForCategories(this.categoryService.getCategories());
+  }
+
+  private subscribeForCategories(observable: Observable<Object>): void {
+    observable.subscribe((response: any) => {
+      this.categories = response;
+    }, (error: any) => {
+      super.logAndShowError(error, this.snackbarService);
+    })
   }
 
   private edit() {
