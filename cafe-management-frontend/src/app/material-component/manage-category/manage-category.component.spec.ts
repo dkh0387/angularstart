@@ -85,7 +85,7 @@ describe('ManageCategoryComponent', () => {
   it('should call the endpoint for get all categories and load table data', () => {
     setUp(false, false);
     fixture.detectChanges();
-    component.tableData();
+    component.loadData();
 
     expect(mockCategoryService.getCategories).toHaveBeenCalled();
     expect(component.dataSource._renderData.value[0]).toEqual(getCategorySubject.value[0]);
@@ -95,7 +95,7 @@ describe('ManageCategoryComponent', () => {
     setUp(true, false);
 
     expect(() => {
-      component.tableData()
+      component.loadData()
     }).toThrowError("Error!");
     expect(component.dataSource).toBeUndefined();
   });

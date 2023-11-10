@@ -27,7 +27,7 @@ export class ManageCategoryComponent extends ItemManager {
     super(ngxService, dialog, snackBarService, router);
   }
 
-  tableData() {
+  loadData() {
     this.subscribe(this.categoryService.getCategories());
   }
 
@@ -43,7 +43,7 @@ export class ManageCategoryComponent extends ItemManager {
     // If the CategoryComponent fires onAddCategory EventEmitter we reload the whole table
     const sub = dialogRef.componentInstance.onAddCategory.subscribe((response) => {
       dialogRef.close();
-      this.tableData();
+      this.loadData();
     })
   }
 
@@ -53,7 +53,7 @@ export class ManageCategoryComponent extends ItemManager {
     const dialogRef = this.dialog.open(CategoryComponent, dialogConfig);
     const sub = dialogRef.componentInstance.onEditCategory.subscribe((response) => {
       dialogRef.close();
-      this.tableData();
+      this.loadData();
     })
   }
 

@@ -11,7 +11,7 @@ import {Router} from "@angular/router";
 import {ConfirmationComponent} from "../material-component/dialog/confirmation/confirmation.component";
 
 /**
- * Base class for managing pages of all items like categories, products, etc.
+ * Base class for managing pages of all items like categories, products, etc., which have a table structure with actions.
  */
 @Injectable()
 export class ItemManager extends ResponseHadler implements OnInit, RestSubscriber {
@@ -28,7 +28,7 @@ export class ItemManager extends ResponseHadler implements OnInit, RestSubscribe
 
   ngOnInit(): void {
     this.ngxService.start();
-    this.tableData();
+    this.loadData();
   }
 
   subscribe(observable: Observable<Object>): void {
@@ -42,13 +42,18 @@ export class ItemManager extends ResponseHadler implements OnInit, RestSubscribe
     )
   }
 
-  subscribeForDelete(dialogRef: MatDialogRef<ConfirmationComponent>, data: any, observable: Observable<Object>) {
+  applyFilter(event: Event) {
+    const filterValue = (event.target as HTMLInputElement).value;
+    this.dataSource.filter = filterValue.trim().toLowerCase();
+  }
+
+  protected subscribeForDelete(dialogRef: MatDialogRef<ConfirmationComponent>, data: any, observable: Observable<Object>) {
     return dialogRef.componentInstance.onEmitStatusChange.subscribe((response) => {
       this.ngxService.start();
       observable.subscribe((response: any) => {
         this.ngxService.stop();
         this.snackbarService.openSnackBar(response, GlobalConstants.success);
-        this.tableData();
+        this.loadData();
       }, (error: any) => {
         this.ngxService.stop();
         super.logAndShowError(error, this.snackbarService);
@@ -57,25 +62,32 @@ export class ItemManager extends ResponseHadler implements OnInit, RestSubscribe
     });
   }
 
-  tableData() {
+  protected loadData() {
     // to override...
   }
 
-  applyFilter(event: Event) {
-    const filterValue = (event.target as HTMLInputElement).value;
-    this.dataSource.filter = filterValue.trim().toLowerCase();
+  protected updateDataSource() {
+    this.dataSource = [...this.dataSource];
   }
 
-  handleAddAction() {
+  protected handleAddAction() {
     // to override...
   }
 
-  handleEditAction(data: any) {
+  protected handleEditAction(data: any) {
     // to override...
   }
 
-  handleDeleteAction(data: any) {
+  protected handleDeleteAction(data: any) {
     // to override...
+  }
+
+  protected handleDropAction(data: any, element: any) {
+    // to override...
+  }
+
+  protected reset() {
+    this.dataSource = [];
   }
 
 }

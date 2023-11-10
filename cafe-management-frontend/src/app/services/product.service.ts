@@ -36,7 +36,7 @@ export class ProductService extends RequestService {
     return super.get("/" + GlobalConstants.productPath + `/getByCategory/${data.categoryId}`);
   }
 
-  getProductsById(data: any) {
+  getProductById(data: any) {
     return super.get("/" + GlobalConstants.productPath + `/getById/${data.id}`);
   }
 }

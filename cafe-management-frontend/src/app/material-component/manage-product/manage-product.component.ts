@@ -26,7 +26,7 @@ export class ManageProductComponent extends ItemManager {
     super(ngxService, dialog, snackBarService, router);
   }
 
-  tableData() {
+  loadData() {
     this.subscribe(this.productService.getProducts());
   }
 
@@ -37,7 +37,7 @@ export class ManageProductComponent extends ItemManager {
     const dialogRef = this.dialog.open(ProductComponent, dialogConfig);
     const sub = dialogRef.componentInstance.onAddProduct.subscribe((response) => {
       dialogRef.close();
-      this.tableData();
+      this.loadData();
     })
   }
 
@@ -47,7 +47,7 @@ export class ManageProductComponent extends ItemManager {
     const dialogRef = this.dialog.open(ProductComponent, dialogConfig);
     const sub = dialogRef.componentInstance.onEditProduct.subscribe((response) => {
       dialogRef.close();
-      this.tableData();
+      this.loadData();
     })
   }
 
@@ -69,7 +69,7 @@ export class ManageProductComponent extends ItemManager {
     return this.productService.updateProductStatus(data).subscribe((response: any) => {
       this.ngxService.stop();
       this.snackbarService.openSnackBar(response, GlobalConstants.success);
-      this.tableData();
+      this.loadData();
     }, (error: any) => {
       this.ngxService.stop();
       super.logAndShowError(error, this.snackbarService);

@@ -42,7 +42,7 @@ class BillServiceImpl(
             )
         }
         return CafeUtils.getStringResponseFor(
-            CafeConstants.GENERATE_BILL_WENT_WRONG, HttpStatus.INTERNAL_SERVER_ERROR
+            CafeUtils.formatBodyAsJSON(CafeConstants.GENERATE_BILL_WENT_WRONG), HttpStatus.INTERNAL_SERVER_ERROR
         )
     }
 

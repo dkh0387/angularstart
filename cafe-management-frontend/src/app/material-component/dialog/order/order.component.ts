@@ -30,50 +30,17 @@ export class OrderComponent extends ResponseHadler implements OnInit, SubmitHand
 
   constructor(@Inject(MAT_DIALOG_DATA) public dialogData: any,
               private formBuilder: FormBuilder,
-              private productService: ProductService,
-              private categoryService: CategoryService,
-              private billService: BillService,
-              public dialogRef: MatDialogRef<OrderComponent>,
-              private snackBarService: SnackbarService) {
+              public dialogRef: MatDialogRef<OrderComponent>) {
     super();
   }
 
   ngOnInit(): void {
-    this.orderForm = this.formBuilder.group({
-      name: [null, [Validators.required, Validators.pattern(GlobalConstants.nameRegex)]],
-      email: [null, [Validators.required, Validators.pattern(GlobalConstants.emailRegex)]],
-      contactNumber: [null, [Validators.required, Validators.pattern(GlobalConstants.contactNumberRegex)]],
-      paymentMethod: [null, [Validators.required]],
-      product: [null, [Validators.required]],
-      category: [null, [Validators.required]],
-      quantity: [null, [Validators.pattern(GlobalConstants.numberRegex)]],
-      price: [null, [Validators.pattern(GlobalConstants.priceRegex)]],
-      total: [0, [Validators.pattern(GlobalConstants.priceRegex)]]
-    });
 
-    if (this.dialogData.action === GlobalConstants.dialogActionEdit) {
-      this.dialogAction = GlobalConstants.dialogActionEdit;
-      this.action = "update";
-      this.orderForm.patchValue(this.dialogData.data);
-    }
-    this.getCategories();
   }
 
   handleSubmit(): void {
   }
 
   subscribe(observable: Observable<Object>): void {
-  }
-
-  private getCategories() {
-    return this.subscribeForCategories(this.categoryService.getFilteredCategories());
-  }
-
-  private subscribeForCategories(observable: Observable<Object>): void {
-    observable.subscribe((response: any) => {
-      this.categories = response;
-    }, (error: any) => {
-      super.logAndShowError(error, this.snackBarService);
-    })
   }
 }
