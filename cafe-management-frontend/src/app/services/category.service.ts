@@ -2,7 +2,6 @@ import {Injectable} from '@angular/core';
 import {HttpClient} from "@angular/common/http";
 import {GlobalConstants} from "../shared/global-constants";
 import {RequestService} from "./extended/request.service";
-import {Observable} from "rxjs";
 
 @Injectable({providedIn: 'root'})
 export class CategoryService extends RequestService {

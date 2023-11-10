@@ -9,7 +9,6 @@ import {MatDialog, MatDialogRef} from "@angular/material/dialog";
 import {SnackbarService} from "../services/snackbar.service";
 import {Router} from "@angular/router";
 import {ConfirmationComponent} from "../material-component/dialog/confirmation/confirmation.component";
-import {RequestService} from "../services/extended/request.service";
 
 /**
  * Base class for managing pages of all items like categories, products, etc.

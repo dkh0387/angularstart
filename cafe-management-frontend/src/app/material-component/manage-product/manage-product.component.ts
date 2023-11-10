@@ -1,6 +1,6 @@
 import {Component} from '@angular/core';
 import {NgxUiLoaderService} from "ngx-ui-loader";
-import {MatDialog, MatDialogConfig, MatDialogRef} from "@angular/material/dialog";
+import {MatDialog, MatDialogConfig} from "@angular/material/dialog";
 import {SnackbarService} from "../../services/snackbar.service";
 import {Router} from "@angular/router";
 import {ProductService} from "../../services/product.service";

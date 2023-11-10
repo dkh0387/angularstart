@@ -7,7 +7,6 @@ import {SnackbarService} from "../../../services/snackbar.service";
 import {RestSubscriber} from "../../../interfaces/rest-subscriber";
 import {SubmitHandler} from "../../../interfaces/submit-handler";
 import {Observable} from 'rxjs';
-import {GlobalConstants} from "../../../shared/global-constants";
 import {Router} from "@angular/router";
 import {ResponseHadler} from "../../../extended/response-handler";
 
