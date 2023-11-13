@@ -2,7 +2,6 @@ import {Injectable} from '@angular/core';
 import {ProductService} from "./product.service";
 import {CategoryService} from "./category.service";
 import {BillService} from "./bill.service";
-import {SnackbarService} from "./snackbar.service";
 
 @Injectable({
   providedIn: 'root'
