@@ -29,4 +29,5 @@ export class CategoryService extends RequestService {
   getFilteredCategories() {
     return super.get("/" + GlobalConstants.categoryPath + "/get?filterValue=true");
   }
+
 }

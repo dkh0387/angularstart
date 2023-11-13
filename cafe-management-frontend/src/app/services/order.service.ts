@@ -33,4 +33,9 @@ export class OrderService {
   getBillDocument(data: any) {
     return this.billService.getBillDocument(data);
   }
+
+  getProductById(productId: any) {
+    return this.productService.getProductById(productId);
+  }
+
 }

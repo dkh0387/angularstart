@@ -32,7 +32,8 @@ class BillServiceImpl(
 
         try {
             val bill = createFromMapperAndSave(requestMap)
-            return CafeUtils.getStringResponseFor("{\"uuid:\":\" ${bill.uuid} \"}", HttpStatus.OK)
+            //return CafeUtils.getStringResponseFor("{\"uuid:\":\" ${bill.uuid} \"}", HttpStatus.OK)
+            return CafeUtils.getStringResponseFor(CafeUtils.formatBodyAsJSON(bill.uuid), HttpStatus.OK)
         } catch (e: Exception) {
             logAndThrow(
                 logger,

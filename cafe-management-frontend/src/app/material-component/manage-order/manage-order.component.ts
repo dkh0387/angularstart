@@ -10,6 +10,7 @@ import {FormBuilder, FormGroup, Validators} from "@angular/forms";
 import {GlobalConstants} from "../../shared/global-constants";
 import {SubmitHandler} from "../../interfaces/submit-handler";
 import {saveAs} from "file-saver";
+import {MatTableDataSource} from "@angular/material/table";
 
 @Component({
   selector: 'app-manage-order',
@@ -24,6 +25,8 @@ export class ManageOrderComponent extends ItemManager implements SubmitHandler {
   products: any = [];
   price: any;
   total: number = 0;
+  productNameById: any;
+  categoryNameById: any;
 
   constructor(private orderService: OrderService,
               private formBuilder: FormBuilder,
@@ -41,8 +44,8 @@ export class ManageOrderComponent extends ItemManager implements SubmitHandler {
       email: [null, [Validators.required, Validators.pattern(GlobalConstants.emailRegex)]],
       contactNumber: [null, [Validators.required, Validators.pattern(GlobalConstants.contactNumberRegex)]],
       paymentMethod: [null, [Validators.required]],
-      productId: [null, [Validators.required]],
-      categoryId: [null, [Validators.required]],
+      product: [null, [Validators.required]],
+      category: [null, [Validators.required]],
       quantity: [null, [Validators.pattern(GlobalConstants.quantityRegex)]],
       price: [null, [Validators.pattern(GlobalConstants.priceRegex)]],
       total: [0, [Validators.pattern(GlobalConstants.priceRegex)]]
@@ -50,30 +53,41 @@ export class ManageOrderComponent extends ItemManager implements SubmitHandler {
   }
 
   loadData() {
+    this.dataSource = [];
     this.getFilteredCategories();
-    /*this.getProductsByCategory();
-    this.getProductDetails();*/
     this.ngxService.stop();
   }
 
   getProductDetails(productId: any) {
     this.subscribeForProductDetails(this.orderService.getProductDetails(productId));
+    this.loadObjectsById(productId);
   }
 
   getProductsByCategory(categoryId: any) {
     this.subscribeForProducts(this.orderService.getProductsByCategory(categoryId));
   }
 
+  /**
+   * Get only categories with active products.
+   */
   getFilteredCategories() {
     this.subscribeForCategories(this.orderService.getFilteredCategories());
   }
 
+  /**
+   * Remove a product from the actual order.
+   * @param data
+   * @param element
+   */
   handleDropAction(data: any, element: any) {
     this.total -= element.total;
     this.dataSource.splice(data, 1);
     super.updateDataSource();
   }
 
+  /**
+   * Place order and generate/download a bill.
+   */
   handleSubmit(): void {
     const formData = this.manageOrderForm.value;
     const data = {
@@ -88,11 +102,17 @@ export class ManageOrderComponent extends ItemManager implements SubmitHandler {
     this.subscribeForBill(this.orderService.generateBill(data));
   }
 
+  /**
+   * Validate the button ability to add a new product to the actual order.
+   */
   validateProductAdd() {
     const total = this.manageOrderForm.controls["total"].value;
     return total === null || total === 0;
   }
 
+  /**
+   * Controls the button ability to place an order.
+   */
   validateSubmit() {
     const name = this.manageOrderForm.controls["name"].value;
     const email = this.manageOrderForm.controls["email"].value;
@@ -102,16 +122,19 @@ export class ManageOrderComponent extends ItemManager implements SubmitHandler {
     return this.total === 0 || name === null || email === null || contactNumber === null || paymentMethod === null;
   }
 
+  /**
+   * Adding a new product to a table datasource overview.
+   */
   add() {
     const formData = this.manageOrderForm.value;
-    const productName = this.dataSource.find((e: { id: number }) => e.id === formData.product.id);
+    const productName = this.dataSource.find((e: { id: number }) => e.id === formData.product);
 
     if (productName === undefined) {
       this.total += formData.total;
       this.dataSource.push({
-        id: formData.product.id,
-        name: formData.product.name,
-        category: formData.category.name,
+        id: formData.product,
+        name: this.productNameById,
+        category: this.categoryNameById,
         quantity: formData.quantity,
         price: formData.price,
         total: formData.total
@@ -167,16 +190,12 @@ export class ManageOrderComponent extends ItemManager implements SubmitHandler {
 
   private subscribeForBill(observable: Observable<Object>): void {
     observable.subscribe((response: any) => {
-      this.downloadFile(response?.uuid);
+      this.subscribeForBillDownload(this.orderService.getBillDocument({uuid: response}), response);
       this.reset();
+      this.ngxService.stop();
     }, (error: any) => {
       super.logAndShowError(error, this.snackbarService);
     })
-  }
-
-  private downloadFile(fileName: string) {
-    const data = {uuid: fileName};
-    this.subscribeForBillDownload(this.orderService.getBillDocument(data), fileName);
   }
 
   private subscribeForBillDownload(observable: Observable<Blob>, fileName: string) {
@@ -186,5 +205,18 @@ export class ManageOrderComponent extends ItemManager implements SubmitHandler {
     }, (error: any) => {
       super.logAndShowError(error, this.snackbarService);
     });
+  }
+
+  private loadObjectsById(productId: any) {
+    this.subscribeForObjectsById(this.orderService.getProductById(productId));
+  }
+
+  private subscribeForObjectsById(observable: Observable<Object>): void {
+    observable.subscribe((response: any) => {
+      this.productNameById = response.name;
+      this.categoryNameById = response.categoryName;
+    }, (error: any) => {
+      super.logAndShowError(error, this.snackbarService);
+    })
   }
 }

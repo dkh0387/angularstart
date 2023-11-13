@@ -39,7 +39,7 @@ export class ProductComponent extends ResponseHadler implements OnInit, SubmitHa
       name: [null, [Validators.required, Validators.pattern(GlobalConstants.nameRegex)]],
       description: [null, [Validators.required]],
       price: [null, [Validators.pattern(GlobalConstants.priceRegex)]],
-      categoryId: [null, [Validators.required]],
+      category: [null, [Validators.required]],
       status: [null, [Validators.pattern(GlobalConstants.statusRegex)]]
     });
 
@@ -93,7 +93,7 @@ export class ProductComponent extends ResponseHadler implements OnInit, SubmitHa
     const data = {
       id: this.dialogData.data.id,
       name: formData.name,
-      categoryId: formData.categoryId,
+      categoryId: formData.category,
       price: formData.price,
       description: formData.description,
       status: formData.status
@@ -105,7 +105,7 @@ export class ProductComponent extends ResponseHadler implements OnInit, SubmitHa
     const formData = this.productForm.value;
     const data = {
       name: formData.name,
-      categoryId: formData.categoryId,
+      categoryId: formData.category,
       price: formData.price,
       description: formData.description,
       status: formData.status

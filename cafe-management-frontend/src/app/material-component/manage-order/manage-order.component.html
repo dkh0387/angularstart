@@ -1,8 +1,8 @@
 <mat-card>
   <b><span>Manage Order</span></b>
   <button mat-flat-button color="primary" class="float-right" [disabled]="validateSubmit()" (click)="handleSubmit()">
-    <mat-icon>print</mat-icon>
-    Submit & Get Bill
+    <mat-icon>save</mat-icon>
+    Submit
   </button>
 </mat-card>
 <hr>
@@ -64,7 +64,8 @@
       <div fxLayout="row wrap">
         <mat-form-field appearance="standard" fxFlex id="category">
           <mat-label>Category</mat-label>
-          <mat-select formControlName="categoryId" (selectionChange)="getProductsByCategory($event.value)">
+          <!-- Prefiltered list of categories of active products; if one is selected load all products for it-->
+          <mat-select formControlName="category" (selectionChange)="getProductsByCategory($event.value)">
             <mat-option *ngFor="let category of categories" [value]="category.id">
               {{category.name}}
             </mat-option>
@@ -72,7 +73,8 @@
         </mat-form-field>
         <mat-form-field appearance="standard" fxFlex id="product">
           <mat-label>Product</mat-label>
-          <mat-select formControlName="productId" (selectionChange)="getProductDetails($event.value)">
+          <!-- If one product is selected load details for it -->
+          <mat-select formControlName="product" (selectionChange)="getProductDetails($event.value)">
             <mat-option *ngFor="let product of products" [value]="product.id">
               {{product.name}}
             </mat-option>
@@ -108,4 +110,49 @@
       </div>
     </div>
   </form>
+
+  <div>
+    <button mat-flat-button color="primary" [disabled]="validateProductAdd()" (click)="add()">Add</button>
+    <button mat-flat-button color="primary" class="float-right">
+      <mat-icon>monetization_on</mat-icon>
+      Total amount: {{total}}
+    </button>
+  </div>
 </mat-card>
+<hr>
+
+<div class="responsive_table">
+  <table mat-table [dataSource]="dataSource" class="mat-elevation-z8">
+    <ng-container matColumnDef="name">
+      <th mat-header-cell *matHeaderCellDef>Name</th>
+      <td mat-cell *matCellDef="let element">{{element.name}}</td>
+    </ng-container>
+    <ng-container matColumnDef="category">
+      <th mat-header-cell *matHeaderCellDef>Category</th>
+      <td mat-cell *matCellDef="let element">{{element.category}}</td>
+    </ng-container>
+    <ng-container matColumnDef="price">
+      <th mat-header-cell *matHeaderCellDef>Price</th>
+      <td mat-cell *matCellDef="let element">{{element.price}}</td>
+    </ng-container>
+    <ng-container matColumnDef="quantity">
+      <th mat-header-cell *matHeaderCellDef>Quantity</th>
+      <td mat-cell *matCellDef="let element">{{element.quantity}}</td>
+    </ng-container>
+    <ng-container matColumnDef="total">
+      <th mat-header-cell *matHeaderCellDef>Total</th>
+      <td mat-cell *matCellDef="let element">{{element.total}}</td>
+    </ng-container>
+    <ng-container matColumnDef="edit">
+      <th mat-header-cell *matHeaderCellDef>Actions</th>
+      <td mat-cell *matCellDef="let element; let i = index" class="action-link">
+        <button mat-icon-button color="primary" matTooltip="Delete" (click)="handleDropAction(i, element)">
+          <mat-icon>delete</mat-icon>
+        </button>
+      </td>
+    </ng-container>
+    <tr mat-header-row *matHeaderRowDef="displayedColumns;sticky:true"></tr>
+    <tr mat-row *matRowDef="let row;columns:displayedColumns;"></tr>
+  </table>
+</div>
+
