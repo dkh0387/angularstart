@@ -56,8 +56,8 @@ export class ManageOrderComponent extends ItemManager implements SubmitHandler {
     this.ngxService.stop();
   }
 
-  getProductDetails(data: any) {
-    this.subscribeForProductDetails(this.orderService.getProductDetails(data));
+  getProductDetails(productId: any) {
+    this.subscribeForProductDetails(this.orderService.getProductDetails(productId));
   }
 
   getProductsByCategory(categoryId: any) {
@@ -124,7 +124,8 @@ export class ManageOrderComponent extends ItemManager implements SubmitHandler {
   }
 
   setTotal(data: any) {
-    this.manageOrderForm.controls["total"].setValue(this.manageOrderForm.controls["price"].value * this.getQuantity());
+    this.manageOrderForm.controls["total"]
+      .setValue(this.manageOrderForm.controls["price"].value * this.manageOrderForm.controls["quantity"].value);
 
   }
 
@@ -171,15 +172,6 @@ export class ManageOrderComponent extends ItemManager implements SubmitHandler {
     }, (error: any) => {
       super.logAndShowError(error, this.snackbarService);
     })
-  }
-
-  private getQuantity() {
-    const value = this.manageOrderForm.controls["quantity"].value;
-
-    if (value === '') {
-      return 1;
-    }
-    return value;
   }
 
   private downloadFile(fileName: string) {

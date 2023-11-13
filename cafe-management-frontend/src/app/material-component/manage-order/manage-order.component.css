@@ -14,4 +14,8 @@ mat-card {
   padding-bottom: 30px !important;
 }
 
+.readonly {
+  color: lightgray;
+}
+
 /*# sourceMappingURL=manage-order.component.css.map */

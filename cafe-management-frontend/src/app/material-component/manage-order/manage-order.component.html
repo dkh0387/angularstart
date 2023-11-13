@@ -8,7 +8,7 @@
 <hr>
 
 <mat-card>
-  <b><span>Customer details:</span></b>
+  <b><span>Customer details</span></b>
   <form [formGroup]="manageOrderForm">
     <div fxFlex fxLayout="column">
       <div fxLayout="row wrap">
@@ -58,17 +58,52 @@
 <hr>
 
 <mat-card>
-  <b><span>Select Product:</span></b>
+  <b><span>Select Product</span></b>
   <form [formGroup]="manageOrderForm">
     <div fxFlex fxLayout="column">
       <div fxLayout="row wrap">
-        <mat-form-field appearance="standard" fxFlex id="categoryId">
+        <mat-form-field appearance="standard" fxFlex id="category">
           <mat-label>Category</mat-label>
           <mat-select formControlName="categoryId" (selectionChange)="getProductsByCategory($event.value)">
             <mat-option *ngFor="let category of categories" [value]="category.id">
               {{category.name}}
             </mat-option>
           </mat-select>
+        </mat-form-field>
+        <mat-form-field appearance="standard" fxFlex id="product">
+          <mat-label>Product</mat-label>
+          <mat-select formControlName="productId" (selectionChange)="getProductDetails($event.value)">
+            <mat-option *ngFor="let product of products" [value]="product.id">
+              {{product.name}}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+      </div>
+      <b><span>Product details</span></b>
+      <div fxLayout="row wrap">
+        <mat-form-field appearance="standard" fxFlex id="price" class="readonly">
+          <mat-label>Price</mat-label>
+          <input matInput formControlName="price" required readonly>
+          <mat-error *ngIf="manageOrderForm.controls.price.touched && manageOrderForm.controls.price.invalid">
+            <span *ngIf="manageOrderForm.controls.price.errors.required">This field is mandatory!</span>
+            <span *ngIf="manageOrderForm.controls.price.errors.pattern">This field is invalid!</span>
+          </mat-error>
+        </mat-form-field>
+        <mat-form-field appearance="standard" fxFlex id="quantity">
+          <mat-label>Quantity</mat-label>
+          <input matInput formControlName="quantity" required (keyup)="setTotal($event)" #input>
+          <mat-error *ngIf="manageOrderForm.controls.quantity.touched && manageOrderForm.controls.quantity.invalid">
+            <span *ngIf="manageOrderForm.controls.quantity.errors.required">This field is mandatory!</span>
+            <span *ngIf="manageOrderForm.controls.quantity.errors.pattern">This field is invalid!</span>
+          </mat-error>
+        </mat-form-field>
+        <mat-form-field appearance="standard" fxFlex id="total" class="readonly">
+          <mat-label>Total</mat-label>
+          <input matInput formControlName="total" required readonly>
+          <mat-error *ngIf="manageOrderForm.controls.total.touched && manageOrderForm.controls.total.invalid">
+            <span *ngIf="manageOrderForm.controls.total.errors.required">This field is mandatory!</span>
+            <span *ngIf="manageOrderForm.controls.total.errors.pattern">This field is invalid!</span>
+          </mat-error>
         </mat-form-field>
       </div>
     </div>
