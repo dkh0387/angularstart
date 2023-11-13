@@ -80,7 +80,7 @@ class SecurityConfig(
                     "user/login", "user/signup", "user/forgotPassword", "user/changePassword"
                 ).permitAll().requestMatchers(
                     "product/getByCategory/*", "product/getById/*", "bill/generate"
-                ).hasAuthority("ROLE_USER").requestMatchers(
+                ).hasAnyAuthority("ROLE_ADMIN", "ROLE_USER").requestMatchers(
                     "user/get",
                     "user/update",
                     "category/add",

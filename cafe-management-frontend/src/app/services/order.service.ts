@@ -19,8 +19,8 @@ export class OrderService {
   }
 
 
-  getProductsByCategory(data: any) {
-    return this.productService.getProductsByCategory(data);
+  getProductsByCategory(categoryId: any) {
+    return this.productService.getProductsByCategory(categoryId);
   }
 
   getProductDetails(data: any) {

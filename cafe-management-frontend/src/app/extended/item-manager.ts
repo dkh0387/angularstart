@@ -70,24 +70,24 @@ export class ItemManager extends ResponseHadler implements OnInit, RestSubscribe
     this.dataSource = [...this.dataSource];
   }
 
-  protected handleAddAction() {
-    // to override...
-  }
-
-  protected handleEditAction(data: any) {
-    // to override...
-  }
-
-  protected handleDeleteAction(data: any) {
-    // to override...
-  }
-
-  protected handleDropAction(data: any, element: any) {
-    // to override...
-  }
-
   protected reset() {
     this.dataSource = [];
+  }
+
+  handleAddAction() {
+    // to override...
+  }
+
+  handleEditAction(data: any) {
+    // to override...
+  }
+
+  handleDeleteAction(data: any) {
+    // to override...
+  }
+
+  handleDropAction(data: any, element: any) {
+    // to override...
   }
 
 }

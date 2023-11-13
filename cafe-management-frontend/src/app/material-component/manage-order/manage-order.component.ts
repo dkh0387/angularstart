@@ -41,8 +41,8 @@ export class ManageOrderComponent extends ItemManager implements SubmitHandler {
       email: [null, [Validators.required, Validators.pattern(GlobalConstants.emailRegex)]],
       contactNumber: [null, [Validators.required, Validators.pattern(GlobalConstants.contactNumberRegex)]],
       paymentMethod: [null, [Validators.required]],
-      product: [null, [Validators.required]],
-      category: [null, [Validators.required]],
+      productId: [null, [Validators.required]],
+      categoryId: [null, [Validators.required]],
       quantity: [null, [Validators.pattern(GlobalConstants.quantityRegex)]],
       price: [null, [Validators.pattern(GlobalConstants.priceRegex)]],
       total: [0, [Validators.pattern(GlobalConstants.priceRegex)]]
@@ -50,10 +50,22 @@ export class ManageOrderComponent extends ItemManager implements SubmitHandler {
   }
 
   loadData() {
-    /*    this.subscribeForCategories(this.orderService.getFilteredCategories());
-        this.subscribeForProducts(this.orderService.getProductsByCategory());
-        this.subscribeForProductDetails(this.orderService.getProductDetails());*/
+    this.getFilteredCategories();
+    /*this.getProductsByCategory();
+    this.getProductDetails();*/
     this.ngxService.stop();
+  }
+
+  getProductDetails(data: any) {
+    this.subscribeForProductDetails(this.orderService.getProductDetails(data));
+  }
+
+  getProductsByCategory(categoryId: any) {
+    this.subscribeForProducts(this.orderService.getProductsByCategory(categoryId));
+  }
+
+  getFilteredCategories() {
+    this.subscribeForCategories(this.orderService.getFilteredCategories());
   }
 
   handleDropAction(data: any, element: any) {

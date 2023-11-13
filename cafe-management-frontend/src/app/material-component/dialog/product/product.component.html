@@ -32,14 +32,14 @@
         </mat-form-field>
       </div>
       <div fxLayout="row wrap">
-        <mat-label-field appearance="standard" fxFlex id="categoryId">
+        <mat-form-field appearance="standard" fxFlex id="categoryId">
           <mat-label>Category</mat-label>
           <mat-select formControlName="categoryId">
             <mat-option *ngFor="let category of categories" [value]="category.id">
               {{category.name}}
             </mat-option>
           </mat-select>
-        </mat-label-field>
+        </mat-form-field>
       </div>
       <div fxLayout="row wrap">
         <mat-form-field appearance="standard" fxFlex id="description">

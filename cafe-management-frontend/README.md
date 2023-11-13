@@ -17,7 +17,7 @@ Run `ng generate component component-name` to generate a new component. You can 
 
 ## Installing dependencies
 
-* We do actually use an old angular version, so @TODO: update! To install suitable versions, run: `sudo npm i <packagename> --legacy-peer-deps`
+* go to: `package.json`
 
 ## Build
 
@@ -109,7 +109,7 @@ WE are able to define routing access per component. As example, we use `material
 
 ## Example of a simple modal dialog with fields with sending data to a backend endpoint
 
-* see: `change-password.component.ts`
+* See: `change-password.component.ts`
 
 ## Concept of using modal dialogs incl. data binding (example)
 
@@ -121,11 +121,12 @@ WE are able to define routing access per component. As example, we use `material
 
 ## Example of using data tables
 
-* see `manage-category.component.html`
+* See `manage-category.component.html`
 
 ## Example of using multi selection options included data bindings:
 
-* see `product.component.html`
+* See `product.component.html`
+* Event-based selection (get product by selected category) see: `manage-order.component.html`
 
 ## Adding a new sidebar menu element (on category management example)
 
@@ -141,3 +142,9 @@ WE are able to define routing access per component. As example, we use `material
 * Resources are bound to the according user role of a logged-in user
 * Which urls are allowed to be reached for which role is described via routing concept (see above)
 * Further, we can provide an expected role to any UI element (like sidebar icons): see `sidebar.component.ts` for example
+
+## TODOs
+
+* Installing dependencies save way: `sudo npm i <packagename> --legacy-peer-deps` --> update to angular 16
+* make all strings to globals (multi language??) --> look for multi language lib
+* testing
