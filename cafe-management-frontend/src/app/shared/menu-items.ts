@@ -44,6 +44,13 @@ const MENUITEMS = [
     type: 'link',
     icon: GlobalConstants.billIcon,
     role: GlobalConstants.roleAny
+  },
+  {
+    state: GlobalConstants.userPath,
+    name: GlobalConstants.sidebarManageUser,
+    type: 'link',
+    icon: GlobalConstants.userIcon,
+    role: GlobalConstants.roleAdmin
   }
 ];
 

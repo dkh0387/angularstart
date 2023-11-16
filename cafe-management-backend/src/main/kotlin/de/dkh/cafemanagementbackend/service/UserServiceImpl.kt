@@ -158,7 +158,7 @@ class UserServiceImpl(
 
             if (userMapperFull.status == "") {
                 return CafeUtils.getStringResponseFor(
-                    CafeConstants.NO_STATUS_REQUESTED_FOR_UPDATE, HttpStatus.OK
+                    CafeUtils.formatBodyAsJSON(CafeConstants.NO_STATUS_REQUESTED_FOR_UPDATE), HttpStatus.OK
                 )
             }
             val userFromMap = User.createFromFull(userMapperFull)
@@ -166,7 +166,10 @@ class UserServiceImpl(
                 val userOptional = userRepository.findById(Integer.parseInt(userFromMap.id.toString()).toLong())
                 // if the user exists, update the status
                 if (userOptional.isEmpty) {
-                    return CafeUtils.getStringResponseFor(CafeConstants.NO_USER_FOR_ID, HttpStatus.OK)
+                    return CafeUtils.getStringResponseFor(
+                        CafeUtils.formatBodyAsJSON(CafeConstants.NO_USER_FOR_ID),
+                        HttpStatus.OK
+                    )
                 } else {
                     run {
                         userRepository.updateStatus(userOptional.get().id, userFromMap.status)
@@ -176,13 +179,16 @@ class UserServiceImpl(
                             )
                         )
                         return CafeUtils.getStringResponseFor(
-                            CafeConstants.USER_STATUS_UPDATED, HttpStatus.OK
+                            CafeUtils.formatBodyAsJSON(CafeConstants.USER_STATUS_UPDATED), HttpStatus.OK
                         )
                     }
 
                 }
             } else {
-                CafeUtils.getStringResponseFor(CafeConstants.UNAUTHORIZED_ACCESS, HttpStatus.UNAUTHORIZED)
+                CafeUtils.getStringResponseFor(
+                    CafeUtils.formatBodyAsJSON(CafeConstants.UNAUTHORIZED_ACCESS),
+                    HttpStatus.UNAUTHORIZED
+                )
             }
 
         } catch (e: Exception) {
@@ -194,7 +200,7 @@ class UserServiceImpl(
             )
         }
         return CafeUtils.getStringResponseFor(
-            CafeConstants.USER_STATUS_UPDATE_WENT_WRONG, HttpStatus.INTERNAL_SERVER_ERROR
+            CafeUtils.formatBodyAsJSON(CafeConstants.USER_STATUS_UPDATE_WENT_WRONG), HttpStatus.INTERNAL_SERVER_ERROR
         )
     }
 

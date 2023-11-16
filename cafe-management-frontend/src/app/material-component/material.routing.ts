@@ -5,6 +5,7 @@ import {GlobalConstants} from "../shared/global-constants";
 import {ManageProductComponent} from "./manage-product/manage-product.component";
 import {ManageOrderComponent} from "./manage-order/manage-order.component";
 import {ViewBillComponent} from "./view-bill/view-bill.component";
+import {ManageUserComponent} from "./manage-user/manage-user.component";
 
 
 export const MaterialRoutes: Routes = [
@@ -31,5 +32,11 @@ export const MaterialRoutes: Routes = [
     component: ViewBillComponent,
     canActivate: [RouteGuardService],
     data: {expectedRole: [GlobalConstants.roleAdmin, GlobalConstants.roleUser]}
+  },
+  {
+    path: GlobalConstants.userPath,
+    component: ManageUserComponent,
+    canActivate: [RouteGuardService],
+    data: {expectedRole: [GlobalConstants.roleAdmin]}
   }
 ];

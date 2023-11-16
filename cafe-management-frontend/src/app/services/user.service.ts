@@ -35,4 +35,12 @@ export class UserService extends RequestService {
   changePassword(data: any) {
     return super.post("/" + GlobalConstants.userPath + "/" + "changePassword", data);
   }
+
+  getUsers() {
+    return super.get("/" + GlobalConstants.userPath + "/" + "get");
+  }
+
+  updateUser(data: any) {
+    return super.post("/" + GlobalConstants.userPath + "/" + "update", data);
+  }
 }

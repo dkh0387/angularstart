@@ -16,9 +16,11 @@ export class GlobalConstants {
   public static sidebarManageProduct: string = "Manage Product";
   public static sidebarManageOrder: string = "Manage Order";
   public static sidebarViewBill: string = "View Bill";
+  static sidebarManageUser: string = "Manage User";
   public static productIcon: string = "inventory_2";
   public static orderIcon: string = "shopping_cart";
   public static billIcon: string = "backup_table";
+  public static userIcon: string = "people";
 
   //Roles
   public static roleUser: string = "ROLE_USER";

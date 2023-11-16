@@ -84,7 +84,6 @@ class SecurityConfig(
                     "user/get",
                     "user/update",
                     "category/add",
-                    "category/get",
                     "category/update",
                     "category/delete/*",
                     "product/add",
@@ -92,7 +91,7 @@ class SecurityConfig(
                     "product/update",
                     "product/delete/*"
                 ).hasAuthority("ROLE_ADMIN").requestMatchers(
-                    "bill/get", "bill/getBillDocument", "bill/delete/*", "dashboard/details"
+                    "bill/get", "bill/getBillDocument", "bill/delete/*", "dashboard/details", "category/get",
                 ) //.hasAnyAuthority("ROLE_ADMIN", "ROLE_USER").requestMatchers("user/checkToken")
                 .hasAnyAuthority("ROLE_ADMIN", "ROLE_USER").anyRequest().authenticated()
         }.csrf { csrf -> csrf.disable() }.cors { cors -> cors.configurationSource(urlBasedCorsConfigurationSource()) }
