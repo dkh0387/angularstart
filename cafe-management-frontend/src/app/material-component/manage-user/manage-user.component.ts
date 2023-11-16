@@ -6,7 +6,6 @@ import {SnackbarService} from "../../services/snackbar.service";
 import {Router} from "@angular/router";
 import {UserService} from "../../services/user.service";
 import {Observable} from "rxjs";
-import {MatTableDataSource} from "@angular/material/table";
 
 @Component({
   selector: 'app-manage-user',
