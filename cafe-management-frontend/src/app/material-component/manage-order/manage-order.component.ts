@@ -9,7 +9,6 @@ import {Observable} from "rxjs";
 import {FormBuilder, FormGroup, Validators} from "@angular/forms";
 import {GlobalConstants} from "../../shared/global-constants";
 import {SubmitHandler} from "../../interfaces/submit-handler";
-import {saveAs} from "file-saver";
 
 @Component({
   selector: 'app-manage-order',
