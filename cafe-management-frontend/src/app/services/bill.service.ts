@@ -25,5 +25,9 @@ export class BillService extends RequestService {
     return super.get("/" + GlobalConstants.billPath + "/get");
   }
 
+  deleteBill(data: any) {
+    return super.post("/" + GlobalConstants.billPath + `/delete/${data.id}`, {});
+  }
+
 
 }

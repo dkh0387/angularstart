@@ -189,17 +189,8 @@ export class ManageOrderComponent extends ItemManager implements SubmitHandler {
 
   private subscribeForBill(observable: Observable<Object>): void {
     observable.subscribe((response: any) => {
-      this.subscribeForBillDownload(this.orderService.getBillDocument({uuid: response}), response);
+      super.subscribeForBillDownload(this.orderService.getBillDocument({uuid: response}), response);
       this.reset();
-      this.ngxService.stop();
-    }, (error: any) => {
-      super.logAndShowError(error, this.snackbarService);
-    })
-  }
-
-  private subscribeForBillDownload(observable: Observable<Blob>, fileName: string) {
-    observable.subscribe((response: any) => {
-      saveAs(response, fileName + GlobalConstants.fileExtensionPDF);
       this.ngxService.stop();
     }, (error: any) => {
       super.logAndShowError(error, this.snackbarService);

@@ -9,6 +9,7 @@ import {MatDialog, MatDialogRef} from "@angular/material/dialog";
 import {SnackbarService} from "../services/snackbar.service";
 import {Router} from "@angular/router";
 import {ConfirmationComponent} from "../material-component/dialog/confirmation/confirmation.component";
+import {saveAs} from "file-saver";
 
 /**
  * Base class for managing pages of all items like categories, products, etc., which have a table structure with actions.
@@ -22,7 +23,7 @@ export class ItemManager extends ResponseHadler implements OnInit, RestSubscribe
   constructor(protected ngxService: NgxUiLoaderService,
               protected dialog: MatDialog,
               protected snackbarService: SnackbarService,
-              private router: Router) {
+              protected router: Router) {
     super();
   }
 
@@ -47,7 +48,7 @@ export class ItemManager extends ResponseHadler implements OnInit, RestSubscribe
     this.dataSource.filter = filterValue.trim().toLowerCase();
   }
 
-  protected subscribeForDelete(dialogRef: MatDialogRef<ConfirmationComponent>, data: any, observable: Observable<Object>) {
+  protected subscribeForDelete(dialogRef: MatDialogRef<ConfirmationComponent>, observable: Observable<Object>) {
     return dialogRef.componentInstance.onEmitStatusChange.subscribe((response) => {
       this.ngxService.start();
       observable.subscribe((response: any) => {
@@ -59,6 +60,15 @@ export class ItemManager extends ResponseHadler implements OnInit, RestSubscribe
         super.logAndShowError(error, this.snackbarService);
       });
       dialogRef.close();
+    });
+  }
+
+  protected subscribeForBillDownload(observable: Observable<Blob>, fileName: string) {
+    observable.subscribe((response: any) => {
+      saveAs(response, fileName + GlobalConstants.fileExtensionPDF);
+      this.ngxService.stop();
+    }, (error: any) => {
+      super.logAndShowError(error, this.snackbarService);
     });
   }
 

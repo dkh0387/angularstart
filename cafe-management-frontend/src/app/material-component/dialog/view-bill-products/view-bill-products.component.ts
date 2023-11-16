@@ -1,4 +1,5 @@
-import { Component, OnInit, Inject } from '@angular/core';
+import {Component, OnInit, Inject} from '@angular/core';
+import {MAT_DIALOG_DATA, MatDialogRef} from "@angular/material/dialog";
 
 @Component({
   selector: 'app-view-bill-products',
@@ -7,8 +8,19 @@ import { Component, OnInit, Inject } from '@angular/core';
 })
 export class ViewBillProductsComponent implements OnInit {
 
-  constructor() { }
+  displayedColumns: string[] = ["name", "category", "price", "quantity", "total"];
+  dataSource: any;
+  data: any;
 
+  constructor(@Inject(MAT_DIALOG_DATA) public dialogData: any, public dialogRef: MatDialogRef<ViewBillProductsComponent>) {
+  }
+
+  /**
+   * This one is being initialized by calling ViewBillComponent#handleViewAction.
+   * We inject a whole Bill object into the component, so all attributes of a bill can be parsed.
+   */
   ngOnInit() {
+    this.data = this.dialogData.data;
+    this.dataSource = JSON.parse(this.data.productDetails);
   }
 }

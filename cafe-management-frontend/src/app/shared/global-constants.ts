@@ -11,8 +11,14 @@ export class GlobalConstants {
   public static orderPath: string = "order";
 
   //Sidebar
+  public static sidebarDashboard: string = "Dashboard";
+  public static sidebarManageCategory: string = "Manage Category";
+  public static sidebarManageProduct: string = "Manage Product";
+  public static sidebarManageOrder: string = "Manage Order";
+  public static sidebarViewBill: string = "View Bill";
   public static productIcon: string = "inventory_2";
   public static orderIcon: string = "shopping_cart";
+  public static billIcon: string = "backup_table";
 
   //Roles
   public static roleUser: string = "ROLE_USER";
@@ -39,6 +45,7 @@ export class GlobalConstants {
   public static defaultProductStatus: string = "false";
 
   //Dialog
+  public static fullDialogWidth: string = "100%";
   public static dialogWidth: string = "550px";
   public static wideDialogWidth: string = "850px";
 

@@ -55,7 +55,7 @@ export class ManageProductComponent extends ItemManager {
     const dialogConfig = new MatDialogConfig();
     dialogConfig.data = {data: data, message: `delete the product ${data.name}?`, confirmation: true};
     const dialogRef = this.dialog.open(ConfirmationComponent, dialogConfig);
-    const sub = this.subscribeForDelete(dialogRef, data, this.productService.deleteProduct(data));
+    const sub = this.subscribeForDelete(dialogRef, this.productService.deleteProduct(data));
   }
 
   handleStatusChangeAction(checked: boolean, id: bigint) {

@@ -60,7 +60,7 @@ export class ManageCategoryComponent extends ItemManager {
     const dialogConfig = new MatDialogConfig();
     dialogConfig.data = {data: data, message: `delete the category ${data.name}?`, confirmation: true};
     const dialogRef = this.dialog.open(ConfirmationComponent, dialogConfig);
-    const sub = this.subscribeForDelete(dialogRef, data, this.categoryService.deleteCategory(data));
+    const sub = this.subscribeForDelete(dialogRef, this.categoryService.deleteCategory(data));
   }
 
   setCategoryService(categoryService: CategoryService) {

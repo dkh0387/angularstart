@@ -110,9 +110,15 @@ class BillServiceImpl(
 
             return if (billOptional.isPresent) {
                 billRepository.delete(billOptional.get())
-                CafeUtils.getStringResponseFor(CafeConstants.DELETE_BILL_SUCCESSFULLY, HttpStatus.OK)
+                CafeUtils.getStringResponseFor(
+                    CafeUtils.formatBodyAsJSON(CafeConstants.DELETE_BILL_SUCCESSFULLY),
+                    HttpStatus.OK
+                )
             } else {
-                CafeUtils.getStringResponseFor(CafeConstants.DELETE_BILL_WENT_WRONG, HttpStatus.BAD_REQUEST)
+                CafeUtils.getStringResponseFor(
+                    CafeUtils.formatBodyAsJSON(CafeConstants.DELETE_BILL_WENT_WRONG),
+                    HttpStatus.BAD_REQUEST
+                )
             }
         } catch (e: Exception) {
             logAndThrow(
@@ -122,7 +128,10 @@ class BillServiceImpl(
                 DeleteBillException(CafeConstants.DELETE_BILL_WENT_WRONG, HttpStatus.INTERNAL_SERVER_ERROR)
             )
         }
-        return CafeUtils.getStringResponseFor(CafeConstants.DELETE_BILL_WENT_WRONG, HttpStatus.INTERNAL_SERVER_ERROR)
+        return CafeUtils.getStringResponseFor(
+            CafeUtils.formatBodyAsJSON(CafeConstants.DELETE_BILL_WENT_WRONG),
+            HttpStatus.INTERNAL_SERVER_ERROR
+        )
     }
 
     private fun createFromMapperAndSave(requestMap: Map<String, Any>): Bill {

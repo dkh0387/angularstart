@@ -12,30 +12,37 @@ export interface Menu {
 const MENUITEMS = [
   {
     state: GlobalConstants.dashboardPath,
-    name: 'Dashboard',
+    name: GlobalConstants.sidebarDashboard,
     type: 'link',
     icon: GlobalConstants.dashboardPath,
     role: GlobalConstants.roleAny
   },
   {
     state: GlobalConstants.categoryPath,
-    name: 'Manage Category',
+    name: GlobalConstants.sidebarManageCategory,
     type: 'link',
     icon: GlobalConstants.categoryPath,
     role: GlobalConstants.roleAdmin
   },
   {
     state: GlobalConstants.productPath,
-    name: 'Manage Product',
+    name: GlobalConstants.sidebarManageProduct,
     type: 'link',
     icon: GlobalConstants.productIcon,
     role: GlobalConstants.roleAdmin
   },
   {
     state: GlobalConstants.orderPath,
-    name: 'Manage Order',
+    name: GlobalConstants.sidebarManageOrder,
     type: 'link',
     icon: GlobalConstants.orderIcon,
+    role: GlobalConstants.roleAny
+  },
+  {
+    state: GlobalConstants.billPath,
+    name: GlobalConstants.sidebarViewBill,
+    type: 'link',
+    icon: GlobalConstants.billIcon,
     role: GlobalConstants.roleAny
   }
 ];
