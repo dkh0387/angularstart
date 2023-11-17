@@ -1,4 +1,4 @@
-<mat-toolbar color="primary">
+<!--<mat-toolbar color="primary">
   <mat-toolbar-row fixLayout="row">
     <span id="title">{{buyServiceDialogTitle}}</span>
     <span class="spacer"></span>
@@ -6,7 +6,7 @@
       <mat-icon>close</mat-icon>
     </button>
   </mat-toolbar-row>
-</mat-toolbar>
+</mat-toolbar>-->
 
 <mat-dialog-content class="mat-typography">
   <form [formGroup]="buyForm" id="buyForm">
@@ -14,7 +14,7 @@
       <div fxLayout="row wrap">
         <mat-form-field appearance="standard" fxFlex id="service">
           <mat-label>{{buyServiceDialogServiceLabel}}</mat-label>
-          <input matInput formControlName="service" required>
+          <input matInput formControlName="service" required readonly>
           <mat-error *ngIf="buyForm.controls.service.touched && buyForm.controls.service.invalid">
             <span *ngIf="buyForm.controls.service.errors.required">This field is mandatory!</span>
           </mat-error>
