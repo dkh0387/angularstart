@@ -62,7 +62,7 @@ export class GlobalConstants {
    * Lena specific stuff
    */
 
-  //Main page
+    //Main page
   public static mainPageTitle: string = "FREIRAUM";
   public static mainPageIcon: string = "house";
   public static headerIconChangeLanguage: string = "language";
@@ -79,5 +79,30 @@ export class GlobalConstants {
   //Services
   public static servicePageTitleGER: string = "Dienstleistungen";
   public static servicePageTitleRUS: string = "Услуги";
+
+  public static servicePageService1GER: string = "Videoanruf zum Kennenlernen, ca. 30 Minuten";
+  public static servicePageService2GER: string = "Online-Beratung auf Anfrage";
+  public static servicePageService3GER: string = "Organisation von Räumen";
+  public static servicePageService4GER: string = "Garderobenanalyse mit Stylistin, 1 Tag";
+  public static servicePageService5GER: string = "Möbelplanung / Einrichtung, 1 Zone";
+  public static servicePageService6GER: string = "Möbelplanung";
+  public static servicePageService7GER: string = "Teilnahme als Referent";
+  public static servicePageService1RUS: string = "Видеозвонок-знакомство, около 30 минут";
+  public static servicePageService2RUS: string = "Консультация онлайн по точечному запросу";
+  public static servicePageService3RUS: string = "Организация пространства";
+  public static servicePageService4RUS: string = "Разбор гардероба со стилистом, 1 день";
+  public static servicePageService5RUS: string = "Планировка / расстановка мебели, 1 зона";
+  public static servicePageService6RUS: string = "Планирование мебели";
+  public static servicePageService7RUS: string = "Участие в качестве спикера";
+
+  // Buy service dialog
+  public static buyServiceDialogTitleRUS: string = "Купить услугу";
+  public static buyServiceDialogTitleGER: string = "Dienstleistung kaufen";
+  public static buyServiceDialogCloseRUS: string = "Отмена";
+  public static buyServiceDialogClosGER: string = "Abbrechen";
+  public static buyServiceDialogSubmitRUS: string = "Купить";
+  public static buyServiceDialogSubmitGER: string = "Kaufen";
+  static buyServiceDialogServiceLabelRUS: string = "Услуга";
+  static buyServiceDialogServiceLabelGER: string = "Dienstleistung";
 
 }

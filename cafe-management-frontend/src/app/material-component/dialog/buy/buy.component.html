@@ -1,0 +1,36 @@
+<mat-toolbar color="primary">
+  <mat-toolbar-row fixLayout="row">
+    <span id="title">{{buyServiceDialogTitle}}</span>
+    <span class="spacer"></span>
+    <button class="mat-dialog-close" mat-icon-button mat-dialog-close>
+      <mat-icon>close</mat-icon>
+    </button>
+  </mat-toolbar-row>
+</mat-toolbar>
+
+<mat-dialog-content class="mat-typography">
+  <form [formGroup]="buyForm" id="buyForm">
+    <div fxFlex fxLayout="column">
+      <div fxLayout="row wrap">
+        <mat-form-field appearance="standard" fxFlex id="service">
+          <mat-label>{{buyServiceDialogServiceLabel}}</mat-label>
+          <input matInput formControlName="service" required>
+          <mat-error *ngIf="buyForm.controls.service.touched && buyForm.controls.service.invalid">
+            <span *ngIf="buyForm.controls.service.errors.required">This field is mandatory!</span>
+          </mat-error>
+        </mat-form-field>
+      </div>
+    </div>
+  </form>
+</mat-dialog-content>
+
+<mat-dialog-actions align="end">
+  <button mat-raised-button color="primary" type="submit" (click)="handleBuy()">
+    <mat-icon>monetization_on</mat-icon>
+    {{buyServiceDialogSubmit}}
+  </button>
+  <button mat-raised-button color="warn" mat-dialog-close>
+    <mat-icon>cancel</mat-icon>
+    {{buyServiceDialogClose}}
+  </button>
+</mat-dialog-actions>

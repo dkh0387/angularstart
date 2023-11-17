@@ -8,6 +8,9 @@ import {Router} from "@angular/router";
 import {RestSubscriber} from "../interfaces/rest-subscriber";
 import {Observable} from "rxjs";
 import {GlobalConstants} from "../shared/global-constants";
+import {FormGroup} from "@angular/forms";
+import {CategoryComponent} from "../material-component/dialog/category/category.component";
+import {BuyComponent} from "../material-component/dialog/buy/buy.component";
 
 @Component({
   selector: 'app-home',
@@ -19,13 +22,26 @@ export class HomeComponent implements OnInit, RestSubscriber {
   dashboardPath = "/" + GlobalConstants.homePath + "/" + GlobalConstants.dashboardPath;
   mainPageTitle = GlobalConstants.mainPageTitle;
   mainPageIcon = GlobalConstants.mainPageIcon;
+  /*
+   * Language Settings
+   */
   headerIconChangeLanguage = GlobalConstants.headerIconChangeLanguage;
   mainPageMenuAboutTextActual = GlobalConstants.mainPageMenuAboutTextRUS;
   mainPageMenuProjectsTextActual = GlobalConstants.mainPageMenuProjectsTextRUS;
   mainPageMenuContactTextActual = GlobalConstants.mainPageMenuContactTextRUS;
 
-  mainPageMenuChangeLanguageGERTitle=GlobalConstants.mainPageMenuChangeLanguageGERTitle;
-  mainPageMenuChangeLanguageRUSTitle=GlobalConstants.mainPageMenuChangeLanguageRUSTitle;
+  mainPageMenuChangeLanguageGERTitle = GlobalConstants.mainPageMenuChangeLanguageGERTitle;
+  mainPageMenuChangeLanguageRUSTitle = GlobalConstants.mainPageMenuChangeLanguageRUSTitle;
+
+  // Best sellers
+  servicePageTitle = GlobalConstants.servicePageTitleRUS;
+  servicePageService1 = GlobalConstants.servicePageService1RUS;
+  servicePageService2 = GlobalConstants.servicePageService2RUS;
+  servicePageService3 = GlobalConstants.servicePageService3RUS;
+  servicePageService4 = GlobalConstants.servicePageService4RUS;
+  servicePageService5 = GlobalConstants.servicePageService5RUS;
+  servicePageService6 = GlobalConstants.servicePageService6RUS;
+  servicePageService7 = GlobalConstants.servicePageService7RUS;
 
   constructor(private dialog: MatDialog, private userService: UserService, private router: Router) {
   }
@@ -79,12 +95,29 @@ export class HomeComponent implements OnInit, RestSubscriber {
     this.mainPageMenuAboutTextActual = GlobalConstants.mainPageMenuAboutTextGER;
     this.mainPageMenuProjectsTextActual = GlobalConstants.mainPageMenuProjectsTextGER;
     this.mainPageMenuContactTextActual = GlobalConstants.mainPageMenuContactTextGER;
+    this.servicePageTitle = GlobalConstants.servicePageTitleGER;
+    this.servicePageService1 = GlobalConstants.servicePageService1GER;
+    this.servicePageService2 = GlobalConstants.servicePageService2GER;
+    this.servicePageService3 = GlobalConstants.servicePageService3GER;
+    this.servicePageService4 = GlobalConstants.servicePageService4GER;
+    this.servicePageService5 = GlobalConstants.servicePageService5GER;
+    this.servicePageService6 = GlobalConstants.servicePageService6GER;
+    this.servicePageService7 = GlobalConstants.servicePageService7GER;
   }
 
   changeToRUS() {
     this.mainPageMenuAboutTextActual = GlobalConstants.mainPageMenuAboutTextRUS;
     this.mainPageMenuProjectsTextActual = GlobalConstants.mainPageMenuProjectsTextRUS;
     this.mainPageMenuContactTextActual = GlobalConstants.mainPageMenuContactTextRUS;
+    this.servicePageTitle = GlobalConstants.servicePageTitleRUS;
+    this.servicePageService1 = GlobalConstants.servicePageService1RUS;
+    this.servicePageService2 = GlobalConstants.servicePageService2RUS;
+    this.servicePageService3 = GlobalConstants.servicePageService3RUS;
+    this.servicePageService4 = GlobalConstants.servicePageService4RUS;
+    this.servicePageService5 = GlobalConstants.servicePageService5RUS;
+    this.servicePageService6 = GlobalConstants.servicePageService6RUS;
+    this.servicePageService7 = GlobalConstants.servicePageService7RUS;
   }
 
+  protected readonly FormGroup = FormGroup;
 }

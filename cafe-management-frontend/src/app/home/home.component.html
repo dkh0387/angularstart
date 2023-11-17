@@ -1,13 +1,28 @@
+<!--Title image-->
 <div class="bg-image"></div>
+<!--Title image-->
 
-<app-best-seller></app-best-seller>
+<!--Services-->
+<app-best-seller [app-best-seller-servicePageTitle]=servicePageTitle
+                 [app-best-seller-servicePageService1]=servicePageService1
+                 [app-best-seller-servicePageService2]=servicePageService2
+                 [app-best-seller-servicePageService3]=servicePageService3
+                 [app-best-seller-servicePageService4]=servicePageService4
+                 [app-best-seller-servicePageService5]=servicePageService5
+                 [app-best-seller-servicePageService6]=servicePageService6
+                 [app-best-seller-servicePageService7]=servicePageService7
+></app-best-seller>
+<!--Services-->
 
-<div class="wrapper sticky">
+<!--Navigation bar-->
+<div class=" wrapper sticky">
   <nav class="navbar-fixed-top">
+
     <a href="#" class="logo">
       <mat-icon>{{mainPageIcon}}</mat-icon>
       {{mainPageTitle}}
     </a>
+
     <ul>
       <li>
         <a (click)="handleLoginAction()">{{mainPageMenuAboutTextActual}}</a>
@@ -30,6 +45,10 @@
     </ul>
   </nav>
 </div>
+<!--Navigation bar-->
+
+<!--Footer-->
 <div class="footer" id="signup">
   <h2>All right reserved @Denis Khaskin</h2>
 </div>
+<!--Footer-->
