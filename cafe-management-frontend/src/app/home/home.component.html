@@ -1,20 +1,31 @@
 <div class="bg-image"></div>
+
 <app-best-seller></app-best-seller>
 
 <div class="wrapper sticky">
   <nav class="navbar-fixed-top">
     <a href="#" class="logo">
-      <mat-icon>storefront</mat-icon>
-      Cafe Management System
+      <mat-icon>{{mainPageIcon}}</mat-icon>
+      {{mainPageTitle}}
     </a>
     <ul>
       <li>
-        <!-- Example of creating a menu button in the navigation bar on the home page
-         NOTE: we are not using a ng component <app-signup> here directly, but we inject it via method!
-         -->
-        <a (click)="handleLoginAction()">Login</a>
-        <a (click)="handleSignUpAction()">Signup</a>
-        <a (click)="handleForgotPasswordAction()">Forgot Password</a>
+        <a (click)="handleLoginAction()">{{mainPageMenuAboutTextActual}}</a>
+        <a (click)="handleSignUpAction()">{{mainPageMenuProjectsTextActual}}</a>
+        <a (click)="handleForgotPasswordAction()">{{mainPageMenuContactTextActual}}</a>
+        <a>
+          <button [matMenuTriggerFor]="profile" mat-icon-button class="m-r-5">
+            <mat-icon style="color: white">{{headerIconChangeLanguage}}</mat-icon>
+          </button>
+          <mat-menu #profile="matMenu" class="mymegamenu">
+            <button mat-menu-item (click)="changeToGER()">
+              {{mainPageMenuChangeLanguageGERTitle}}
+            </button>
+            <button mat-menu-item (click)="changeToRUS()">
+              {{mainPageMenuChangeLanguageRUSTitle}}
+            </button>
+          </mat-menu>
+        </a>
       </li>
     </ul>
   </nav>

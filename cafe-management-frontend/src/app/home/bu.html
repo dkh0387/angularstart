@@ -1,0 +1,23 @@
+<div class="bg-image"></div>
+
+<!--<app-best-seller></app-best-seller>-->
+<app-lena-services-overview></app-lena-services-overview>
+
+<div class="wrapper sticky">
+  <nav class="navbar-fixed-top">
+    <a href="#" class="logo">
+      <mat-icon>{{mainPageIcon}}</mat-icon>
+      {{mainPageTitle}}
+    </a>
+    <ul>
+      <li>
+        <a (click)="handleLoginAction()">{{mainPageMenuAboutTextRUS}}</a>
+        <a (click)="handleSignUpAction()">{{mainPageMenuProjectsTextRUS}}</a>
+        <a (click)="handleForgotPasswordAction()">{{mainPageMenuContactTextRUS}}</a>
+      </li>
+    </ul>
+  </nav>
+</div>
+<div class="footer" id="signup">
+  <h2>All right reserved @Denis Khaskin</h2>
+</div>

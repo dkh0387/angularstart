@@ -14,8 +14,8 @@ $headingfont: 'Poppins', sans-serif;
 
 /*Material Theme Colors*/
 
-$primary: mat-palette($mat-purple, 600);
-$accent: mat-palette($mat-purple, 500);
+$primary: mat-palette($mat-green, 600);
+$accent: mat-palette($mat-green, 500);
 $warn: mat-palette($mat-red, 500);
 $theme: mat-light-theme($primary, $accent, $warn);
 $background: map-get($theme, background);
@@ -93,6 +93,7 @@ $yellow: #a0aec4;
 $purple: #7460ee;
 $blue: #02bec9;
 $megna: #00897b;
+$green: #6a9c7a;
 
 /*Extra Variable*/
 $rgt: right;

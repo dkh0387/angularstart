@@ -58,4 +58,26 @@ export class GlobalConstants {
   //Files
   public static fileExtensionPDF: string = ".pdf";
 
+  /**
+   * Lena specific stuff
+   */
+
+  //Main page
+  public static mainPageTitle: string = "FREIRAUM";
+  public static mainPageIcon: string = "house";
+  public static headerIconChangeLanguage: string = "language";
+  public static mainPageMenuChangeLanguageGERTitle: string = "Deutsch";
+  public static mainPageMenuChangeLanguageRUSTitle: string = "Русский";
+  public static headerIconLanguageRus: string;
+  public static mainPageMenuAboutTextGER: string = "Über mich";
+  public static mainPageMenuAboutTextRUS: string = "Обо мне";
+  public static mainPageMenuProjectsTextGER: string = "Projekte";
+  public static mainPageMenuProjectsTextRUS: string = "Проекты";
+  public static mainPageMenuContactTextGER: string = "Kontakt";
+  public static mainPageMenuContactTextRUS: string = "Контакт";
+
+  //Services
+  public static servicePageTitleGER: string = "Dienstleistungen";
+  public static servicePageTitleRUS: string = "Услуги";
+
 }

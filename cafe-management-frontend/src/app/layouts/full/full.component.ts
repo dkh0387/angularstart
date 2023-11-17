@@ -1,5 +1,6 @@
 import { MediaMatcher } from '@angular/cdk/layout';
 import { ChangeDetectorRef, Component, OnDestroy, AfterViewInit } from '@angular/core';
+import {GlobalConstants} from "../../shared/global-constants";
 
 
 /** @title Responsive sidenav */
@@ -10,6 +11,8 @@ import { ChangeDetectorRef, Component, OnDestroy, AfterViewInit } from '@angular
 })
 export class FullComponent implements OnDestroy, AfterViewInit {
   mobileQuery: MediaQueryList;
+  mainPageTitle = GlobalConstants.mainPageTitle;
+  mainPageIcon = GlobalConstants.mainPageIcon;
 
   private _mobileQueryListener: () => void;
 

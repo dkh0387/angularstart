@@ -21,6 +21,7 @@ import {LoginComponent} from './login/login.component';
 import {Token} from "@angular/compiler";
 import {TokenInterceptor} from "./services/token.interceptor";
 import {DashboardComponent} from "./dashboard/dashboard.component";
+import { LenaServicesOverviewComponent } from './lena-services-overview/lena-services-overview.component';
 
 /**
  * Definition of ui loader:
@@ -48,7 +49,8 @@ const ngUiLoaderConfig: NgxUiLoaderConfig = {
     AppSidebarComponent,
     SignupComponent,
     ForgotPasswordComponent,
-    LoginComponent
+    LoginComponent,
+    LenaServicesOverviewComponent
   ],
   imports: [
     BrowserModule,

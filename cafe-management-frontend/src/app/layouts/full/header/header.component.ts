@@ -5,6 +5,7 @@ import {ConfirmationComponent} from "../../../material-component/dialog/confirma
 import {resolve} from "@angular/compiler-cli/src/ngtsc/file_system";
 import {ChangePasswordComponent} from "../../../material-component/dialog/change-password/change-password.component";
 import {GlobalConstants} from "../../../shared/global-constants";
+import * as events from "events";
 
 @Component({
   selector: 'app-header',
@@ -14,6 +15,7 @@ import {GlobalConstants} from "../../../shared/global-constants";
 export class AppHeaderComponent {
 
   role: any
+  headerIconChangeLanguage = GlobalConstants.headerIconChangeLanguage;
 
   constructor(private router: Router, private dialog: MatDialog) {
   }
@@ -43,4 +45,6 @@ export class AppHeaderComponent {
     dialogConfig.width = GlobalConstants.dialogWidth;
     this.dialog.open(ChangePasswordComponent, dialogConfig);
   }
+
+  protected readonly events = events;
 }

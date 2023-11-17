@@ -17,6 +17,15 @@ import {GlobalConstants} from "../shared/global-constants";
 export class HomeComponent implements OnInit, RestSubscriber {
 
   dashboardPath = "/" + GlobalConstants.homePath + "/" + GlobalConstants.dashboardPath;
+  mainPageTitle = GlobalConstants.mainPageTitle;
+  mainPageIcon = GlobalConstants.mainPageIcon;
+  headerIconChangeLanguage = GlobalConstants.headerIconChangeLanguage;
+  mainPageMenuAboutTextActual = GlobalConstants.mainPageMenuAboutTextRUS;
+  mainPageMenuProjectsTextActual = GlobalConstants.mainPageMenuProjectsTextRUS;
+  mainPageMenuContactTextActual = GlobalConstants.mainPageMenuContactTextRUS;
+
+  mainPageMenuChangeLanguageGERTitle=GlobalConstants.mainPageMenuChangeLanguageGERTitle;
+  mainPageMenuChangeLanguageRUSTitle=GlobalConstants.mainPageMenuChangeLanguageRUSTitle;
 
   constructor(private dialog: MatDialog, private userService: UserService, private router: Router) {
   }
@@ -64,6 +73,18 @@ export class HomeComponent implements OnInit, RestSubscriber {
     const dialogConfig = new MatDialogConfig();
     dialogConfig.width = '550px';
     this.dialog.open(LoginComponent, dialogConfig);
+  }
+
+  changeToGER() {
+    this.mainPageMenuAboutTextActual = GlobalConstants.mainPageMenuAboutTextGER;
+    this.mainPageMenuProjectsTextActual = GlobalConstants.mainPageMenuProjectsTextGER;
+    this.mainPageMenuContactTextActual = GlobalConstants.mainPageMenuContactTextGER;
+  }
+
+  changeToRUS() {
+    this.mainPageMenuAboutTextActual = GlobalConstants.mainPageMenuAboutTextRUS;
+    this.mainPageMenuProjectsTextActual = GlobalConstants.mainPageMenuProjectsTextRUS;
+    this.mainPageMenuContactTextActual = GlobalConstants.mainPageMenuContactTextRUS;
   }
 
 }
