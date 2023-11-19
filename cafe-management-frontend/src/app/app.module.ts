@@ -19,7 +19,8 @@ import {NgxUiLoaderConfig, NgxUiLoaderModule, SPINNER} from "ngx-ui-loader";
 import {ForgotPasswordComponent} from './forgot-password/forgot-password.component';
 import {LoginComponent} from './login/login.component';
 import {TokenInterceptor} from "./services/token.interceptor";
-import { LenaServicesOverviewComponent } from './lena-services-overview/lena-services-overview.component';
+import {LenaServicesOverviewComponent} from './lena-services-overview/lena-services-overview.component';
+import {AboutMeComponent} from "./about-me/about-me.component";
 
 /**
  * Definition of ui loader:
@@ -48,7 +49,8 @@ const ngUiLoaderConfig: NgxUiLoaderConfig = {
     SignupComponent,
     ForgotPasswordComponent,
     LoginComponent,
-    LenaServicesOverviewComponent
+    LenaServicesOverviewComponent,
+    AboutMeComponent
   ],
   imports: [
     BrowserModule,

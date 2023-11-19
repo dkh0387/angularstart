@@ -111,4 +111,8 @@ export class GlobalConstants {
   public static buyServiceDialogServiceLabelRUS: string = "Услуга";
   public static buyServiceDialogServiceLabelGER: string = "Dienstleistung";
 
+  //About me page
+  public static aboutMePageTitleRUS: string = "Обо мне";
+  public static aboutMePageTitleGER: string = "Über mich";
+
 }
