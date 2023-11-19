@@ -4,14 +4,18 @@ import {HomeComponent} from './home/home.component';
 import {FullComponent} from './layouts/full/full.component';
 import {RouteGuardService} from "./services/route-guard.service";
 import {GlobalConstants} from "./shared/global-constants";
-import {ManageCategoryComponent} from "./material-component/manage-category/manage-category.component";
-import {AboutMeComponent} from "./about-me/about-me.component";
 
 const routes: Routes = [
+  {path: '', component: HomeComponent},
   {
-    path: '',
-    component: HomeComponent,
+    path: GlobalConstants.homePath,
+    component: FullComponent,
     children: [
+      {
+        path: '',
+        redirectTo: `/${GlobalConstants.homePath}/${GlobalConstants.dashboardPath}`,
+        pathMatch: 'full',
+      },
       {
         path: '',
         loadChildren:
@@ -23,19 +27,13 @@ const routes: Routes = [
       },
       {
         path: GlobalConstants.dashboardPath,
-        loadChildren: () => import('./dashboard/dashboard.module').then(m => m.DashboardModule),
+        loadChildren: () => import('./dashboard/dashboard.module').then(m => m.AboutMeModule),
         canActivate: [RouteGuardService],
         data: {
           expectedRole: [GlobalConstants.roleUser, GlobalConstants.roleAdmin]
         }
       }
     ]
-  },
-  {
-    path: GlobalConstants.aboutMePath,
-    component: AboutMeComponent,
-    canActivate: [RouteGuardService],
-    data: {expectedRole: [GlobalConstants.roleAdmin, GlobalConstants.roleUser]}
   },
   {path: '**', component: HomeComponent}
 ];

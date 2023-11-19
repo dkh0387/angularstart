@@ -62,7 +62,13 @@ export class GlobalConstants {
    * Lena specific stuff
    */
 
-    //Main page
+  public static RUS: string = "RUS";
+  public static GER: string = "GER";
+
+  // Routing
+  public static aboutMePath: string = "aboutme";
+
+  //Main page
   public static mainPageTitle: string = "FREIRAUM";
   public static mainPageIcon: string = "house";
   public static headerIconChangeLanguage: string = "language";
@@ -102,7 +108,7 @@ export class GlobalConstants {
   public static buyServiceDialogClosGER: string = "Abbrechen";
   public static buyServiceDialogSubmitRUS: string = "Купить";
   public static buyServiceDialogSubmitGER: string = "Kaufen";
-  static buyServiceDialogServiceLabelRUS: string = "Услуга";
-  static buyServiceDialogServiceLabelGER: string = "Dienstleistung";
+  public static buyServiceDialogServiceLabelRUS: string = "Услуга";
+  public static buyServiceDialogServiceLabelGER: string = "Dienstleistung";
 
 }

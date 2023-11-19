@@ -22,6 +22,7 @@ import {Token} from "@angular/compiler";
 import {TokenInterceptor} from "./services/token.interceptor";
 import {DashboardComponent} from "./dashboard/dashboard.component";
 import { LenaServicesOverviewComponent } from './lena-services-overview/lena-services-overview.component';
+import { AboutMeComponent } from './about-me/about-me.component';
 
 /**
  * Definition of ui loader:
@@ -32,8 +33,8 @@ const ngUiLoaderConfig: NgxUiLoaderConfig = {
   text: "Loading...",
   textColor: "#FFFFFF",
   textPosition: "center-center",
-  bgsColor: "#7b1fa2",
-  fgsColor: "#7b1fa2",
+  bgsColor: "#6a9c7a",
+  fgsColor: "#6a9c7a",
   fgsType: SPINNER.squareJellyBox,
   fgsSize: 100,
   hasProgressBar: false

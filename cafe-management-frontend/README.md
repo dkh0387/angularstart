@@ -6,6 +6,7 @@ This project was generated with [Angular CLI](https://github.com/angular/angular
 
 * Can be found here: `src/assets`
 * Themes etc.: `src/assets/styles/variable.scss`
+* `NgxUiLoaderConfig`: see `app.module.ts`
 
 ## Development server
 

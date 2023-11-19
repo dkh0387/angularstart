@@ -19,38 +19,11 @@ export class RouteGuardService {
   }
 
   /**
+   * NOTE: at the moment, there is no role concept required!
    * @param activatedRouteSnapshot
    */
   canActivate(activatedRouteSnapshot: ActivatedRouteSnapshot) {
-    // variables declared with let have a block-scope
-    let expectedRoleArray = activatedRouteSnapshot.data.expectedRole;
-    let tokenPayload: any;
-
-    // decode a JWT using jwt_decode
-    try {
-      tokenPayload = this.decodeToken();
-    } catch (error) {
-      localStorage.clear();
-      this.router.navigate(['/']);
-      throw new Error('Invalid token specified')
-    }
-
-    /* if user or admin, but unauthenticated or not allowed, navigate to the dashboard;
-    * if either user nor admin navigates to homepage
-    * is authenticated, enable activation
-     */
-    if (tokenPayload.role == GlobalConstants.roleUser || tokenPayload.role == GlobalConstants.roleAdmin) {
-      if (this.authService.isAuthenticated() && expectedRoleArray.includes(tokenPayload.role )) {
-        return true;
-      }
-      this.snackbarService.openSnackBar(GlobalConstants.unauthorized, GlobalConstants.error);
-      // navigate to dashboard, since only user or admin are allowed
-      this.router.navigate(['/' + GlobalConstants.homePath + '/' + GlobalConstants.dashboardPath]);
-      return false;
-    }
-    this.router.navigate(['/']);
-    localStorage.clear();
-    return false;
+    return true;
 
   }
 

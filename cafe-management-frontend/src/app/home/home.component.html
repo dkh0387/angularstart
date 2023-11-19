@@ -25,7 +25,7 @@
 
     <ul>
       <li>
-        <a (click)="handleLoginAction()">{{mainPageMenuAboutTextActual}}</a>
+        <a (click)="handleGotToAboutMePage()" [routerLink]="[aboutMePath]">{{mainPageMenuAboutTextActual}}</a>
         <a (click)="handleSignUpAction()">{{mainPageMenuProjectsTextActual}}</a>
         <a (click)="handleForgotPasswordAction()">{{mainPageMenuContactTextActual}}</a>
         <a>

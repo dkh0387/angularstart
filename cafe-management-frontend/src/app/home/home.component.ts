@@ -2,15 +2,12 @@ import {Component, OnInit} from '@angular/core';
 import {MatDialog, MatDialogConfig} from "@angular/material/dialog";
 import {SignupComponent} from "../signup/signup.component";
 import {ForgotPasswordComponent} from "../forgot-password/forgot-password.component";
-import {LoginComponent} from "../login/login.component";
 import {UserService} from "../services/user.service";
 import {Router} from "@angular/router";
 import {RestSubscriber} from "../interfaces/rest-subscriber";
 import {Observable} from "rxjs";
 import {GlobalConstants} from "../shared/global-constants";
 import {FormGroup} from "@angular/forms";
-import {CategoryComponent} from "../material-component/dialog/category/category.component";
-import {BuyComponent} from "../material-component/dialog/buy/buy.component";
 
 @Component({
   selector: 'app-home',
@@ -19,12 +16,13 @@ import {BuyComponent} from "../material-component/dialog/buy/buy.component";
 })
 export class HomeComponent implements OnInit, RestSubscriber {
 
-  dashboardPath = "/" + GlobalConstants.homePath + "/" + GlobalConstants.dashboardPath;
+  aboutMePath = "/" + GlobalConstants.aboutMePath;
   mainPageTitle = GlobalConstants.mainPageTitle;
   mainPageIcon = GlobalConstants.mainPageIcon;
   /*
    * Language Settings
    */
+  languageSettings = GlobalConstants.RUS;
   headerIconChangeLanguage = GlobalConstants.headerIconChangeLanguage;
   mainPageMenuAboutTextActual = GlobalConstants.mainPageMenuAboutTextRUS;
   mainPageMenuProjectsTextActual = GlobalConstants.mainPageMenuProjectsTextRUS;
@@ -61,7 +59,7 @@ export class HomeComponent implements OnInit, RestSubscriber {
    */
   subscribe(observable: Observable<Object>): void {
     observable.subscribe(() => {
-      this.router.navigate([this.dashboardPath]); // after check token, navigate to the dashboard,
+      this.router.navigate([this.aboutMePath]);
       // see [app-routing.module.ts]
     }, (error) => {
       // log error
@@ -85,13 +83,13 @@ export class HomeComponent implements OnInit, RestSubscriber {
     this.dialog.open(ForgotPasswordComponent, dialogConfig);
   }
 
-  handleLoginAction() {
-    const dialogConfig = new MatDialogConfig();
-    dialogConfig.width = '550px';
-    this.dialog.open(LoginComponent, dialogConfig);
+  handleGotToAboutMePage() {
+    //this.router.navigate(["/" + GlobalConstants.aboutMePath]).catch((error) => console.log(error));
+
   }
 
   changeToGER() {
+    this.languageSettings = GlobalConstants.GER;
     this.mainPageMenuAboutTextActual = GlobalConstants.mainPageMenuAboutTextGER;
     this.mainPageMenuProjectsTextActual = GlobalConstants.mainPageMenuProjectsTextGER;
     this.mainPageMenuContactTextActual = GlobalConstants.mainPageMenuContactTextGER;
@@ -106,6 +104,7 @@ export class HomeComponent implements OnInit, RestSubscriber {
   }
 
   changeToRUS() {
+    this.languageSettings = GlobalConstants.RUS;
     this.mainPageMenuAboutTextActual = GlobalConstants.mainPageMenuAboutTextRUS;
     this.mainPageMenuProjectsTextActual = GlobalConstants.mainPageMenuProjectsTextRUS;
     this.mainPageMenuContactTextActual = GlobalConstants.mainPageMenuContactTextRUS;
