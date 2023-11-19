@@ -3,7 +3,6 @@ import {AuthService} from "./auth.service";
 import {ActivatedRouteSnapshot, Router} from "@angular/router";
 import {SnackbarService} from "./snackbar.service";
 import jwt_decode from 'jwt-decode';
-import {GlobalConstants} from "../shared/global-constants";
 
 /**
  * CanActivate() handler used to determine if the current user is allowed to activate the component,

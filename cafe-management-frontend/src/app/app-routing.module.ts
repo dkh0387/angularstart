@@ -1,10 +1,8 @@
 import {NgModule} from '@angular/core';
 import {RouterModule, Routes} from '@angular/router';
 import {HomeComponent} from './home/home.component';
-import {FullComponent} from './layouts/full/full.component';
 import {RouteGuardService} from "./services/route-guard.service";
 import {GlobalConstants} from "./shared/global-constants";
-import {ManageCategoryComponent} from "./material-component/manage-category/manage-category.component";
 import {AboutMeComponent} from "./about-me/about-me.component";
 
 const routes: Routes = [
