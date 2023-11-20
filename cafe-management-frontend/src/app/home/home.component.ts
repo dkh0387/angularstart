@@ -65,9 +65,13 @@ export class HomeComponent extends LanguageHandler implements OnInit, RestSubscr
     this.dialog.open(ForgotPasswordComponent, dialogConfig);
   }
 
+  /**
+   * NOTE: we are sending the language setting over the URL to all non-child components,
+   * which we are not calling directly from home.
+   */
   handleGoToAboutMePage() {
-    //this.router.navigate(["/" + GlobalConstants.aboutMePath]).catch((error) => console.log(error));
-
+    this.router.navigate(["/" + GlobalConstants.aboutMePath, {language: this.languageSettings}])
+      .catch((error) => console.log(error));
   }
 
   protected readonly FormGroup = FormGroup;

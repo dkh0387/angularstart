@@ -1,6 +1,6 @@
 import {Component, OnInit} from '@angular/core';
 import {GlobalConstants} from "../shared/global-constants";
-import {FormGroup} from "@angular/forms";
+import {ActivatedRoute} from "@angular/router";
 
 @Component({
   selector: 'app-about-me',
@@ -9,12 +9,30 @@ import {FormGroup} from "@angular/forms";
 })
 export class AboutMeComponent implements OnInit {
   aboutMeTitle: string = GlobalConstants.aboutMePageTitleRUS;
+  aboutMeContentTitle: string = GlobalConstants.aboutMeContentTitleRUS;
+  language: string | null = GlobalConstants.RUS;
 
-  constructor() {
+  constructor(private route: ActivatedRoute) {
+    this.language = this.route.snapshot.paramMap.get("language");
   }
 
   ngOnInit(): void {
+    this.changeLanguage();
+    //history.pushState({}, "language", `?language=${this.language}`);
   }
 
-  protected readonly FormGroup = FormGroup;
+  goBack() {
+    //history.back();
+  }
+
+  private changeLanguage() {
+    if (this.language === GlobalConstants.RUS) {
+      this.aboutMeTitle = GlobalConstants.aboutMePageTitleRUS;
+      this.aboutMeContentTitle = GlobalConstants.aboutMeContentTitleRUS;
+    } else if (this.language === GlobalConstants.GER) {
+      this.aboutMeTitle = GlobalConstants.aboutMePageTitleGER;
+      this.aboutMeContentTitle = GlobalConstants.aboutMeContentTitleGER;
+    }
+  }
+
 }

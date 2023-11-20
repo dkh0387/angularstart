@@ -61,7 +61,6 @@ export class GlobalConstants {
   /**
    * Lena specific stuff
    */
-
   public static RUS: string = "RUS";
   public static GER: string = "GER";
 
@@ -114,5 +113,7 @@ export class GlobalConstants {
   //About me page
   public static aboutMePageTitleRUS: string = "Обо мне";
   public static aboutMePageTitleGER: string = "Über mich";
+  public static aboutMeContentTitleRUS: string = "Аккуратность - моя страсть!";
+  public static aboutMeContentTitleGER: string = "Ordnung ist meine Leidenschaft!";
 
 }
