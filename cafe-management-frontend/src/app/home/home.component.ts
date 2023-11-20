@@ -8,40 +8,22 @@ import {RestSubscriber} from "../interfaces/rest-subscriber";
 import {Observable} from "rxjs";
 import {GlobalConstants} from "../shared/global-constants";
 import {FormGroup} from "@angular/forms";
+import {LanguageHandler} from "../extended/language-handler";
 
 @Component({
   selector: 'app-home',
   templateUrl: './home.component.html',
   styleUrls: ['./home.component.scss']
 })
-export class HomeComponent implements OnInit, RestSubscriber {
+export class HomeComponent extends LanguageHandler implements OnInit, RestSubscriber {
 
   aboutMePath = "/" + GlobalConstants.aboutMePath;
   mainPageTitle = GlobalConstants.mainPageTitle;
   mainPageIcon = GlobalConstants.mainPageIcon;
-  /*
-   * Language Settings
-   */
-  languageSettings = GlobalConstants.RUS;
-  headerIconChangeLanguage = GlobalConstants.headerIconChangeLanguage;
-  mainPageMenuAboutTextActual = GlobalConstants.mainPageMenuAboutTextRUS;
-  mainPageMenuProjectsTextActual = GlobalConstants.mainPageMenuProjectsTextRUS;
-  mainPageMenuContactTextActual = GlobalConstants.mainPageMenuContactTextRUS;
 
-  mainPageMenuChangeLanguageGERTitle = GlobalConstants.mainPageMenuChangeLanguageGERTitle;
-  mainPageMenuChangeLanguageRUSTitle = GlobalConstants.mainPageMenuChangeLanguageRUSTitle;
-
-  // Best sellers
-  servicePageTitle = GlobalConstants.servicePageTitleRUS;
-  servicePageService1 = GlobalConstants.servicePageService1RUS;
-  servicePageService2 = GlobalConstants.servicePageService2RUS;
-  servicePageService3 = GlobalConstants.servicePageService3RUS;
-  servicePageService4 = GlobalConstants.servicePageService4RUS;
-  servicePageService5 = GlobalConstants.servicePageService5RUS;
-  servicePageService6 = GlobalConstants.servicePageService6RUS;
-  servicePageService7 = GlobalConstants.servicePageService7RUS;
 
   constructor(private dialog: MatDialog, private userService: UserService, private router: Router) {
+    super(GlobalConstants.RUS);
   }
 
   /**
@@ -83,39 +65,9 @@ export class HomeComponent implements OnInit, RestSubscriber {
     this.dialog.open(ForgotPasswordComponent, dialogConfig);
   }
 
-  handleGotToAboutMePage() {
+  handleGoToAboutMePage() {
     //this.router.navigate(["/" + GlobalConstants.aboutMePath]).catch((error) => console.log(error));
 
-  }
-
-  changeToGER() {
-    this.languageSettings = GlobalConstants.GER;
-    this.mainPageMenuAboutTextActual = GlobalConstants.mainPageMenuAboutTextGER;
-    this.mainPageMenuProjectsTextActual = GlobalConstants.mainPageMenuProjectsTextGER;
-    this.mainPageMenuContactTextActual = GlobalConstants.mainPageMenuContactTextGER;
-    this.servicePageTitle = GlobalConstants.servicePageTitleGER;
-    this.servicePageService1 = GlobalConstants.servicePageService1GER;
-    this.servicePageService2 = GlobalConstants.servicePageService2GER;
-    this.servicePageService3 = GlobalConstants.servicePageService3GER;
-    this.servicePageService4 = GlobalConstants.servicePageService4GER;
-    this.servicePageService5 = GlobalConstants.servicePageService5GER;
-    this.servicePageService6 = GlobalConstants.servicePageService6GER;
-    this.servicePageService7 = GlobalConstants.servicePageService7GER;
-  }
-
-  changeToRUS() {
-    this.languageSettings = GlobalConstants.RUS;
-    this.mainPageMenuAboutTextActual = GlobalConstants.mainPageMenuAboutTextRUS;
-    this.mainPageMenuProjectsTextActual = GlobalConstants.mainPageMenuProjectsTextRUS;
-    this.mainPageMenuContactTextActual = GlobalConstants.mainPageMenuContactTextRUS;
-    this.servicePageTitle = GlobalConstants.servicePageTitleRUS;
-    this.servicePageService1 = GlobalConstants.servicePageService1RUS;
-    this.servicePageService2 = GlobalConstants.servicePageService2RUS;
-    this.servicePageService3 = GlobalConstants.servicePageService3RUS;
-    this.servicePageService4 = GlobalConstants.servicePageService4RUS;
-    this.servicePageService5 = GlobalConstants.servicePageService5RUS;
-    this.servicePageService6 = GlobalConstants.servicePageService6RUS;
-    this.servicePageService7 = GlobalConstants.servicePageService7RUS;
   }
 
   protected readonly FormGroup = FormGroup;

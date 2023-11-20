@@ -4,7 +4,6 @@ import {FormBuilder, FormGroup, Validators} from "@angular/forms";
 import {SnackbarService} from "../../../services/snackbar.service";
 import {BuyService} from "../../../services/buy.service";
 import {GlobalConstants} from "../../../shared/global-constants";
-import {HttpClient} from "@angular/common/http";
 
 @Component({
   selector: 'app-buy',
@@ -15,8 +14,6 @@ export class BuyComponent implements OnInit {
 
   buyForm: any = FormGroup;
   service: string | undefined;
-  // TODO: trigger on change language settings...
-  buyServiceDialogTitle: string = GlobalConstants.buyServiceDialogTitleRUS;
   buyServiceDialogClose: string = GlobalConstants.buyServiceDialogCloseRUS;
   buyServiceDialogSubmit: string = GlobalConstants.buyServiceDialogSubmitRUS;
   buyServiceDialogServiceLabel: string = GlobalConstants.buyServiceDialogServiceLabelRUS;
@@ -32,12 +29,29 @@ export class BuyComponent implements OnInit {
     this.buyForm = this.formBuilder.group({
       service: [null, [Validators.required]]
     });
+    this.changeLanguage();
     this.service = this.dialogData.service;
     this.buyForm.controls["service"].setValue(this.service);
   }
 
-  handleBuy() {
-    // TODO: redirect to PayPal, Tinkoff etc. (depending on language settings)
-    window.open("https://www.tinkoff.ru/rm/khaskina.elena2/uYwTe8791/", "_blank");
+  private changeLanguage() {
+    if (this.dialogData.language === GlobalConstants.RUS) {
+      this.buyServiceDialogServiceLabel = GlobalConstants.buyServiceDialogServiceLabelRUS;
+      this.buyServiceDialogClose = GlobalConstants.buyServiceDialogCloseRUS;
+      this.buyServiceDialogSubmit = GlobalConstants.buyServiceDialogSubmitRUS;
+    } else if (this.dialogData.language === GlobalConstants.GER) {
+      this.buyServiceDialogServiceLabel = GlobalConstants.buyServiceDialogServiceLabelGER;
+      this.buyServiceDialogClose = GlobalConstants.buyServiceDialogClosGER;
+      this.buyServiceDialogSubmit = GlobalConstants.buyServiceDialogSubmitGER;
+    }
   }
+
+  handleBuy() {
+    if (this.dialogData.language === GlobalConstants.RUS) {
+      window.open("https://www.tinkoff.ru/rm/khaskina.elena2/uYwTe8791/", "_blank");
+    } else if (this.dialogData.language === GlobalConstants.GER) {
+      window.open("https://www.paypal.com/de/home", "_blank");
+    }
+  }
+
 }

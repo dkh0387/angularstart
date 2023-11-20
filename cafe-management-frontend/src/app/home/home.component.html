@@ -3,7 +3,8 @@
 <!--Title image-->
 
 <!--Services-->
-<app-best-seller [app-best-seller-servicePageTitle]=servicePageTitle
+<app-best-seller [app-best-seller-language]=languageSettings
+                 [app-best-seller-servicePageTitle]=servicePageTitle
                  [app-best-seller-servicePageService1]=servicePageService1
                  [app-best-seller-servicePageService2]=servicePageService2
                  [app-best-seller-servicePageService3]=servicePageService3
@@ -25,7 +26,7 @@
 
     <ul>
       <li>
-        <a (click)="handleGotToAboutMePage()" [routerLink]="[aboutMePath]">{{mainPageMenuAboutTextActual}}</a>
+        <a (click)="handleGoToAboutMePage()" [routerLink]="[aboutMePath]">{{mainPageMenuAboutTextActual}}</a>
         <a (click)="handleSignUpAction()">{{mainPageMenuProjectsTextActual}}</a>
         <a (click)="handleForgotPasswordAction()">{{mainPageMenuContactTextActual}}</a>
         <a>
@@ -33,10 +34,10 @@
             <mat-icon style="color: white">{{headerIconChangeLanguage}}</mat-icon>
           </button>
           <mat-menu #profile="matMenu" class="mymegamenu">
-            <button mat-menu-item (click)="changeToGER()">
+            <button mat-menu-item (click)="changeMainPageLanguageTo(ger)">
               {{mainPageMenuChangeLanguageGERTitle}}
             </button>
-            <button mat-menu-item (click)="changeToRUS()">
+            <button mat-menu-item (click)="changeMainPageLanguageTo(rus)">
               {{mainPageMenuChangeLanguageRUSTitle}}
             </button>
           </mat-menu>

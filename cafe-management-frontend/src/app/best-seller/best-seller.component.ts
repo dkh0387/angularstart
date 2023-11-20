@@ -14,6 +14,7 @@ import {Router} from "@angular/router";
   styleUrls: ['./best-seller.component.scss']
 })
 export class BestSellerComponent extends ItemManager {
+  @Input('app-best-seller-language') language: string | undefined;
   @Input('app-best-seller-servicePageTitle') servicePageTitle: string | undefined;
   @Input('app-best-seller-servicePageService1') servicePageService1: string | undefined;
   @Input('app-best-seller-servicePageService2') servicePageService2: string | undefined;
@@ -35,7 +36,7 @@ export class BestSellerComponent extends ItemManager {
     this.ngxService.stop();
   }
 
-  handleShowBuyForm(servicePageService: string | undefined) {
+  handleShowBuyForm(servicePageService: string | undefined,) {
     switch (servicePageService) {
       case this.servicePageService1:
         this.openBuyDialog(this.servicePageService1);
@@ -64,7 +65,7 @@ export class BestSellerComponent extends ItemManager {
   private openBuyDialog(servicePageService: string | undefined) {
     const dialogConfig = new MatDialogConfig();
     dialogConfig.width = GlobalConstants.dialogWidth;
-    dialogConfig.data = {service: servicePageService};
+    dialogConfig.data = {service: servicePageService, language: this.language};
     const dialogRef = this.dialog.open(BuyComponent, dialogConfig);
     this.router.events.subscribe(() => {
       dialogRef.close();
