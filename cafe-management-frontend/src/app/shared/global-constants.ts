@@ -61,8 +61,8 @@ export class GlobalConstants {
   /**
    * Lena specific stuff
    */
-  public static RUS: string = "RUS";
-  public static GER: string = "GER";
+  public static RUS: string = "ru";
+  public static GER: string = "de";
 
   // Routing
   public static aboutMePath: string = "aboutme";

@@ -8,6 +8,12 @@ This project was generated with [Angular CLI](https://github.com/angular/angular
 * Themes etc.: `src/assets/styles/variable.scss`
 * `NgxUiLoaderConfig`: see `app.module.ts`
 
+## Translation
+
+* Details: `https://www.codeandweb.com/babeledit/tutorials/how-to-translate-your-angular-app-with-ngx-translate`
+* Default language settings in `app.component.ts ` using `translate.setDefaultLang('en')`. The default language is the fall-back language, that is used if a translation cannot be found.
+  Set the current language to English by `calling translate.use('en')`.
+
 ## Development server
 
 Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The app will automatically reload if you change any of the source files.

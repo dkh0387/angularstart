@@ -13,7 +13,7 @@ import {SharedModule} from './shared/shared.module';
 import {FullComponent} from './layouts/full/full.component';
 import {AppHeaderComponent} from './layouts/full/header/header.component';
 import {AppSidebarComponent} from './layouts/full/sidebar/sidebar.component';
-import {HTTP_INTERCEPTORS, HttpClientModule} from "@angular/common/http";
+import {HTTP_INTERCEPTORS} from "@angular/common/http";
 import {SignupComponent} from './signup/signup.component';
 import {NgxUiLoaderConfig, NgxUiLoaderModule, SPINNER} from "ngx-ui-loader";
 import {ForgotPasswordComponent} from './forgot-password/forgot-password.component';
@@ -37,6 +37,11 @@ const ngUiLoaderConfig: NgxUiLoaderConfig = {
   fgsSize: 100,
   hasProgressBar: false
 }
+
+// import ngx-translate and the http loader
+import {TranslateLoader, TranslateModule} from '@ngx-translate/core';
+import {TranslateHttpLoader} from '@ngx-translate/http-loader';
+import {HttpClient, HttpClientModule} from '@angular/common/http';
 
 @NgModule({
   declarations: [
@@ -62,10 +67,25 @@ const ngUiLoaderConfig: NgxUiLoaderConfig = {
     FlexLayoutModule,
     SharedModule,
     HttpClientModule,
-    NgxUiLoaderModule.forRoot(ngUiLoaderConfig)
+    NgxUiLoaderModule.forRoot(ngUiLoaderConfig),
+    BrowserModule,
+    // ngx-translate and the loader module
+    HttpClientModule,
+    TranslateModule.forRoot({
+      loader: {
+        provide: TranslateLoader,
+        useFactory: HttpLoaderFactory,
+        deps: [HttpClient]
+      }
+    })
   ],
   providers: [HttpClientModule, {provide: HTTP_INTERCEPTORS, useClass: TokenInterceptor, multi: true}],
   bootstrap: [AppComponent]
 })
 export class AppModule {
+}
+
+// The HttpLoaderFactory function is required for AOT (ahead of time) compilation in your project.
+export function HttpLoaderFactory(http: HttpClient): TranslateHttpLoader {
+  return new TranslateHttpLoader(http);
 }

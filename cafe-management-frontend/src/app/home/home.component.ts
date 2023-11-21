@@ -9,6 +9,7 @@ import {Observable} from "rxjs";
 import {GlobalConstants} from "../shared/global-constants";
 import {FormGroup} from "@angular/forms";
 import {LanguageHandler} from "../extended/language-handler";
+import {TranslateService} from "@ngx-translate/core";
 
 @Component({
   selector: 'app-home',
@@ -16,14 +17,16 @@ import {LanguageHandler} from "../extended/language-handler";
   styleUrls: ['./home.component.scss']
 })
 export class HomeComponent extends LanguageHandler implements OnInit, RestSubscriber {
-
+  //sudo npm install @ngx-translate/core @ngx-translate/http-loader --save --legacy-peer-deps
+//sudo npm install --save --legacy-peer-deps
   aboutMePath = "/" + GlobalConstants.aboutMePath;
   mainPageTitle = GlobalConstants.mainPageTitle;
   mainPageIcon = GlobalConstants.mainPageIcon;
 
-
-  constructor(private dialog: MatDialog, private userService: UserService, private router: Router) {
+  constructor(private translate: TranslateService, private dialog: MatDialog, private userService: UserService, private router: Router) {
     super(GlobalConstants.RUS);
+    translate.setDefaultLang(GlobalConstants.RUS);
+    translate.use(GlobalConstants.RUS);
   }
 
   /**
@@ -74,5 +77,7 @@ export class HomeComponent extends LanguageHandler implements OnInit, RestSubscr
       .catch((error) => console.log(error));
   }
 
-  protected readonly FormGroup = FormGroup;
+  useLanguage(language: string): void {
+    this.translate.use(language);
+  }
 }
