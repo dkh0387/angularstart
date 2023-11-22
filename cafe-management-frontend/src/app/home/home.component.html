@@ -2,18 +2,9 @@
 <div class="bg-image"></div>
 <!--Title image-->
 
-<!--Services-->
-<app-best-seller [app-best-seller-language]=languageSettings
-                 [app-best-seller-servicePageTitle]=servicePageTitle
-                 [app-best-seller-servicePageService1]=servicePageService1
-                 [app-best-seller-servicePageService2]=servicePageService2
-                 [app-best-seller-servicePageService3]=servicePageService3
-                 [app-best-seller-servicePageService4]=servicePageService4
-                 [app-best-seller-servicePageService5]=servicePageService5
-                 [app-best-seller-servicePageService6]=servicePageService6
-                 [app-best-seller-servicePageService7]=servicePageService7
-></app-best-seller>
-<!--Services-->
+<!--Best sellers-->
+<app-best-seller></app-best-seller>
+<!--Best sellers-->
 
 <!--Navigation bar-->
 <div class=" wrapper sticky">
@@ -27,21 +18,15 @@
     <ul>
       <li>
         <a (click)="handleGoToAboutMePage()">{{ "main.navigation.aboutme" | translate }}</a>
-        <a (click)="handleSignUpAction()">{{mainPageMenuProjectsTextActual}}</a>
-        <a (click)="handleForgotPasswordAction()">{{mainPageMenuContactTextActual}}</a>
+        <a>{{ "main.navigation.projects" | translate }}</a>
+        <a>{{ "main.navigation.contact" | translate }}</a>
         <a>
           <button [matMenuTriggerFor]="profile" mat-icon-button class="m-r-5">
             <mat-icon style="color: white">{{headerIconChangeLanguage}}</mat-icon>
           </button>
           <mat-menu #profile="matMenu" class="mymegamenu">
-<!--            <button mat-menu-item (click)="changeMainPageLanguageTo(ger)">
-              {{mainPageMenuChangeLanguageGERTitle}}
-            </button>
-            <button mat-menu-item (click)="changeMainPageLanguageTo(rus)">
-              {{mainPageMenuChangeLanguageRUSTitle}}
-            </button>-->
             <button mat-menu-item (click)="useLanguage('de')">de</button>
-            <button mat-menu-item (click)="useLanguage('en')">ru</button>
+            <button mat-menu-item (click)="useLanguage('ru')">ru</button>
           </mat-menu>
         </a>
       </li>

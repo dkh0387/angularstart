@@ -7,6 +7,7 @@ import {BuyService} from "../services/buy.service";
 import {NgxUiLoaderService} from "ngx-ui-loader";
 import {SnackbarService} from "../services/snackbar.service";
 import {Router} from "@angular/router";
+import {TranslateService} from "@ngx-translate/core";
 
 @Component({
   selector: 'app-best-seller',
@@ -14,17 +15,9 @@ import {Router} from "@angular/router";
   styleUrls: ['./best-seller.component.scss']
 })
 export class BestSellerComponent extends ItemManager {
-  @Input('app-best-seller-language') language: string | undefined;
-  @Input('app-best-seller-servicePageTitle') servicePageTitle: string | undefined;
-  @Input('app-best-seller-servicePageService1') servicePageService1: string | undefined;
-  @Input('app-best-seller-servicePageService2') servicePageService2: string | undefined;
-  @Input('app-best-seller-servicePageService3') servicePageService3: string | undefined;
-  @Input('app-best-seller-servicePageService4') servicePageService4: string | undefined;
-  @Input('app-best-seller-servicePageService5') servicePageService5: string | undefined;
-  @Input('app-best-seller-servicePageService6') servicePageService6: string | undefined;
-  @Input('app-best-seller-servicePageService7') servicePageService7: string | undefined;
 
-  constructor(private buyService: BuyService,
+  constructor(private translateService: TranslateService,
+              private buyService: BuyService,
               ngxService: NgxUiLoaderService,
               dialog: MatDialog,
               snackBarService: SnackbarService,
@@ -36,36 +29,16 @@ export class BestSellerComponent extends ItemManager {
     this.ngxService.stop();
   }
 
-  handleShowBuyForm(servicePageService: string | undefined,) {
-    switch (servicePageService) {
-      case this.servicePageService1:
-        this.openBuyDialog(this.servicePageService1);
-        break;
-      case this.servicePageService2:
-        this.openBuyDialog(this.servicePageService2);
-        break;
-      case this.servicePageService3:
-        this.openBuyDialog(this.servicePageService3);
-        break;
-      case this.servicePageService4:
-        this.openBuyDialog(this.servicePageService4);
-        break;
-      case this.servicePageService5:
-        this.openBuyDialog(this.servicePageService5);
-        break;
-      case this.servicePageService6:
-        this.openBuyDialog(this.servicePageService6);
-        break;
-      case this.servicePageService7:
-        this.openBuyDialog(this.servicePageService7);
-        break;
-    }
+  handleShowBuyForm(key: string) {
+    this.translateService.get(key).subscribe((res: string) => {
+      this.openBuyDialog(res);
+    });
   }
 
-  private openBuyDialog(servicePageService: string | undefined) {
+  private openBuyDialog(bestsellerTitle: string | undefined) {
     const dialogConfig = new MatDialogConfig();
     dialogConfig.width = GlobalConstants.dialogWidth;
-    dialogConfig.data = {service: servicePageService, language: this.language};
+    dialogConfig.data = {bestseller: bestsellerTitle};
     const dialogRef = this.dialog.open(BuyComponent, dialogConfig);
     this.router.events.subscribe(() => {
       dialogRef.close();

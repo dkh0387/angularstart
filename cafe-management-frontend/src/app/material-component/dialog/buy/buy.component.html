@@ -12,11 +12,12 @@
   <form [formGroup]="buyForm" id="buyForm">
     <div fxFlex fxLayout="column">
       <div fxLayout="row wrap">
-        <mat-form-field appearance="standard" fxFlex id="service">
-          <mat-label>{{buyServiceDialogServiceLabel}}</mat-label>
-          <input matInput formControlName="service" required readonly>
-          <mat-error *ngIf="buyForm.controls.service.touched && buyForm.controls.service.invalid">
-            <span *ngIf="buyForm.controls.service.errors.required">This field is mandatory!</span>
+        <mat-form-field appearance="standard" fxFlex id="bestseller">
+          <mat-label>{{ "main.bestsellers.buydialog.label" | translate }}</mat-label>
+          <input matInput formControlName="bestseller" required readonly>
+          <mat-error *ngIf="buyForm.controls.bestseller.touched && buyForm.controls.bestseller.invalid">
+            <span
+              *ngIf="buyForm.controls.bestseller.errors.required">{{ "main.messages.errors.mandatory" | translate }}</span>
           </mat-error>
         </mat-form-field>
       </div>
@@ -27,10 +28,10 @@
 <mat-dialog-actions align="end">
   <button mat-raised-button color="primary" type="submit" (click)="handleBuy()">
     <mat-icon>monetization_on</mat-icon>
-    {{buyServiceDialogSubmit}}
+    {{ "main.bestsellers.buydialog.button.submit" | translate }}
   </button>
   <button mat-raised-button color="warn" mat-dialog-close>
     <mat-icon>cancel</mat-icon>
-    {{buyServiceDialogClose}}
+    {{ "main.messages.buttons.cancel" | translate }}
   </button>
 </mat-dialog-actions>

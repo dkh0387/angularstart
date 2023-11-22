@@ -22,9 +22,15 @@ Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The app w
 
 Run `ng generate component component-name` to generate a new component. You can also use `ng generate directive|pipe|service|class|guard|interface|enum|module`.
 
-## Installing dependencies
+## Installing/Updating dependencies
 
 * go to: `package.json`
+* bei major updates (like Angular 1x.x) the best wy is to hardly remove the `node_modules` folder and the `package-lock.json` file.
+To do so we need:
+  - `sudo rm -rf .angular/cache `
+  - `sudo rm -rf node_modules/`
+  - remove `package-lock.json`
+  - run `sudo npm install` again to rebuild the dependency tree
 
 ## Build
 

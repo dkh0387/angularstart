@@ -21,18 +21,20 @@ import { ViewBillComponent } from './view-bill/view-bill.component';
 import { ManageUserComponent } from './manage-user/manage-user.component';
 import { UserComponent } from './dialog/user/user.component';
 import { BuyComponent } from './dialog/buy/buy.component';
+import {TranslateModule} from "@ngx-translate/core";
 
 @NgModule({
-  imports: [
-    CommonModule,
-    RouterModule.forChild(MaterialRoutes),
-    MaterialModule,
-    HttpClientModule,
-    FormsModule,
-    ReactiveFormsModule,
-    FlexLayoutModule,
-    CdkTableModule
-  ],
+    imports: [
+        CommonModule,
+        RouterModule.forChild(MaterialRoutes),
+        MaterialModule,
+        HttpClientModule,
+        FormsModule,
+        ReactiveFormsModule,
+        FlexLayoutModule,
+        CdkTableModule,
+        TranslateModule
+    ],
   providers: [],
   declarations: [
     ViewBillProductsComponent,

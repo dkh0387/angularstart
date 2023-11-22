@@ -19,7 +19,6 @@ import {NgxUiLoaderConfig, NgxUiLoaderModule, SPINNER} from "ngx-ui-loader";
 import {ForgotPasswordComponent} from './forgot-password/forgot-password.component';
 import {LoginComponent} from './login/login.component';
 import {TokenInterceptor} from "./services/token.interceptor";
-import {LenaServicesOverviewComponent} from './lena-services-overview/lena-services-overview.component';
 import {AboutMeComponent} from "./about-me/about-me.component";
 
 /**
@@ -54,7 +53,6 @@ import {HttpClient, HttpClientModule} from '@angular/common/http';
     SignupComponent,
     ForgotPasswordComponent,
     LoginComponent,
-    LenaServicesOverviewComponent,
     AboutMeComponent
   ],
   imports: [

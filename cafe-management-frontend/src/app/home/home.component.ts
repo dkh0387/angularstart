@@ -7,8 +7,6 @@ import {Router} from "@angular/router";
 import {RestSubscriber} from "../interfaces/rest-subscriber";
 import {Observable} from "rxjs";
 import {GlobalConstants} from "../shared/global-constants";
-import {FormGroup} from "@angular/forms";
-import {LanguageHandler} from "../extended/language-handler";
 import {TranslateService} from "@ngx-translate/core";
 
 @Component({
@@ -16,17 +14,15 @@ import {TranslateService} from "@ngx-translate/core";
   templateUrl: './home.component.html',
   styleUrls: ['./home.component.scss']
 })
-export class HomeComponent extends LanguageHandler implements OnInit, RestSubscriber {
-  //sudo npm install @ngx-translate/core @ngx-translate/http-loader --save --legacy-peer-deps
-//sudo npm install --save --legacy-peer-deps
+export class HomeComponent implements OnInit, RestSubscriber {
   aboutMePath = "/" + GlobalConstants.aboutMePath;
   mainPageTitle = GlobalConstants.mainPageTitle;
   mainPageIcon = GlobalConstants.mainPageIcon;
+  headerIconChangeLanguage = GlobalConstants.headerIconChangeLanguage;
 
-  constructor(private translate: TranslateService, private dialog: MatDialog, private userService: UserService, private router: Router) {
-    super(GlobalConstants.RUS);
-    translate.setDefaultLang(GlobalConstants.RUS);
-    translate.use(GlobalConstants.RUS);
+  constructor(private translateService: TranslateService, private dialog: MatDialog, private userService: UserService, private router: Router) {
+    translateService.setDefaultLang(GlobalConstants.RUS);
+    translateService.use(GlobalConstants.RUS);
   }
 
   /**
@@ -68,16 +64,11 @@ export class HomeComponent extends LanguageHandler implements OnInit, RestSubscr
     this.dialog.open(ForgotPasswordComponent, dialogConfig);
   }
 
-  /**
-   * NOTE: we are sending the language setting over the URL to all non-child components,
-   * which we are not calling directly from home.
-   */
   handleGoToAboutMePage() {
-    this.router.navigate(["/" + GlobalConstants.aboutMePath, {language: this.languageSettings}])
-      .catch((error) => console.log(error));
+    this.router.navigate(["/" + GlobalConstants.aboutMePath]).catch((error) => console.log(error));
   }
 
   useLanguage(language: string): void {
-    this.translate.use(language);
+    this.translateService.use(language);
   }
 }
