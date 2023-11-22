@@ -1,6 +1,6 @@
 <html>
 <head>
-  <title>{{aboutMeTitle}}</title></head>
+  <title>{{ "main.aboutme.title" | translate }}</title></head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.15.4/css/all.css"/>
@@ -9,18 +9,13 @@
   <div class="container">
     <div class="content-section">
       <div class="title">
-        <h1>{{aboutMeTitle}}</h1>
+        <h1>{{ "main.aboutme.title" | translate }}</h1>
       </div>
       <div class="content">
-        <h3>{{aboutMeContentTitle}}</h3>
-        <p>Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et
-          dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet
-          clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet,
-          consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat,
-          sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea
-          takimata sanctus est Lorem ipsum dolor sit amet.</p>
-        <button mat-raised-button color="primary" (click)="goBack()">
-          <a>Read more</a>
+        <h3>{{ "main.aboutme.content.title" | translate }}</h3>
+        <p>{{ "main.aboutme.content.text" | translate }}</p>
+        <button mat-raised-button color="primary" (click)="handleShowMore()">
+          <a>{{ "main.aboutme.button.readmore" | translate }}</a>
         </button>
       </div>
       <div class="social">

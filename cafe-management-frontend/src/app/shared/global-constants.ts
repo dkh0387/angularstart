@@ -72,10 +72,4 @@ export class GlobalConstants {
   public static mainPageIcon: string = "house";
   public static headerIconChangeLanguage: string = "language";
 
-  //About me page
-  public static aboutMePageTitleRUS: string = "Обо мне";
-  public static aboutMePageTitleGER: string = "Über mich";
-  public static aboutMeContentTitleRUS: string = "Аккуратность - моя страсть!";
-  public static aboutMeContentTitleGER: string = "Ordnung ist meine Leidenschaft!";
-
 }
