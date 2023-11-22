@@ -1,4 +1,4 @@
-import {Component, Input} from '@angular/core';
+import {Component} from '@angular/core';
 import {GlobalConstants} from "../shared/global-constants";
 import {MatDialog, MatDialogConfig} from "@angular/material/dialog";
 import {BuyComponent} from "../material-component/dialog/buy/buy.component";
