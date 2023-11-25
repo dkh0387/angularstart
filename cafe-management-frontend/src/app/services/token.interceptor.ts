@@ -9,6 +9,7 @@ import {Observable, throwError} from 'rxjs';
 import {Router} from "@angular/router";
 import {AuthService} from "./auth.service";
 import {catchError} from "rxjs/operators";
+import {PayPalService} from "./paypal.service";
 
 /**
  * @TODO: testing!
@@ -17,19 +18,21 @@ import {catchError} from "rxjs/operators";
 @Injectable()
 export class TokenInterceptor implements HttpInterceptor {
 
-  constructor(private router: Router, private authService: AuthService) {
+  constructor(private router: Router, private authService: AuthService, private payPalService: PayPalService) {
   }
 
   /**
-   * After we got the JWT we clone an HTTP request with Bearer Authentication header in order to reach secured components.
+   * After we got the JWT we clone an HTTP request with Bearer Authentication header to reach secured components.
    * @param request
    * @param next
    */
   intercept(request: HttpRequest<unknown>, next: HttpHandler): Observable<HttpEvent<unknown>> {
     const token = this.authService.getToken();
+    //const tokenMap = this.payPalService.getAccessToken();
 
     if (token != null) {
       request = request.clone({setHeaders: {Authorization: `Bearer ${token}`}});
+      //request = request.clone({setHeaders: {Authorization: `${tokenMap.token_type} ${tokenMap.access_token}`}});
     }
     return next.handle(request).pipe(
       catchError((error) => {

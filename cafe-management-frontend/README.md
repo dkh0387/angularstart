@@ -26,7 +26,7 @@ Run `ng generate component component-name` to generate a new component. You can 
 
 * go to: `package.json`
 * bei major updates (like Angular 1x.x) the best wy is to hardly remove the `node_modules` folder and the `package-lock.json` file.
-To do so we need:
+  To do so we need:
   - `sudo rm -rf .angular/cache `
   - `sudo rm -rf node_modules/`
   - remove `package-lock.json`
@@ -156,8 +156,14 @@ WE are able to define routing access per component. As example, we use `material
 * Which urls are allowed to be reached for which role is described via routing concept (see above)
 * Further, we can provide an expected role to any UI element (like sidebar icons): see `sidebar.component.ts` for example
 
+## PayPal API integration
+
+* Get started: `https://developer.paypal.com/api/rest/`
+* Insert PayPal script into `index.html`
+* 
+
 ## TODOs
 
+* PayPal API integration
 * Installing dependencies save way: `sudo npm i <packagename> --legacy-peer-deps` --> update to angular 16
-* make all strings to globals (multi language??) --> look for multi language lib
 * testing

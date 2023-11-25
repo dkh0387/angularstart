@@ -7,7 +7,7 @@ export class RequestService {
 
   url = environment.apiUrl;
 
-  constructor(private httpClient: HttpClient) {
+  constructor(protected httpClient: HttpClient) {
   }
 
   protected post(endpointUrl: string, data: any) {

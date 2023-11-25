@@ -72,4 +72,10 @@ export class GlobalConstants {
   public static mainPageIcon: string = "house";
   public static headerIconChangeLanguage: string = "language";
 
+  //PayPal
+  public static payPalAuthClientID:string = "AUwAhpG92aeLS_INgn6GwgqWVvwwoRKcLXDsFM0rGjh6SJIJIS8EJOfAG_RtRzxExi4vjwDYpKMBWgVA";
+  public static payPalAuthClientSecret:string = "ED7nIhLk-fhGWaza0S2QaQHF-oZZz4PvMfp2XW9yA0qiW184aBhHubLjS9Pzfz9VvzT2efITNc1pmS51";
+  public static payPalAuthTokenAPI:string = "https://api-m.sandbox.paypal.com/v1/oauth2/token";
+  public static payPalURL: string = "https://www.paypal.com/sdk/js?currency=EUR&client-id=";
+
 }
