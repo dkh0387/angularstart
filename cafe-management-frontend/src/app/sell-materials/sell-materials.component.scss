@@ -1,3 +1,5 @@
+$button-color: #d0ad8a;
+
 .text-uppercase {
   text-transform: uppercase !important;
 }
@@ -25,7 +27,7 @@ section-heading {
 
   button {
     color: white;
-    background-color: #d0ad8a;
+    background-color: $button-color;
     min-width: 25%;
   }
 }

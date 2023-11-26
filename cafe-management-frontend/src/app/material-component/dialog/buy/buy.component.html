@@ -1,23 +1,14 @@
-<!--
-<mat-toolbar color="primary">
-  <mat-toolbar-row fixLayout="row">
-    <span class="spacer"></span>
-    <button class="mat-dialog-close" mat-icon-button mat-dialog-close>
-      <mat-icon>close</mat-icon>
-    </button>
-  </mat-toolbar-row>
+<mat-toolbar style="margin-bottom: 20px">
+    <mat-toolbar-row fixLayout="row">
+        <span>{{ "main.messages.buttons.buy" | translate }} {{documentName}}</span>
+    </mat-toolbar-row>
 </mat-toolbar>
--->
+<hr>
 
 <mat-dialog-content class="mat-typography">
-    <form [formGroup]="buyForm" id="buyForm">
-        <div fxFlex fxLayout="column">
-            <div fxLayout="row wrap">
-                <span>sdfeüfk</span>
-            </div>
-        </div>
-    </form>
+    <p>{{documentDescription}}</p>
 </mat-dialog-content>
+<hr>
 
 <mat-dialog-actions align="end">
 

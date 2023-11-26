@@ -1,7 +1,6 @@
 {
-	"main.aboutme.button.readmore": "Mehr erfahren",
 	"main.aboutme.content.text": "Beispielhafter Kontexttext",
-	"main.aboutme.content.title": "<ul>\n<li>Wer bin ich</li>\n<li>Warum ihr mich braucht</li>\n</ul>",
+	"main.aboutme.content.title": "Wer bin ich, warum ihr mich braucht",
 	"main.aboutme.title": "Über mich",
 	"main.bestsellers.bestseller1.description": "Wir lernen uns persönlich kennen! Wir stellen sicher, dass die Zusammenarbeit an Ihrem Hausprojekt angenehm ist und dass wir auf derselben Seite stehen. Dann besprechen wir Herausforderungen und Ziele, Lebensszenarien.",
 	"main.bestsellers.bestseller1.title": "Videoanruf zum Kennenlernen, ca. 30 Minuten",
@@ -13,9 +12,14 @@
 	"main.bestsellers.buydialog.label": "Dienstleistung",
 	"main.bestsellers.buydialog.servicename": "Wir lernen uns persönlich kennen! Wir stellen sicher, dass die Zusammenarbeit an Ihrem Hausprojekt angenehm ist und dass wir auf derselben Seite stehen. Dann besprechen wir Herausforderungen und Ziele, Lebensszenarien.",
 	"main.bestsellers.title": "Dienstleistungen",
+	"main.documents.description1": "Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.",
+	"main.documents.description2": "Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.",
+	"main.documents.description3": "Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.",
+	"main.documents.title": "Dokumente",
+	"main.messages.buttons.buy": "Kaufen",
 	"main.messages.buttons.cancel": "Abbrechen",
 	"main.messages.errors.mandatory": "Dies ist ein Pflichtfeld!",
-	"main.navigation.aboutme": "Über mich",
 	"main.navigation.contact": "Kontakt",
-	"main.navigation.projects": "Projekte"
+	"main.navigation.projects": "Projekte",
+	"main.navigation.services": "Dienstleistungen"
 }

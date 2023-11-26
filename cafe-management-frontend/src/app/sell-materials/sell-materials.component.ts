@@ -3,6 +3,8 @@ import {MatDialog, MatDialogConfig} from "@angular/material/dialog";
 import {GlobalConstants} from "../shared/global-constants";
 import {BuyComponent} from "../material-component/dialog/buy/buy.component";
 import {Router} from "@angular/router";
+import {Documents} from "../bo/documents";
+import {DocumentsService} from "../services/documents.service";
 
 @Component({
     selector: 'app-sell-materials',
@@ -11,16 +13,20 @@ import {Router} from "@angular/router";
 })
 export class SellMaterialsComponent implements OnInit {
 
-    constructor(private dialog: MatDialog, private router: Router) {
+    documents: any;
+
+    constructor(private dialog: MatDialog, private router: Router, private documentsService: DocumentsService) {
     }
 
     ngOnInit(): void {
+        this.documents = this.documentsService.getAll();
     }
 
-    handleBuyAction() {
+    handleBuyAction(document: Documents) {
+        console.log(document);
         const dialogConfig = new MatDialogConfig();
         dialogConfig.width = GlobalConstants.dialogWidth;
-        dialogConfig.data = {document: "document1.pdf"};
+        dialogConfig.data = {documentName: document.name, documentDescription: document.description};
         const dialogRef = this.dialog.open(BuyComponent, dialogConfig);
         this.router.events.subscribe(() => {
             dialogRef.close();

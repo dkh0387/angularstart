@@ -1,27 +1,16 @@
 <div style="margin-top: 40px;">
-  <div class="container">
-    <div class="text-center">
-      <h2 class="section-heading text-uppercase">Dokumente</h2>
-    </div>
-    <ul class="document-list">
-      <li>
-        <div fxFlex fxLayout="column">
-          <div fxLayout="row wrap">
-            <div class="document-element">
-              <button mat-flat-button (click)="handleBuyAction()">
-                dokument1.pdf
-              </button>
-            </div>
-          </div>
-          <div fxLayout="row wrap">
-            <div class="document-element">
-              <button mat-flat-button>
-                dokument2.pdf
-              </button>
-            </div>
-          </div>
+    <div class="container">
+        <div class="text-center">
+            <h2 class="section-heading text-uppercase">{{ "main.documents.title" | translate }}</h2>
         </div>
-      </li>
-    </ul>
-  </div>
+        <ul class="document-list" *ngFor="let document of documents">
+            <li>
+                <div class="document-element">
+                    <button mat-flat-button (click)="handleBuyAction(document)">
+                        {{document.name}}
+                    </button>
+                </div>
+            </li>
+        </ul>
+    </div>
 </div>

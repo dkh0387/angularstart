@@ -1,7 +1,6 @@
 {
-	"main.aboutme.button.readmore": "Узнать больше",
 	"main.aboutme.content.text": "Образец контекстного текста",
-	"main.aboutme.content.title": "<ul>\n<li>Кто я</li>\n<li>Зачем я вам</li>\n</ul>",
+	"main.aboutme.content.title": "Кто я, зачем я вам",
 	"main.aboutme.title": "Обо мне",
 	"main.bestsellers.bestseller1.description": "Знакомимся вживую! Убеждаемся, что совместно работать над проектом вашего дома комфортно и мы на одной волне. Далее - обсуждаем сложности и цели, жизненные сценарии.",
 	"main.bestsellers.bestseller1.title": "Видеозвонок-знакомство, около 30 минут",
@@ -13,9 +12,14 @@
 	"main.bestsellers.buydialog.label": "Услуга",
 	"main.bestsellers.buydialog.servicename": "Знакомимся вживую! Убеждаемся, что совместно работать над проектом вашего дома комфортно и мы на одной волне. Далее - обсуждаем сложности и цели, жизненные сценарии.",
 	"main.bestsellers.title": "Услуги",
+	"main.documents.description1": "Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.",
+	"main.documents.description2": "Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.",
+	"main.documents.description3": "Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.",
+	"main.documents.title": "Документы",
+	"main.messages.buttons.buy": "Купить",
 	"main.messages.buttons.cancel": "Отменить",
 	"main.messages.errors.mandatory": "Это обязательное поле!",
-	"main.navigation.aboutme": "Обо мне",
 	"main.navigation.contact": "Контакт",
-	"main.navigation.projects": "Проекты"
+	"main.navigation.projects": "Проекты",
+	"main.navigation.services": "Услуги"
 }

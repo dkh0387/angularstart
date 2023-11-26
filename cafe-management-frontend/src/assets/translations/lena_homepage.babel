@@ -26,26 +26,6 @@
 								<name>aboutme</name>
 								<children>
 									<folder_node>
-										<name>button</name>
-										<children>
-											<concept_node>
-												<name>readmore</name>
-												<description/>
-												<comment/>
-												<translations>
-													<translation>
-														<language>de-DE</language>
-														<approved>false</approved>
-													</translation>
-													<translation>
-														<language>ru-RU</language>
-														<approved>false</approved>
-													</translation>
-												</translations>
-											</concept_node>
-										</children>
-									</folder_node>
-									<folder_node>
 										<name>content</name>
 										<children>
 											<concept_node>
@@ -278,11 +258,91 @@
 								</children>
 							</folder_node>
 							<folder_node>
+								<name>documents</name>
+								<children>
+									<concept_node>
+										<name>description1</name>
+										<description/>
+										<comment/>
+										<translations>
+											<translation>
+												<language>de-DE</language>
+												<approved>false</approved>
+											</translation>
+											<translation>
+												<language>ru-RU</language>
+												<approved>false</approved>
+											</translation>
+										</translations>
+									</concept_node>
+									<concept_node>
+										<name>description2</name>
+										<description/>
+										<comment/>
+										<translations>
+											<translation>
+												<language>de-DE</language>
+												<approved>false</approved>
+											</translation>
+											<translation>
+												<language>ru-RU</language>
+												<approved>false</approved>
+											</translation>
+										</translations>
+									</concept_node>
+									<concept_node>
+										<name>description3</name>
+										<description/>
+										<comment/>
+										<translations>
+											<translation>
+												<language>de-DE</language>
+												<approved>false</approved>
+											</translation>
+											<translation>
+												<language>ru-RU</language>
+												<approved>false</approved>
+											</translation>
+										</translations>
+									</concept_node>
+									<concept_node>
+										<name>title</name>
+										<description/>
+										<comment/>
+										<translations>
+											<translation>
+												<language>de-DE</language>
+												<approved>false</approved>
+											</translation>
+											<translation>
+												<language>ru-RU</language>
+												<approved>false</approved>
+											</translation>
+										</translations>
+									</concept_node>
+								</children>
+							</folder_node>
+							<folder_node>
 								<name>messages</name>
 								<children>
 									<folder_node>
 										<name>buttons</name>
 										<children>
+											<concept_node>
+												<name>buy</name>
+												<description/>
+												<comment/>
+												<translations>
+													<translation>
+														<language>de-DE</language>
+														<approved>false</approved>
+													</translation>
+													<translation>
+														<language>ru-RU</language>
+														<approved>false</approved>
+													</translation>
+												</translations>
+											</concept_node>
 											<concept_node>
 												<name>cancel</name>
 												<description/>
@@ -326,21 +386,6 @@
 								<name>navigation</name>
 								<children>
 									<concept_node>
-										<name>aboutme</name>
-										<description/>
-										<comment/>
-										<translations>
-											<translation>
-												<language>de-DE</language>
-												<approved>false</approved>
-											</translation>
-											<translation>
-												<language>ru-RU</language>
-												<approved>false</approved>
-											</translation>
-										</translations>
-									</concept_node>
-									<concept_node>
 										<name>contact</name>
 										<description/>
 										<comment/>
@@ -357,6 +402,21 @@
 									</concept_node>
 									<concept_node>
 										<name>projects</name>
+										<description/>
+										<comment/>
+										<translations>
+											<translation>
+												<language>de-DE</language>
+												<approved>false</approved>
+											</translation>
+											<translation>
+												<language>ru-RU</language>
+												<approved>false</approved>
+											</translation>
+										</translations>
+									</concept_node>
+									<concept_node>
+										<name>services</name>
 										<description/>
 										<comment/>
 										<translations>

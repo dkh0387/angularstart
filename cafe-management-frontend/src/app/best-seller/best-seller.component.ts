@@ -3,7 +3,6 @@ import {GlobalConstants} from "../shared/global-constants";
 import {MatDialog, MatDialogConfig} from "@angular/material/dialog";
 import {BuyComponent} from "../material-component/dialog/buy/buy.component";
 import {ItemManager} from "../extended/item-manager";
-import {BuyService} from "../services/buy.service";
 import {NgxUiLoaderService} from "ngx-ui-loader";
 import {SnackbarService} from "../services/snackbar.service";
 import {Router} from "@angular/router";
@@ -17,7 +16,6 @@ import {TranslateService} from "@ngx-translate/core";
 export class BestSellerComponent extends ItemManager {
 
   constructor(private translateService: TranslateService,
-              private buyService: BuyService,
               ngxService: NgxUiLoaderService,
               dialog: MatDialog,
               snackBarService: SnackbarService,

@@ -64,11 +64,19 @@ export class HomeComponent implements OnInit, RestSubscriber {
     this.dialog.open(ForgotPasswordComponent, dialogConfig);
   }
 
-  handleGoToAboutMePage() {
-    this.router.navigate(["/" + GlobalConstants.aboutMePath]).catch((error) => console.log(error));
+  handleGoToServicesPage() {
+    //this.router.navigate(["/" + GlobalConstants.aboutMePath]).catch((error) => console.log(error));
   }
 
   useLanguage(language: string): void {
     this.translateService.use(language);
+  }
+
+  handleGoToProjectsPage() {
+
+  }
+
+  handleGoToContactPage() {
+
   }
 }

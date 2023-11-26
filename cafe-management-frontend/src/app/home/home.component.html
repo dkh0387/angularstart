@@ -1,15 +1,14 @@
+<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.15.4/css/all.css"/>
 <!--Title image-->
 <div class="bg-image">
-  <img src="assets/img/title_image.jpg"
-       alt="..."/>
+    <img src="assets/img/title_image.jpg"
+         alt="..."/>
 </div>
 <!--Title image-->
 
 <!--Title text-->
 <div class="aboutme">
-  Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore
-  magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd
-  gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.
+    {{ "main.aboutme.content.title" | translate }}
 </div>
 <!--Title text-->
 
@@ -19,35 +18,40 @@
 
 <!--Navigation bar-->
 <div class=" wrapper sticky">
-  <nav class="navbar-fixed-top">
+    <nav class="navbar-fixed-top">
 
-    <a href="#" class="logo">
-      <mat-icon>{{mainPageIcon}}</mat-icon>
-      {{mainPageTitle}}
-    </a>
-
-    <ul>
-      <li>
-        <a (click)="handleGoToAboutMePage()">{{ "main.navigation.aboutme" | translate }}</a>
-        <a>{{ "main.navigation.projects" | translate }}</a>
-        <a>{{ "main.navigation.contact" | translate }}</a>
-        <a>
-          <button [matMenuTriggerFor]="profile" mat-icon-button class="m-r-5">
-            <mat-icon style="color: white">{{headerIconChangeLanguage}}</mat-icon>
-          </button>
-          <mat-menu #profile="matMenu" class="mymegamenu">
-            <button mat-menu-item (click)="useLanguage('de')">de</button>
-            <button mat-menu-item (click)="useLanguage('ru')">ru</button>
-          </mat-menu>
+        <a href="#" class="logo">
+            <mat-icon>{{mainPageIcon}}</mat-icon>
+            {{mainPageTitle}}
         </a>
-      </li>
-    </ul>
-  </nav>
+
+        <ul>
+            <li>
+                <a (click)="handleGoToServicesPage()">{{ "main.navigation.services" | translate }}</a>
+                <a (click)="handleGoToProjectsPage()">{{ "main.navigation.projects" | translate }}</a>
+                <a (click)="handleGoToContactPage()">{{ "main.navigation.contact" | translate }}</a>
+                <a>
+                    <button [matMenuTriggerFor]="profile" mat-icon-button class="m-r-5">
+                        <mat-icon style="color: white">{{headerIconChangeLanguage}}</mat-icon>
+                    </button>
+                    <mat-menu #profile="matMenu" class="mymegamenu">
+                        <button mat-menu-item (click)="useLanguage('de')">de</button>
+                        <button mat-menu-item (click)="useLanguage('ru')">ru</button>
+                    </mat-menu>
+                </a>
+            </li>
+        </ul>
+    </nav>
 </div>
 <!--Navigation bar-->
 
 <!--Footer-->
 <div class="footer" id="signup">
-  <h2>All right reserved @Denis Khaskin</h2>
+    <div class="social">
+        <a href=""><i class="fab fa-instagram"></i></a>
+        <a href=""><i class="fab fa-telegram"></i></a>
+        <a href=""><i class="fab fa-whatsapp"></i></a>
+    </div>
+    <h2>All right reserved @Denis Khaskin</h2>
 </div>
 <!--Footer-->
