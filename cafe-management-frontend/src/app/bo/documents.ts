@@ -1,5 +1,3 @@
-import {GlobalConstants} from "../shared/global-constants";
-
 export class Documents {
 
     public name: any;
