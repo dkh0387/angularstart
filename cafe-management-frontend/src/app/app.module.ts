@@ -41,6 +41,7 @@ const ngUiLoaderConfig: NgxUiLoaderConfig = {
 import {TranslateLoader, TranslateModule} from '@ngx-translate/core';
 import {TranslateHttpLoader} from '@ngx-translate/http-loader';
 import {HttpClient, HttpClientModule} from '@angular/common/http';
+import { SellMaterialsComponent } from './sell-materials/sell-materials.component';
 
 @NgModule({
   declarations: [
@@ -53,7 +54,8 @@ import {HttpClient, HttpClientModule} from '@angular/common/http';
     SignupComponent,
     ForgotPasswordComponent,
     LoginComponent,
-    AboutMeComponent
+    AboutMeComponent,
+    SellMaterialsComponent
   ],
   imports: [
     BrowserModule,

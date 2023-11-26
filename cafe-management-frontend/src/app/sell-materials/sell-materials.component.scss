@@ -1,0 +1,33 @@
+.text-uppercase {
+  text-transform: uppercase !important;
+}
+
+section-heading {
+  h2 {
+    font-size: 2.5rem;
+    margin-top: 0;
+    margin-bottom: 1rem;
+  }
+
+}
+
+.document-list {
+  position: relative;
+  padding: 0;
+  list-style: none;
+}
+
+.document-list > li .document-element {
+  position: relative;
+  width: 100%;
+  padding-top: 20px;
+  text-align: center;
+
+  button {
+    color: white;
+    background-color: #d0ad8a;
+    min-width: 25%;
+  }
+}
+
+

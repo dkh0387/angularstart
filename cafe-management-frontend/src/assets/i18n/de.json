@@ -1,7 +1,7 @@
 {
 	"main.aboutme.button.readmore": "Mehr erfahren",
 	"main.aboutme.content.text": "Beispielhafter Kontexttext",
-	"main.aboutme.content.title": "Ordnung ist meine Leidenschaft!",
+	"main.aboutme.content.title": "<ul>\n<li>Wer bin ich</li>\n<li>Warum ihr mich braucht</li>\n</ul>",
 	"main.aboutme.title": "Über mich",
 	"main.bestsellers.bestseller1.description": "Wir lernen uns persönlich kennen! Wir stellen sicher, dass die Zusammenarbeit an Ihrem Hausprojekt angenehm ist und dass wir auf derselben Seite stehen. Dann besprechen wir Herausforderungen und Ziele, Lebensszenarien.",
 	"main.bestsellers.bestseller1.title": "Videoanruf zum Kennenlernen, ca. 30 Minuten",

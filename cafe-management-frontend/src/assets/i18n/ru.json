@@ -1,7 +1,7 @@
 {
 	"main.aboutme.button.readmore": "Узнать больше",
 	"main.aboutme.content.text": "Образец контекстного текста",
-	"main.aboutme.content.title": "Аккуратность - моя страсть!",
+	"main.aboutme.content.title": "<ul>\n<li>Кто я</li>\n<li>Зачем я вам</li>\n</ul>",
 	"main.aboutme.title": "Обо мне",
 	"main.bestsellers.bestseller1.description": "Знакомимся вживую! Убеждаемся, что совместно работать над проектом вашего дома комфортно и мы на одной волне. Далее - обсуждаем сложности и цели, жизненные сценарии.",
 	"main.bestsellers.bestseller1.title": "Видеозвонок-знакомство, около 30 минут",
