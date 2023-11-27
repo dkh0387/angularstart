@@ -26,7 +26,7 @@ export class SellMaterialsComponent implements OnInit {
         console.log(document);
         const dialogConfig = new MatDialogConfig();
         dialogConfig.width = GlobalConstants.dialogWidth;
-        dialogConfig.data = {documentName: document.name, documentDescription: document.description};
+        dialogConfig.data = {documentName: document.name, documentDescription: document.description, documentPrice: document.price};
         const dialogRef = this.dialog.open(BuyComponent, dialogConfig);
         this.router.events.subscribe(() => {
             dialogRef.close();

@@ -42,6 +42,7 @@ import {TranslateLoader, TranslateModule} from '@ngx-translate/core';
 import {TranslateHttpLoader} from '@ngx-translate/http-loader';
 import {HttpClient, HttpClientModule} from '@angular/common/http';
 import { SellMaterialsComponent } from './sell-materials/sell-materials.component';
+import { ConfirmPaymentComponent } from './confirm-payment/confirm-payment.component';
 
 @NgModule({
   declarations: [
@@ -55,7 +56,8 @@ import { SellMaterialsComponent } from './sell-materials/sell-materials.componen
     ForgotPasswordComponent,
     LoginComponent,
     AboutMeComponent,
-    SellMaterialsComponent
+    SellMaterialsComponent,
+    ConfirmPaymentComponent
   ],
   imports: [
     BrowserModule,

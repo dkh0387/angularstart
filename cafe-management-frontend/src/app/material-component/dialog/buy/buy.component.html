@@ -1,6 +1,8 @@
 <mat-toolbar style="margin-bottom: 20px">
     <mat-toolbar-row fixLayout="row">
         <span>{{ "main.messages.buttons.buy" | translate }} {{documentName}}</span>
+        <span class="spacer"></span>
+        <span>{{documentPrice}} €</span>
     </mat-toolbar-row>
 </mat-toolbar>
 <hr>
@@ -15,8 +17,6 @@
     <div fxFlex fxLayout="column">
         <div fxLayout="row wrap">
             <div #paymentRef></div>
-        </div>
-        <div fxLayout="row wrap">
             <span class="spacer"></span>
             <button mat-raised-button color="warn" mat-dialog-close>
                 <mat-icon>cancel</mat-icon>

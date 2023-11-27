@@ -81,6 +81,9 @@ export class GlobalConstants {
     public static document1DescriptionTranslateKey = "main.documents.description1";
     public static document2DescriptionTranslateKey = "main.documents.description2";
     public static document3DescriptionTranslateKey = "main.documents.description3";
+    public static document1Price = 23.99;
+    public static document2Price = 12.78;
+    public static document3Price = 11.89;
 
 
     //PayPal
@@ -88,5 +91,9 @@ export class GlobalConstants {
     public static payPalAuthClientSecret: string = "ED7nIhLk-fhGWaza0S2QaQHF-oZZz4PvMfp2XW9yA0qiW184aBhHubLjS9Pzfz9VvzT2efITNc1pmS51";
     public static payPalAuthTokenAPI: string = "https://api-m.sandbox.paypal.com/v1/oauth2/token";
     public static payPalURL: string = "https://www.paypal.com/sdk/js?currency=EUR&client-id=";
+    public static currencyEUR: string = "EUR";
+    public static currencyRUB: string = "RUB";
+    public static paymentStatusCodeCompleted: string = "COMPLETED";
+    public static paypalConfirmationPath: string = "confirmPayment";
 
 }
