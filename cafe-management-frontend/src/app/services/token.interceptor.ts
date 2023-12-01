@@ -18,7 +18,7 @@ import {PayPalService} from "./paypal.service";
 @Injectable()
 export class TokenInterceptor implements HttpInterceptor {
 
-  constructor(private router: Router, private authService: AuthService, private payPalService: PayPalService) {
+  constructor(private router: Router, private authService: AuthService) {
   }
 
   /**
@@ -28,11 +28,9 @@ export class TokenInterceptor implements HttpInterceptor {
    */
   intercept(request: HttpRequest<unknown>, next: HttpHandler): Observable<HttpEvent<unknown>> {
     const token = this.authService.getToken();
-    //const tokenMap = this.payPalService.getAccessToken();
 
     if (token != null) {
       request = request.clone({setHeaders: {Authorization: `Bearer ${token}`}});
-      //request = request.clone({setHeaders: {Authorization: `${tokenMap.token_type} ${tokenMap.access_token}`}});
     }
     return next.handle(request).pipe(
       catchError((error) => {

@@ -41,8 +41,9 @@ const ngUiLoaderConfig: NgxUiLoaderConfig = {
 import {TranslateLoader, TranslateModule} from '@ngx-translate/core';
 import {TranslateHttpLoader} from '@ngx-translate/http-loader';
 import {HttpClient, HttpClientModule} from '@angular/common/http';
-import { SellMaterialsComponent } from './sell-materials/sell-materials.component';
-import { ConfirmPaymentComponent } from './confirm-payment/confirm-payment.component';
+import {SellMaterialsComponent} from './sell-materials/sell-materials.component';
+import {ConfirmPaymentComponent} from './confirm-payment/confirm-payment.component';
+import {PayPalService} from "./services/paypal.service";
 
 @NgModule({
   declarations: [
@@ -81,7 +82,7 @@ import { ConfirmPaymentComponent } from './confirm-payment/confirm-payment.compo
       }
     })
   ],
-  providers: [HttpClientModule, {provide: HTTP_INTERCEPTORS, useClass: TokenInterceptor, multi: true}],
+  providers: [HttpClientModule, {provide: HTTP_INTERCEPTORS, useClass: TokenInterceptor, multi: true}, PayPalService],
   bootstrap: [AppComponent]
 })
 export class AppModule {
