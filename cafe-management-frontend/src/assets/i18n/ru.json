@@ -21,5 +21,6 @@
 	"main.messages.errors.mandatory": "Это обязательное поле!",
 	"main.navigation.contact": "Контакт",
 	"main.navigation.projects": "Проекты",
-	"main.navigation.services": "Услуги"
+	"main.navigation.services": "Услуги",
+  "confirmPayment.title": "Спасибо за вашу покупку!"
 }

@@ -31,10 +31,10 @@ use `ng generate directive|pipe|service|class|guard|interface|enum|module`.
 * bei major updates (like Angular 1x.x) the best wy is to hardly remove the `node_modules` folder and
   the `package-lock.json` file.
   To do so we need:
-    - `sudo rm -rf .angular/cache `
-    - `sudo rm -rf node_modules/`
-    - remove `package-lock.json`
-    - run `sudo npm install` again to rebuild the dependency tree
+  - `sudo rm -rf .angular/cache `
+  - `sudo rm -rf node_modules/`
+  - remove `package-lock.json`
+  - run `sudo npm install` again to rebuild the dependency tree
 
 ## Build
 
@@ -82,14 +82,14 @@ For details see: https://medium.com/swlh/angular-unit-testing-jasmine-karma-step
 ### Teststatus:
 
 * Components:
-    * `login.component.ts` OK
-    * `category.component.ts` OK
-    * `manage-category.component.ts` OK
+  * `login.component.ts` OK
+  * `category.component.ts` OK
+  * `manage-category.component.ts` OK
 
 * Services:
-    * `dashboard.service` OK
-    * `route-guard.service` OK
-    * `category.service.ts` OK
+  * `dashboard.service` OK
+  * `route-guard.service` OK
+  * `category.service.ts` OK
 
 ## Debugging
 
@@ -107,8 +107,8 @@ For details see: https://medium.com/swlh/angular-unit-testing-jasmine-karma-step
 * Dashboard URL is only accessible, if `canActivate()` returned true. This logic is configured
   in `app-routing.module.ts`
 * Access to backend endpoints using JWT:
-    * After JWT is saved in the local storage, we clone a request to the according backend endpoint and
-      add `Bearer <token>` (see `token.interceptor.ts`)
+  * After JWT is saved in the local storage, we clone a request to the according backend endpoint and
+    add `Bearer <token>` (see `token.interceptor.ts`)
 
 ## Global app routing
 
@@ -121,11 +121,18 @@ We do have two main routes:
 
 ## Component-based routing
 
-WE are able to define routing access per component. As example, we use `material.routing.ts`:
+We are able to define routing access per component. As example, we use `material.routing.ts`:
 
 * Basic path 'category/...'
 * For that, we define the corresponding component
 * Access restrictions: admin only, checked by `route-guard.service.ts`
+
+## Providing parameters between components using service
+
+We can provide params from A to B by `router.navigate(...)` using a service.
+It has to be listed in `app.module.ts` under `providers` and needs setter/getter for the params.
+After that, we need to inject the service into the receiver component.
+For a full example see `paypal.service.ts`, `confirm-payment.component.ts`.
 
 ## Providing JWT Authentication
 
@@ -140,7 +147,7 @@ WE are able to define routing access per component. As example, we use `material
 
 * See: `change-password.component.ts`
 
-## Concept of using modal dialogs incl. data binding (example)
+## Concept of using modal dialogs incl. Data binding (example)
 
 * We create a modal dialog instance in `header.component.ts`
 * We create a dialog content component in `confirmation.component.ts`
@@ -183,13 +190,17 @@ WE are able to define routing access per component. As example, we use `material
 
 ## TODOs
 
-* PayPal API integration complete
+* PayPal API integration complete DONE
+* Payment confirmation page template (thank you, download link for dokument, transaction id, back button, download invoice)
+* PayPal button remove from buy dialog and replace with "add to cart"
+* Shopping cart component with PayPal and Tinkoff buttons
+* Juristic stuff in buy dialog??
 * Tinkoff integration: `https://www.tinkoff.ru/kassa/dev/payments/#section/Vvedenie/Sposoby-integracii`
 * Link to GoogleDrive send per Email after payment
 * Lena:
-    * documents descriptions, names and urls (if multiple)
-    * Title photo, title text
-    * Links for social media
-    * Text for block 3
+  * documents descriptions, names and urls (if multiple)
+  * Title photo, title text
+  * Links for social media
+  * Text for block 3
 * Installing dependencies save way: `sudo npm i <packagename> --legacy-peer-deps` --> update to angular 16
 * testing
