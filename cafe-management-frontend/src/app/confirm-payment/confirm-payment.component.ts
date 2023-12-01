@@ -28,6 +28,8 @@ export class ConfirmPaymentComponent implements OnInit {
       dokumentName: [null, [Validators.required]],
       price: [null, [Validators.pattern(GlobalConstants.priceRegex)]]
     });
+    this.orderForm.controls["transactionId"].setValue(this.currentTransactionId);
+    //TODO: provide the Documents object for setting here...
   }
 
   get transactionId(): string {

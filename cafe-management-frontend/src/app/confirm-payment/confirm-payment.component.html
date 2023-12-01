@@ -5,45 +5,33 @@
 </div>
 
 <div class="container">
-  <mat-toolbar style="margin-bottom: 20px">
-    <mat-toolbar-row style="display: grid">
+  <mat-toolbar class="margin-top-20">
+    <mat-toolbar-row class="display-grid">
       <div class="text-center">{{ "confirmPayment.title" | translate }}</div>
     </mat-toolbar-row>
   </mat-toolbar>
 
   <mat-dialog-content class="mat-typography">
     <mat-card>
-      <b><span>Order details</span></b>
+      <b><span>{{ "confirmPayment.orderdetails" | translate }}</span></b>
       <form [formGroup]="orderForm">
         <div fxFlex fxLayout="column">
           <div fxLayout="row wrap">
             <mat-form-field appearance="standard" fxFlex id="transactionId" class="readonly">
-              <mat-label>Transaction-ID</mat-label>
+              <mat-label>{{ "confirmPayment.transactionId" | translate }}</mat-label>
               <input matInput formControlName="transactionId" required readonly>
-              <mat-error *ngIf="orderForm.controls.transactionId.touched && orderForm.controls.transactionId.invalid">
-                <span *ngIf="orderForm.controls.transactionId.errors.required">This field is mandatory!</span>
-                <span *ngIf="orderForm.controls.transactionId.errors.pattern">This field is invalid!</span>
-              </mat-error>
             </mat-form-field>
           </div>
           <div fxLayout="row wrap">
             <mat-form-field appearance="standard" fxFlex id="dokumentName" class="readonly">
-              <mat-label>Dokument</mat-label>
+              <mat-label>{{ "confirmPayment.dokumentName" | translate }}</mat-label>
               <input matInput formControlName="dokumentName" required readonly>
-              <mat-error *ngIf="orderForm.controls.dokumentName.touched && orderForm.controls.dokumentName.invalid">
-                <span *ngIf="orderForm.controls.dokumentName.errors.required">This field is mandatory!</span>
-                <span *ngIf="orderForm.controls.dokumentName.errors.pattern">This field is invalid!</span>
-              </mat-error>
             </mat-form-field>
           </div>
           <div fxLayout="row wrap">
             <mat-form-field appearance="standard" fxFlex id="price" class="readonly">
-              <mat-label>Price</mat-label>
+              <mat-label>{{ "confirmPayment.price" | translate }}</mat-label>
               <input matInput formControlName="price" required readonly>
-              <mat-error *ngIf="orderForm.controls.price.touched && orderForm.controls.price.invalid">
-                <span *ngIf="orderForm.controls.price.errors.required">This field is mandatory!</span>
-                <span *ngIf="orderForm.controls.price.errors.pattern">This field is invalid!</span>
-              </mat-error>
             </mat-form-field>
           </div>
         </div>
@@ -51,19 +39,19 @@
     </mat-card>
   </mat-dialog-content>
 
-  <mat-dialog-actions align="center" style="margin-top: 20px">
+  <mat-dialog-actions align="center" class="margin-top-20">
 
     <div fxFlex fxLayout="column">
       <div fxLayout="row wrap">
         <button mat-flat-button (click)="handleDownloadBillAction()">
           <mat-icon>{{downloadBillIcon}}</mat-icon>
-          {{ "main.messages.buttons.submit" | translate }}
+          {{ "confirmPayment.button.download" | translate }}
         </button>
       </div>
       <div fxLayout="row wrap">
-        <button mat-flat-button style="margin-top: 10px" (click)="handleGoToHomepageAction()">
+        <button mat-flat-button class="margin-top-10" (click)="handleGoToHomepageAction()">
           <mat-icon>{{mainPageIcon}}</mat-icon>
-          {{ "main.messages.buttons.submit" | translate }}
+          {{ "confirmPayment.button.home" | translate }}
         </button>
       </div>
     </div>

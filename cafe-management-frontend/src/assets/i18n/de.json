@@ -22,5 +22,10 @@
   "main.navigation.contact": "Kontakt",
   "main.navigation.projects": "Projekte",
   "main.navigation.services": "Dienstleistungen",
-  "confirmPayment.title": "Danke für Ihren Einkauf!"
+  "confirmPayment.title": "Danke für Ihren Einkauf!",
+  "confirmPayment.button.download": "Rechnung herunterladen",
+  "confirmPayment.button.home": "Zurück zur Hauptseite",
+  "confirmPayment.orderdetails": "Bestelldetails",
+  "confirmPayment.dokumentName": "Name des Dokuments",
+  "confirmPayment.price": "Preis des Dokuments"
 }
