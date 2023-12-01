@@ -9,7 +9,6 @@ import {Observable, throwError} from 'rxjs';
 import {Router} from "@angular/router";
 import {AuthService} from "./auth.service";
 import {catchError} from "rxjs/operators";
-import {PayPalService} from "./paypal.service";
 
 /**
  * @TODO: testing!
