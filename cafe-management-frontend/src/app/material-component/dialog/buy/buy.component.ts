@@ -51,9 +51,8 @@ export class BuyComponent implements OnInit {
           return actions.order.capture().then((details: any) => {
             if (details.status === GlobalConstants.paymentStatusCodeCompleted) {
               this.payPalService.transactionId = details.id;
-              this.router.navigate([this.router.navigate(["/" + GlobalConstants.paypalConfirmationPath])
-                .catch((error) => console.log(error))
-              ]);
+              this.router.navigate(["/" + GlobalConstants.paypalConfirmationPath, this.payPalService.transactionId])
+                .catch((error) => console.log(error));
             }
           });
         },

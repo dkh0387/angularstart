@@ -95,6 +95,9 @@ export class GlobalConstants {
   public static currencyRUB: string = "RUB";
   public static paymentStatusCodeCompleted: string = "COMPLETED";
   public static paypalConfirmationPath: string = "confirmPayment";
+  public static transactionIdKey: string = "transactionId";
+  public static transactionIdLength: number = 17;
+  public static transactionIdRegex: string = "~\b[\dA-Z]{17}\b~";
 
   //Payment approved page
   public static downloadBillIcon: string = "download";
