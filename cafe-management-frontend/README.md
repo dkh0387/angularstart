@@ -191,6 +191,7 @@ For a full example see `paypal.service.ts`, `confirm-payment.component.ts`.
 ## TODOs
 
 * PayPal API integration complete DONE
+* Confirmation page only reachable by valid transaction id DONE
 * Payment confirmation page template (download link for dokument, document object providing over `DocumentService`, back button action, download invoice action)
 * PayPal button remove from buy dialog and replace with "add to cart"
 * Shopping cart component with PayPal and Tinkoff buttons
