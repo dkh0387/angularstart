@@ -34,7 +34,7 @@ export class RouteGuardService {
       const transactionId = activatedRouteSnapshot.paramMap.get(GlobalConstants.transactionIdKey);
 
       if (transactionId != null) {
-        const regexp = new RegExp(GlobalConstants.transactionIdRegex);
+        //const regexp = new RegExp(GlobalConstants.transactionIdRegex);
         //return regexp.test(transactionId);
         return transactionId === this.transactionId;
       }
