@@ -26,6 +26,7 @@
   "confirmPayment.button.download": "Rechnung herunterladen",
   "confirmPayment.button.home": "Zurück zur Hauptseite",
   "confirmPayment.orderdetails": "Bestelldetails",
-  "confirmPayment.dokumentName": "Name des Dokuments",
-  "confirmPayment.price": "Preis des Dokuments"
+  "confirmPayment.transactionId": "ID der Transaktion",
+  "confirmPayment.documentName": "Name des Dokuments",
+  "confirmPayment.documentPrice": "Preis des Dokuments"
 }

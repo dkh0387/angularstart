@@ -12,8 +12,8 @@ export class DocumentsService {
     }
 
     /**
-     * All availible documents for sale.
-     * TODO: where to store??
+     * All available documents for sale.
+     * TODO: call from backend API??
      * (manage page)
      */
     getAll() {

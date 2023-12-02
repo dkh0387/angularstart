@@ -27,6 +27,6 @@
   "confirmPayment.button.home": "Вернуться на главную",
   "confirmPayment.orderdetails": "Детали заказа",
   "confirmPayment.transactionId": "ID транзакции",
-  "confirmPayment.dokumentName": "Название документа",
-  "confirmPayment.price": "Цена документа"
+  "confirmPayment.documentName": "Название документа",
+  "confirmPayment.documentPrice": "Цена документа"
 }

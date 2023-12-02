@@ -10,6 +10,8 @@ export class PayPalService extends RequestService {
 
   accessResponse: any;
   private _transactionId = "";
+  private _documentName = "";
+  private _documentPrice = "";
 
   constructor(httpClient: HttpClient) {
     super(httpClient);
@@ -28,6 +30,14 @@ export class PayPalService extends RequestService {
     });
   }
 
+  private subscribe(): void {
+    this.postForAccessToken().subscribe((response: any) => {
+      this.accessResponse = response;
+    }, (error: any) => {
+      console.log(error);
+    });
+  }
+
   get transactionId(): string {
     return this._transactionId;
   }
@@ -36,12 +46,20 @@ export class PayPalService extends RequestService {
     this._transactionId = value;
   }
 
-  private subscribe(): void {
-    this.postForAccessToken().subscribe((response: any) => {
-      this.accessResponse = response;
-    }, (error: any) => {
-      console.log(error);
-    });
+  get documentName(): string {
+    return this._documentName;
+  }
+
+  set documentName(value: string) {
+    this._documentName = value;
+  }
+
+  get documentPrice(): string {
+    return this._documentPrice;
+  }
+
+  set documentPrice(value: string) {
+    this._documentPrice = value;
   }
 
 }
