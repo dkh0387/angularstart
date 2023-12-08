@@ -190,18 +190,21 @@ For a full example see `paypal.service.ts`, `confirm-payment.component.ts`.
 
 ## TODOs
 
-* PayPal API integration complete DONE
-* Confirmation page only reachable by valid transaction id DONE
-* Payment confirmation page template (download link for dokument, document object providing over `DocumentService`, back button action, download invoice action)
-* PayPal button remove from buy dialog and replace with "add to cart"
-* Shopping cart component with PayPal and Tinkoff buttons
+* Payment confirmation page template:
+  * PayPal API integration ☑️
+  * only reachable by valid transaction ☑️
+  * GoogleDrive API integration behind download button
+  * Home button action
+  * Download invoice action
 * Juristic stuff in buy dialog??
-* Tinkoff integration: `https://www.tinkoff.ru/kassa/dev/payments/#section/Vvedenie/Sposoby-integracii`
-* Link to GoogleDrive send per Email after payment
+* Shopping cart component with PayPal and Tinkoff buttons (perspective)
+  * Move PAyPal button from buy dialog to shopping cart page
+  * Tinkoff integration: `https://www.tinkoff.ru/kassa/dev/payments/#section/Vvedenie/Sposoby-integracii`
 * Lena:
   * documents descriptions, names and urls (if multiple)
+  * prices for documents
   * Title photo, title text
   * Links for social media
   * Text for block 3
 * Installing dependencies save way: `sudo npm i <packagename> --legacy-peer-deps` --> update to angular 16
-* testing
+* Testing
