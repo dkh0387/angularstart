@@ -194,6 +194,7 @@ For a full example see `paypal.service.ts`, `confirm-payment.component.ts`.
   * PayPal API integration ☑️
   * only reachable by valid transaction ☑️
   * GoogleDrive API integration behind download button
+    * see `https://dev.to/kamalhossain/download-and-delete-via-google-drive-api-17i3` for up/download files
   * Home button action
   * Download invoice action
 * Juristic stuff in buy dialog??
