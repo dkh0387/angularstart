@@ -186,7 +186,16 @@ For a full example see `paypal.service.ts`, `confirm-payment.component.ts`.
 
 * Get started: `https://developer.paypal.com/api/rest/`
 * Insert PayPal script into `index.html`
-*
+* Insert child element into `buy.component.ts` incl. all business logic
+* NOTE: providing data like transaction id etc. over `paypal.service.ts`, see `confirm-payment.component.ts` for example
+
+## Google Drive API integration
+
+* Good manual for API activation: `https://blog.tericcabrel.com/upload-file-to-google-drive-with-nodejs/`
+* See `https://support.google.com/cloud/answer/13461325?hl=de&ref_topic=13460882&sjid=17621683177843759044-EU` for verification details.
+  If the Node.js server is requesting Google Auth 2.0 server for a token, we need to publish the app in production before, otherwise it will be blocked
+* See `https://dev.to/kamalhossain/google-drive-api-in-node-js-3mnm` for setting up a Node.js server
+* See `https://dev.to/kamalhossain/download-and-delete-via-google-drive-api-17i3` for up/download files
 
 ## TODOs
 
@@ -194,7 +203,6 @@ For a full example see `paypal.service.ts`, `confirm-payment.component.ts`.
   * PayPal API integration ☑️
   * only reachable by valid transaction ☑️
   * GoogleDrive API integration behind download button
-    * see `https://dev.to/kamalhossain/download-and-delete-via-google-drive-api-17i3` for up/download files
   * Home button action
   * Download invoice action
 * Juristic stuff in buy dialog??
