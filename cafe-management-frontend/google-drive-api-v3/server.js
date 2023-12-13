@@ -9,6 +9,12 @@ const PORT = 5001;
  * Test the server is running.
  */
 
+app.get("/testRoute", (req, res) => res.end("Hello from Server!"));
+
+app.listen(PORT, () => {
+  console.log(`Node.js App running on port ${PORT}...`);
+});
+
 /*
 * Here we are importing fs to access the local file system of node.js server.
 * The readline module provides an interface for reading data from a Readable stream (such as process.stdin) one line at a time.
@@ -94,3 +100,40 @@ function getAccessToken(oAuth2Client) {
   });
 }
 
+// Route for downloading an image/file
+app.get("/downloadAFile", (req, res) => {
+  var dir = `./downloads`; // directory from where node.js will look for downloaded file from Google Drive
+
+  var fileId = "1SJMKjJX0wfSzu9vKC8SsTSRUq1ieLAZp"; // Desired file id to download from Google Drive
+
+  var dest = fs.createWriteStream("./downloads/test.pdf"); // file path where Google Drive function will save the file
+
+  const drive = google.drive({version: "v3", auth}); // Authenticating drive API
+
+  let progress = 0; // This will contain the download progress amount
+
+  // Downloading a Single file from drive
+  drive.files
+    .get({fileId, alt: "media"}, {responseType: "stream"})
+    .then((driveResponse) => {
+      driveResponse.data
+        .on("end", () => {
+          console.log("\nDone downloading file.");
+          const file = `${dir}/Чек-лист осознанные покупки.pdf`; // file path from where node.js will send file to the requested user
+          res.download(file); // Set disposition and send it.
+        })
+        .on("error", (err) => {
+          console.error("Error downloading file.");
+        })
+        .on("data", (d) => {
+          progress += d.length;
+          if (process.stdout.isTTY) {
+            process.stdout.clearLine();
+            process.stdout.cursorTo(0);
+            process.stdout.write(`Downloaded ${progress} bytes`);
+          }
+        })
+        .pipe(dest);
+    })
+    .catch((err) => console.log(err));
+});
