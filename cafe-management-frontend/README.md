@@ -191,18 +191,30 @@ For a full example see `paypal.service.ts`, `confirm-payment.component.ts`.
 
 ## Google Drive API integration
 
+General API documentation: `https://developers.google.com/drive/api/guides/ref-export-formats?hl=de`
+
+### API activation
+
 * Good manual for API activation: `https://blog.tericcabrel.com/upload-file-to-google-drive-with-nodejs/`
 * See `https://support.google.com/cloud/answer/13461325?hl=de&ref_topic=13460882&sjid=17621683177843759044-EU` for verification details.
   If the Node.js server is requesting Google Auth 2.0 server for a token, we need to publish the app in production before, otherwise it will be blocked
-* See `https://dev.to/kamalhossain/google-drive-api-in-node-js-3mnm` for setting up a Node.js server
-* See `https://dev.to/kamalhossain/download-and-delete-via-google-drive-api-17i3` for up/download files
+
+### Node.js Server to get Google Drive token
+
+* See `https://dev.to/kamalhossain/google-drive-api-in-node-js-3mnm`, `https://developers.google.com/drive/api/quickstart/nodejs?hl=de` for setting up a Node.js server
+* Result: we get an OAuth2 acess token, stored in `token.json`. We can use it for Bearer authentication
+
+### Downloading files from Google Drive
+
+1. Method: using Node.js Server directly: see `https://dev.to/kamalhossain/download-and-delete-via-google-drive-api-17i3` for up/download files
+2. Method: using `GET` request with `Bearer` token from OAuth2 --> actual way to go
 
 ## TODOs
 
 * Payment confirmation page template:
   * PayPal API integration ☑️
   * only reachable by valid transaction ☑️
-  * GoogleDrive API integration behind download button
+  * GoogleDrive API integration behind the download button: GET request implemented, UI next...
   * Home button action
   * Download invoice action
 * Juristic stuff in buy dialog??

@@ -35,9 +35,8 @@ const ngUiLoaderConfig: NgxUiLoaderConfig = {
   fgsType: SPINNER.squareJellyBox,
   fgsSize: 100,
   hasProgressBar: false
-}
+};
 
-// import ngx-translate and the http loader
 import {TranslateLoader, TranslateModule} from '@ngx-translate/core';
 import {TranslateHttpLoader} from '@ngx-translate/http-loader';
 import {HttpClient, HttpClientModule} from '@angular/common/http';

@@ -3,6 +3,7 @@ import {PayPalService} from "../services/paypal.service";
 import {GlobalConstants} from "../shared/global-constants";
 import {FormBuilder, FormGroup, Validators} from "@angular/forms";
 import {Router} from "@angular/router";
+import {GoogledriveApiService} from "../services/googledrive-api.service";
 
 @Component({
   selector: 'app-confirm-payment',
@@ -20,11 +21,13 @@ export class ConfirmPaymentComponent implements OnInit {
   displayedColumns: string[] = ["transactionId", "dokumentName", "price"];
   orderForm: any = FormGroup;
 
-  constructor(private payPalService: PayPalService, private formBuilder: FormBuilder, private router: Router) {
+  constructor(private payPalService: PayPalService,
+              private formBuilder: FormBuilder,
+              private router: Router,
+              private googleDriveApiService: GoogledriveApiService) {
     this.currentTransactionId = this.payPalService.transactionId;
     this.currentDocumentName = this.payPalService.documentName;
     this.currentDocumentPrice = this.payPalService.documentPrice;
-
   }
 
   ngOnInit(): void {
@@ -42,6 +45,20 @@ export class ConfirmPaymentComponent implements OnInit {
 
   handleDownloadBillAction() {
     console.log("handleDownloadBillAction")
+  }
+
+  /*
+  TODO: bind to a button in html.
+   */
+  downloadFile() {
+    this.googleDriveApiService.downloadPDFFile().subscribe((res: any) => {
+      const url = window.URL.createObjectURL(new Blob([res]));
+      const link = document.createElement('a');
+      link.href = url;
+      link.setAttribute('download', `${this.documentName}.pdf`); //or any other extension
+      document.body.appendChild(link);
+      link.click();
+    });
   }
 
   get transactionId(): string {
