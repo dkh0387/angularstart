@@ -100,6 +100,6 @@ export class GlobalConstants {
   public static transactionIdRegex: string = "~\b[\dA-Z]{17}\b~";
 
   //Payment approved page
-  public static downloadBillIcon: string = "download";
+  public static downloadIcon: string = "download";
 
 }

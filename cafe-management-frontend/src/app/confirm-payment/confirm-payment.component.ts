@@ -15,7 +15,7 @@ export class ConfirmPaymentComponent implements OnInit {
   currentTransactionId: any;
   currentDocumentName: any;
   currentDocumentPrice: any;
-  downloadBillIcon: string = GlobalConstants.downloadBillIcon;
+  downloadIcon: string = GlobalConstants.downloadIcon;
   mainPageIcon: string = GlobalConstants.mainPageIcon;
 
   displayedColumns: string[] = ["transactionId", "dokumentName", "price"];
@@ -51,14 +51,7 @@ export class ConfirmPaymentComponent implements OnInit {
   TODO: bind to a button in html.
    */
   downloadFile() {
-    this.googleDriveApiService.downloadPDFFile().subscribe((res: any) => {
-      const url = window.URL.createObjectURL(new Blob([res]));
-      const link = document.createElement('a');
-      link.href = url;
-      link.setAttribute('download', `${this.documentName}.pdf`); //or any other extension
-      document.body.appendChild(link);
-      link.click();
-    });
+
   }
 
   get transactionId(): string {
@@ -90,5 +83,16 @@ export class ConfirmPaymentComponent implements OnInit {
 
   handleGoToHomepageAction() {
     this.router.navigate(["/"]);
+  }
+
+  handleDownloadDocumentAction() {
+    this.googleDriveApiService.downloadPDFFile().subscribe((res: any) => {
+      const url = window.URL.createObjectURL(new Blob([res]));
+      const link = document.createElement('a');
+      link.href = url;
+      link.setAttribute("download", `${this.documentName}`);
+      document.body.appendChild(link);
+      link.click();
+    });
   }
 }

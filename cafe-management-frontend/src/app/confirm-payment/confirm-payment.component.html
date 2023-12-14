@@ -44,8 +44,14 @@
     <div fxFlex fxLayout="column">
       <div fxLayout="row wrap">
         <button mat-flat-button (click)="handleDownloadBillAction()">
-          <mat-icon>{{ downloadBillIcon }}</mat-icon>
-          {{ "confirmPayment.button.download" | translate }}
+          <mat-icon>{{ downloadIcon }}</mat-icon>
+          {{ "confirmPayment.button.downloadBill" | translate }}
+        </button>
+      </div>
+      <div fxLayout="row wrap">
+        <button mat-flat-button (click)="handleDownloadDocumentAction()">
+          <mat-icon>{{ downloadIcon }}</mat-icon>
+          {{ "confirmPayment.button.downloadDocument" | translate }}
         </button>
       </div>
       <div fxLayout="row wrap">
