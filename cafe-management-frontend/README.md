@@ -216,14 +216,15 @@ General API documentation: `https://developers.google.com/drive/api/guides/ref-e
   * only reachable by valid transaction ☑️
   * GoogleDrive API integration behind the download button: GET request implemented, UI next...
   * Home button action
-  * Download invoice action
+  * Download invoice action (invoice HTML template)
 * Juristic stuff in buy dialog??
 * Shopping cart component with PayPal and Tinkoff buttons (perspective)
-  * Move PAyPal button from buy dialog to shopping cart page
+  * Move PayPal button from buy dialog to shopping cart page
   * Tinkoff integration: `https://www.tinkoff.ru/kassa/dev/payments/#section/Vvedenie/Sposoby-integracii`
 * Lena:
   * documents descriptions, names and urls (if multiple)
   * prices for documents
+  * Invoice template
   * Title photo, title text
   * Links for social media
   * Text for block 3
