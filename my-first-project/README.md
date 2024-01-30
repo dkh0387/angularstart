@@ -35,8 +35,8 @@ This project was generated with [Angular CLI](https://github.com/angular/angular
     - Create a new project: `ng new --no-standalone my-first-project`
 
 6. App loading:
-   The app entry point when the app is starting is `<app-root></app-root>` in `index.html`
-7. 
+    - The app entry point when the app is starting is `<app-root></app-root>` in `index.html`
+    - Main component (like main in spring) is located in `src/app/app.module.ts`: `bootstrap: [AppComponent]`
 
 ## Development server
 
