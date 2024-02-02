@@ -16,48 +16,49 @@ This project was generated with [Angular CLI](https://github.com/angular/angular
 
 4. Project structure (http://www.angular.io/guide/file-struckture):
 
-   - `angular.json`: Angular workspace configuration, list of execution targets
-   - `node_module`: local repo of node modules
-   - `project.json`: project meta data, list of node dependencies like `pom.xml`
-   - `src/app`: app components, templates, etc.
-   - `src/assets`: resources like images
-   - `src/environments`: profiles for environments like dev, prod, test, etc.; analogon to spring profiles
-   - `src/index.html`: main launch page
-   - `src/polyfills.ts`: add supports for different browser versions
-   - `src/test.ts`: unit test cases
-   - `src/tsconfig.json`: TypeScript compiler configs
+- `angular.json`: Angular workspace configuration, list of execution targets
+- `node_module`: local repo of node modules
+- `project.json`: project meta data, list of node dependencies like `pom.xml`
+- `src/app`: app components, templates, etc.
+- `src/assets`: resources like images
+- `src/environments`: profiles for environments like dev, prod, test, etc.; analogon to spring profiles
+- `src/index.html`: main launch page
+- `src/polyfills.ts`: add supports for different browser versions
+- `src/test.ts`: unit test cases
+- `src/tsconfig.json`: TypeScript compiler configs
 
 5. Angular install guide:
 
-   - Install `npm` (package manager)
-   - Install `nodeJS` (JavaScript runtime)
-   - Install Angular CLI: `npm install --location=global @angular/cli@14.0.7` (version number at the end)
-   - Create a new project: `ng new --no-standalone my-first-project`
+- Install `npm` (package manager)
+- Install `nodeJS` (JavaScript runtime)
+- Install Angular CLI: `npm install --location=global @angular/cli@14.0.7` (version number at the end)
+- Create a new project: `ng new --no-standalone my-first-project`
 
 6. App loading:
 
-   - The app entry point when the app is starting is `<app-root></app-root>` in `index.html`
-   - Main component (like main in spring) is located in `src/app/app.module.ts`: `bootstrap: [AppComponent]`
+- The app entry point when the app is starting is `<app-root></app-root>` in `index.html`
+- Main component (like main in spring) is located in `src/app/app.module.ts`: `bootstrap: [AppComponent]`
 
 7. Modules:
 
-   - `@NgModule` annotation provides meta-data for the module. It can import modules for using all functionality those modules export.
-     Using `providers` we can control the scope of injectable classes (services f. e.).
-     If you provide your service inside your component, it will be local to it. So if you have two instances of your component, you will have two instance of your service.
-     Now if you provide your service inside your module, it will be global and if you have two instances of your component, they will share the same instance of the service.
+- `@NgModule` annotation provides meta-data for the module. It can import modules for using all functionality those modules export.
+  Using `providers` we can control the scope of injectable classes (services f. e.).
+  If you provide your service inside your component, it will be local to it. So if you have two instances of your component, you will have two instances of your service.
+  Now if you provide your service inside your module, it will be global and if you have two instances of your component, they will share the same instance of the service.
 
-       ```
-           @NgModule({
-           declarations: [
-             AppComponent
-           ],
-           imports: [
-             BrowserModule
-           ],
-           providers: [],
-           bootstrap: [AppComponent]
-         })
-       ```
+    ```
+        @NgModule({
+        declarations: [
+          AppComponent
+        ],
+        imports: [
+          BrowserModule
+        ],
+        providers: [],
+        bootstrap: [AppComponent]
+      })
+    ```
+- Any component created is added to the main application module `app.module.ts` in the `declarations` list
 
 ## Development server
 
