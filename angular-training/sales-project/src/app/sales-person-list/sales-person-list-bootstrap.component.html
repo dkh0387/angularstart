@@ -9,11 +9,12 @@
   </tr>
   </thead>
   <tbody>
-  <tr *ngFor="let salesPerson of salesPersonList">
+  <tr class="highlight" *ngFor="let salesPerson of salesPersonList"
+      [ngClass]="{'highlight': metQuota(salesPerson)}">
     <td>{{ salesPerson.firstName }}</td>
     <td>{{ salesPerson.lastName }}</td>
     <td>{{ salesPerson.email }}</td>
-    <td>{{ salesPerson.salesVolume }}</td>
+    <td>{{ salesPerson.salesVolume | currency: 'EUR' }}</td>
     <td>
       <div *ngIf="metQuota(salesPerson); else elseBlock">Yes</div>
       <ng-template #elseBlock>No</ng-template>
