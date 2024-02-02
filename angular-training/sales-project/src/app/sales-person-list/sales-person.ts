@@ -6,5 +6,4 @@ export class SalesPerson {
               public salesVolume: number) {
   }
 
-
 }

@@ -60,6 +60,15 @@ This project was generated with [Angular CLI](https://github.com/angular/angular
     ```
 - Any component created is added to the main application module `app.module.ts` in the `declarations` list
 
+## Including external resources
+
+1. Bootstrap:
+  - Go to `https://getbootstrap.com/docs/5.3/getting-started/introduction/`
+  - Copy the line with `viewport` and `link` and paste them into `index.html`
+
+2. PayPal: TBD
+3. Google drive: TBD
+
 ## Development server
 
 Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The application will automatically reload if you
